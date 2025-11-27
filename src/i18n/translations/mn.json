@@ -395,6 +395,7 @@
   },
   "products": {
     "domain": "Бүтээгдэхүүнүүд",
+    "additionalAttributes": "Нэмэлт шинж чанарууд",
     "list": {
       "noRecordsMessage": "Зарах эхний бүтээгдэхүүнээ үүсгээрэй."
     },

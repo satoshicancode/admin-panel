@@ -418,6 +418,7 @@
       "header": "تحرير عنوان الشحن"
     },
     "domain": "المنتجات",
+    "additionalAttributes": "سمات إضافية",
     "list": {
       "noRecordsMessage": "أنشئ منتجك الأول لبدء البيع."
     },

@@ -395,6 +395,7 @@
   },
   "products": {
     "domain": "Ürünler",
+    "additionalAttributes": "Ek özellikler",
     "list": {
       "noRecordsMessage": "Satışa başlamak için ilk ürününüzü oluşturun."
     },

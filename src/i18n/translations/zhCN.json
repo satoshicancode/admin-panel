@@ -397,6 +397,7 @@
   },
   "products": {
     "domain": "产品",
+    "additionalAttributes": "附加属性",
     "list": {
       "noRecordsMessage": "创建您的第一个产品以开始销售。"
     },

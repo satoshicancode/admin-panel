@@ -383,6 +383,7 @@
   },
   "products": {
     "domain": "Produtos",
+    "additionalAttributes": "Atributos adicionais",
     "list": {
       "noRecordsMessage": "Crie seu primeiro produto para começar a vender."
     },

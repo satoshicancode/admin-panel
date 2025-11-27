@@ -384,6 +384,7 @@
   },
   "products": {
     "domain": "Продукти",
+    "additionalAttributes": "Додаткові атрибути",
     "list": {
       "noRecordsMessage": "Створіть перший продукт, щоб почати продавати."
     },

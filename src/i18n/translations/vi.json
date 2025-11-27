@@ -397,6 +397,7 @@
   },
   "products": {
     "domain": "Sản phẩm",
+    "additionalAttributes": "Thuộc tính bổ sung",
     "list": {
       "noRecordsMessage": "Tạo sản phẩm đầu tiên của bạn để bắt đầu bán hàng."
     },

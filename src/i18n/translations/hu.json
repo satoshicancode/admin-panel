@@ -397,6 +397,7 @@
   },
   "products": {
     "domain": "Termékek",
+    "additionalAttributes": "További attribútumok",
     "list": {
       "noRecordsMessage": "Hozza létre az első terméket"
     },

@@ -395,6 +395,7 @@
   },
   "products": {
     "domain": "محصولات",
+    "additionalAttributes": "ویژگی‌های اضافی",
     "list": {
       "noRecordsMessage": "اولین محصول خود را ایجاد کنید تا شروع به فروش کنید."
     },

@@ -397,6 +397,7 @@
   },
   "products": {
     "domain": "מוצרים",
+    "additionalAttributes": "תכונות נוספות",
     "list": {
       "noRecordsMessage": "צור את המוצר הראשון שלך כדי להתחיל למכור."
     },

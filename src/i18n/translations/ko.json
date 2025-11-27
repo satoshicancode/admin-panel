@@ -397,6 +397,7 @@
   },
   "products": {
     "domain": "제품",
+    "additionalAttributes": "추가 속성",
     "list": {
       "noRecordsMessage": "판매를 시작하려면 첫 번째 제품을 생성하세요."
     },

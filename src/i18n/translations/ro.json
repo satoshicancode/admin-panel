@@ -395,6 +395,7 @@
   },
   "products": {
     "domain": "Produse",
+    "additionalAttributes": "Atribute suplimentare",
     "list": {
       "noRecordsMessage": "Creați primul dvs. produs pentru a începe să vindeți."
     },

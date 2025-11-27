@@ -398,6 +398,7 @@
   },
   "products": {
     "domain": "Products",
+    "additionalAttributes": "Additional Attributes",
     "list": {
       "noRecordsMessage": "Create your first product to start selling."
     },

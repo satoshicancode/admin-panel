@@ -395,6 +395,7 @@
   },
   "products": {
     "domain": "Товары",
+    "additionalAttributes": "Дополнительные атрибуты",
     "list": {
       "noRecordsMessage": "Создайте свой первый товар, чтобы начать продажи."
     },

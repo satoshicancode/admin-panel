@@ -384,6 +384,7 @@
   },
   "products": {
     "domain": "商品",
+    "additionalAttributes": "追加属性",
     "list": {
       "noRecordsMessage": "最初の商品を作成して販売を開始しましょう。"
     },

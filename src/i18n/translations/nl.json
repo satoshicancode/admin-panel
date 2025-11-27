@@ -397,6 +397,7 @@
   },
   "products": {
     "domain": "Producten",
+    "additionalAttributes": "Aanvullende attributen",
     "list": {
       "noRecordsMessage": "Maak uw eerste product aan om te beginnen met verkopen."
     },

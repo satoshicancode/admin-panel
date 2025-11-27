@@ -397,6 +397,7 @@
   },
   "products": {
     "domain": "Proizvodi",
+    "additionalAttributes": "Dodatni atributi",
     "list": {
       "noRecordsMessage": "Kreirajte svoj prvi proizvod da biste počeli prodavati."
     },
