@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom"
-import { MetadataForm } from "../../../components/forms/metadata-form"
-import { useCustomer, useUpdateCustomer } from "../../../hooks/api/customers"
+
 import { FetchError } from "@medusajs/js-sdk"
+import { MetadataForm } from "@components/forms/metadata-form"
+import { useCustomer, useUpdateCustomer } from "@hooks/api"
 
 export const CustomerMetadata = () => {
   const { id } = useParams()
@@ -22,6 +23,7 @@ export const CustomerMetadata = () => {
         metadata: params.metadata ?? undefined,
       })
       callbacks.onSuccess()
+
       return result
     } catch (error) {
       const message = error instanceof FetchError ? error.message : 'An error occurred'
@@ -31,11 +33,13 @@ export const CustomerMetadata = () => {
   }
 
   return (
-    <MetadataForm
-      metadata={customer?.metadata}
-      hook={handleSubmit}
-      isPending={isPending}
-      isMutating={isMutating}
-    />
+    <div data-testid="customer-metadata">
+      <MetadataForm
+        metadata={customer?.metadata}
+        hook={handleSubmit}
+        isPending={isPending}
+        isMutating={isMutating}
+      />
+    </div>
   )
 }

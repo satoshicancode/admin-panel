@@ -1,13 +1,16 @@
-import { HttpTypes } from "@medusajs/types"
-import { useMemo } from "react"
-import { useTranslation } from "react-i18next"
-import { createDataTableColumnHelper } from "@medusajs/ui"
-import { DescriptionCell } from "../../../components/table/table-cells/sales-channel/description-cell"
+import { useMemo } from "react";
 
-const columnHelper = createDataTableColumnHelper<HttpTypes.AdminRefundReason>()
+import { HttpTypes } from "@medusajs/types";
+import { createDataTableColumnHelper } from "@medusajs/ui";
+
+import { useTranslation } from "react-i18next";
+
+import { DescriptionCell } from "../../../components/table/table-cells/sales-channel/description-cell";
+
+const columnHelper = createDataTableColumnHelper<HttpTypes.AdminRefundReason>();
 
 export const useRefundReasonTableColumns = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return useMemo(
     () => [
@@ -18,13 +21,13 @@ export const useRefundReasonTableColumns = () => {
         sortAscLabel: t("filters.sorting.alphabeticallyAsc"),
         sortDescLabel: t("filters.sorting.alphabeticallyDesc"),
       }),
-      columnHelper.accessor("code", {
-        header: () => t("fields.code"),
-        enableSorting: true,
-        sortLabel: t("fields.code"),
-        sortAscLabel: t("filters.sorting.alphabeticallyAsc"),
-        sortDescLabel: t("filters.sorting.alphabeticallyDesc"),
-      }),
+      // columnHelper.accessor("code", {
+      //   header: () => t("fields.code"),
+      //   enableSorting: true,
+      //   sortLabel: t("fields.code"),
+      //   sortAscLabel: t("filters.sorting.alphabeticallyAsc"),
+      //   sortDescLabel: t("filters.sorting.alphabeticallyDesc"),
+      // }),
       columnHelper.accessor("description", {
         header: () => t("fields.description"),
         cell: ({ getValue }) => <DescriptionCell description={getValue()} />,
@@ -34,6 +37,6 @@ export const useRefundReasonTableColumns = () => {
         sortDescLabel: t("filters.sorting.alphabeticallyDesc"),
       }),
     ],
-    [t]
-  )
-}
+    [t],
+  );
+};

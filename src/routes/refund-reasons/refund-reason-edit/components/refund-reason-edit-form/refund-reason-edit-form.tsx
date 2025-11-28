@@ -1,41 +1,43 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { HttpTypes } from "@medusajs/types"
-import { Button, Input, Textarea, toast } from "@medusajs/ui"
-import { useForm } from "react-hook-form"
-import { useTranslation } from "react-i18next"
-import { z } from "zod"
+import { Button, Input, Textarea, toast } from "@medusajs/ui";
 
-import { Form } from "../../../../../components/common/form"
-import { RouteDrawer, useRouteModal } from "../../../../../components/modals"
-import { KeyboundForm } from "../../../../../components/utilities/keybound-form"
-import { useUpdateRefundReason } from "../../../../../hooks/api"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { z } from "zod";
+
+import { AdminRefundReason } from "@custom-types/refund-reasons";
+
+import { Form } from "../../../../../components/common/form";
+import { RouteDrawer, useRouteModal } from "../../../../../components/modals";
+import { KeyboundForm } from "../../../../../components/utilities/keybound-form";
+import { useUpdateRefundReason } from "../../../../../hooks/api";
 
 type RefundReasonEditFormProps = {
-  refundReason: HttpTypes.AdminRefundReason
-}
+  refundReason: AdminRefundReason;
+};
 
 const RefundReasonEditSchema = z.object({
   label: z.string().min(1),
-  code: z.string().min(1),
+  // code: z.string().min(1),
   description: z.string().optional(),
-})
+});
 
 export const RefundReasonEditForm = ({
   refundReason,
 }: RefundReasonEditFormProps) => {
-  const { t } = useTranslation()
-  const { handleSuccess } = useRouteModal()
+  const { t } = useTranslation();
+  const { handleSuccess } = useRouteModal();
 
   const form = useForm<z.infer<typeof RefundReasonEditSchema>>({
     defaultValues: {
       label: refundReason.label,
-      code: refundReason.code,
+      // code: refundReason.code,
       description: refundReason.description ?? undefined,
     },
     resolver: zodResolver(RefundReasonEditSchema),
-  })
+  });
 
-  const { mutateAsync, isPending } = useUpdateRefundReason(refundReason.id)
+  const { mutateAsync, isPending } = useUpdateRefundReason(refundReason.id);
 
   const handleSubmit = form.handleSubmit(async (data) => {
     await mutateAsync(data, {
@@ -43,15 +45,15 @@ export const RefundReasonEditForm = ({
         toast.success(
           t("refundReasons.edit.successToast", {
             label: refund_reason.label,
-          })
-        )
-        handleSuccess()
+          }),
+        );
+        handleSuccess();
       },
       onError: (error) => {
-        toast.error(error.message)
+        toast.error(error.message);
       },
-    })
-  })
+    });
+  });
 
   return (
     <RouteDrawer.Form form={form}>
@@ -77,10 +79,10 @@ export const RefundReasonEditForm = ({
                   </Form.Control>
                   <Form.ErrorMessage />
                 </Form.Item>
-              )
+              );
             }}
           />
-          <Form.Field
+          {/* <Form.Field
             control={form.control}
             name="code"
             render={({ field }) => {
@@ -97,9 +99,9 @@ export const RefundReasonEditForm = ({
                   </Form.Control>
                   <Form.ErrorMessage />
                 </Form.Item>
-              )
+              );
             }}
-          />
+          /> */}
           <Form.Field
             control={form.control}
             name="description"
@@ -113,13 +115,13 @@ export const RefundReasonEditForm = ({
                     <Textarea
                       {...field}
                       placeholder={t(
-                        "refundReasons.fields.description.placeholder"
+                        "refundReasons.fields.description.placeholder",
                       )}
                     />
                   </Form.Control>
                   <Form.ErrorMessage />
                 </Form.Item>
-              )
+              );
             }}
           />
         </RouteDrawer.Body>
@@ -137,5 +139,5 @@ export const RefundReasonEditForm = ({
         </RouteDrawer.Footer>
       </KeyboundForm>
     </RouteDrawer.Form>
-  )
-}
+  );
+};

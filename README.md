@@ -21,6 +21,7 @@ The Admin Panel is a pivotal component of the MercurJS ecosystem, designed to pr
 - Product Management: Add, edit, and organize products with ease.
 - Order Tracking: Monitor order statuses and manage fulfillment processes.
 - Store Customization: Update store details
+- Sellers: manage vendor accounts
 - Requests: accept or reject requests from vendors
 - Attributes: manage global product attributes in the store
 - Commissions: manage and inspect commissions

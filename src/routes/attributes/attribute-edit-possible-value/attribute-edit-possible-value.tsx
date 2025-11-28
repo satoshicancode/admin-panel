@@ -89,6 +89,7 @@ export const EditPossibleValue = () => {
         if (item.key.trim() !== "" && item.value.trim() !== "") {
           acc[item.key] = item.value;
         }
+        
         return acc;
       },
       {} as Record<string, unknown>
@@ -98,20 +99,18 @@ export const EditPossibleValue = () => {
       {
         value: data.value,
         rank: data.rank,
-        //@ts-ignore
         metadata:
           Object.keys(transformedMetadata).length > 0
             ? transformedMetadata
-            : null,
+            : {},
       },
       {
         onSuccess: () => {
           toast.success("Possible value updated!");
           navigate(-1);
         },
-        onError: (error) => {
+        onError: () => {
           toast.error("Failed to update possible value");
-          console.error(error);
         },
       }
     );

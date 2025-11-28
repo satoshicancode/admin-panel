@@ -3,7 +3,7 @@ import { FocusModal, Button, toast, ProgressTabs } from "@medusajs/ui";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { AdminProductCategory } from "@medusajs/types";
-import { AttributeForm } from "./components/AttributeForm";
+import { AttributeForm } from "./components/attribute-form";
 import { z } from "zod";
 import {
   useAttribute,

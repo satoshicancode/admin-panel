@@ -6,6 +6,7 @@ import {
   Textarea,
   Switch,
   InlineTip,
+  toast,
 } from "@medusajs/ui";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,6 +17,7 @@ import { AdminUpdateAttribute, CreateAttributeFormSchema } from "../schema";
 import { AdminProductCategory } from "@medusajs/types";
 import PossibleValuesList from "../../attribute-create/components/PossibleValuesList";
 import MultiSelectCategory from "../../attribute-create/components/MultiSelectCategory";
+import { findDuplicatePossibleValues } from "../utils";
 
 enum AttributeUIComponent {
   SELECT = "select",
@@ -76,6 +78,23 @@ export const AttributeForm = ({
 
   const handleSubmit = form.handleSubmit(async (data) => {
     try {
+      if (data.possible_values) {
+        const duplicateValues = findDuplicatePossibleValues(
+          data.possible_values
+        );
+        
+        if (duplicateValues.length > 0) {
+          const duplicateNames = duplicateValues.join(", ");
+          const message =
+            duplicateValues.length === 1
+              ? `Attribute ${duplicateNames} already exists. Please create another name.`
+              : `Attributes ${duplicateNames} already exist. Please create other names.`;
+          toast.error(message);
+
+          return;
+        }
+      }
+
       await onSubmit(data);
     } catch (error) {
       console.error(error);

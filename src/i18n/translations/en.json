@@ -3197,7 +3197,23 @@
     "product-update": "Product Update"
   },
   "sellers": {
-    "domain": "Sellers"
+    "domain": "Sellers",
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "description": "Description",
+      "address": "Address",
+      "address_line": "Address Line",
+      "postal_code": "Postal Code",
+      "city": "City",
+      "country_code": "Country Code",
+      "tax_id": "Tax ID"
+    },
+    "edit": {
+      "header": "Edit Seller",
+      "successToast": "Seller {{name}} was successfully updated."
+    }
   },
   "messages": {
     "domain": "Messages"
