@@ -1,4 +1,4 @@
-import Stripe from 'stripe'
+import type Stripe from 'stripe'
 import type { BigNumberInput } from '@medusajs/types'
 import type { PayoutWebhookAction } from './events'
 

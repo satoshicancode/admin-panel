@@ -9,6 +9,7 @@
  */
 export const formatProvider = (id: string) => {
   const [_, name, type] = id.split("_")
+  
   return (
     name
       .split("-")
