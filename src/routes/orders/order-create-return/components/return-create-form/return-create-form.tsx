@@ -356,7 +356,7 @@ export const ReturnCreateForm = ({
         return ret
       }
 
-      ;(
+      (
         await Promise.all(
           items.map(async (_i) => {
             const item = itemsMap.get(_i.item_id)
