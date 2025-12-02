@@ -47,7 +47,6 @@ export const EditInventoryItemAttributesForm = ({
 }: EditInventoryItemAttributeFormProps) => {
   const { t } = useTranslation()
   const { handleSuccess } = useRouteModal()
-console.log("edit inventory item attributes form", item)
   const form = useForm<zod.infer<typeof EditInventoryItemAttributesSchema>>({
     defaultValues: getDefaultValues(item),
     resolver: zodResolver(EditInventoryItemAttributesSchema),
