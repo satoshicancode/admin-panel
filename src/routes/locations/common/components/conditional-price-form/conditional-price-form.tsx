@@ -342,7 +342,6 @@ const ConditionalPriceItem = ({
                         onValueChange={(_value, _name, values) =>
                           onChange(values?.value ? values?.value : "")
                         }
-                        autoFocus={false}
                         {...props}
                       />
                     </Form.Control>
@@ -397,22 +396,23 @@ const ConditionalPriceItem = ({
   )
 }
 
-interface OperatorInputProps {
+interface OperatorInputProps<
+  TName extends `prices.${number}.lte` | `prices.${number}.gte`
+> {
   currency: CurrencyInfo
   placeholder: string
   label: string
-  field: ControllerRenderProps<
-    CondtionalPriceRuleSchemaType,
-    `prices.${number}.lte` | `prices.${number}.gte`
-  >
+  field: ControllerRenderProps<CondtionalPriceRuleSchemaType, TName>
 }
 
-const OperatorInput = ({
+const OperatorInput = <
+  TName extends `prices.${number}.lte` | `prices.${number}.gte`
+>({
   field,
   label,
   currency,
   placeholder,
-}: OperatorInputProps) => {
+}: OperatorInputProps<TName>) => {
   const innerRef = useRef<HTMLInputElement>(null)
 
   const { value, onChange, ref, ...props } = field
