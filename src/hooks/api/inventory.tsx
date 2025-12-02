@@ -12,7 +12,7 @@ import { sdk } from "@lib/client"
 import { queryClient } from "@lib/query-client"
 import { queryKeysFactory } from "@lib/query-key-factory"
 import { variantsQueryKeys } from "./products"
-import type { ExtendedAdminInventoryItemResponse } from "@custom-types/inventory"
+import type { ExtendedAdminInventoryItemResponse, ExtendedInventoryItemLevelsResponse } from "@custom-types/inventory"
 
 const INVENTORY_ITEMS_QUERY_KEY = "inventory_items" as const
 export const inventoryItemsQueryKeys = queryKeysFactory(
@@ -167,16 +167,16 @@ export const useInventoryItemLevels = (
   query?: Record<string, unknown>,
   options?: Omit<
     UseQueryOptions<
-      HttpTypes.AdminInventoryLevelListResponse,
+      ExtendedInventoryItemLevelsResponse,
       FetchError,
-      HttpTypes.AdminInventoryLevelListResponse,
+      ExtendedInventoryItemLevelsResponse,
       QueryKey
     >,
     "queryKey" | "queryFn"
   >
 ) => {
   const { data, ...rest } = useQuery({
-    queryFn: () => sdk.admin.inventoryItem.listLevels(inventoryItemId, query),
+    queryFn: () => sdk.admin.inventoryItem.listLevels(inventoryItemId, query) as Promise<ExtendedInventoryItemLevelsResponse>,
     queryKey: inventoryItemLevelsQueryKeys.list({
       ...(query || {}),
       inventoryItemId,

@@ -1,7 +1,8 @@
-import { DataTable } from "../../../../../components/data-table"
-import { useInventoryItemLevels } from "../../../../../hooks/api/inventory"
+import { useInventoryItemLevels } from "@hooks/api"
 import { useLocationListTableColumns } from "./use-location-list-table-columns"
 import { useLocationLevelTableQuery } from "./use-location-list-table-query"
+import { DataTable } from "@components/data-table"
+// import { _DataTable } from "../../../../../components/table/data-table"
 
 const PAGE_SIZE = 20
 const PREFIX = "invlvl"
