@@ -1,6 +1,6 @@
-import { RegionCountryDTO } from "@medusajs/types"
+import type { StaticCountry } from "@lib/data/countries"
+import type { RegionCountryDTO } from "@medusajs/types"
 import { json } from "react-router-dom"
-import { StaticCountry } from "../../../../lib/data/countries"
 
 const acceptedOrderKeys = ["name", "code"]
 
@@ -44,6 +44,7 @@ export const useCountries = ({
       if (b[sortKey] === null) {
         return -direction
       }
+
       return a[sortKey]! > b[sortKey]! ? direction : -direction
     })
   }
@@ -55,6 +56,7 @@ export const useCountries = ({
         c.name.toLowerCase().includes(query) ||
         c.iso_2.toLowerCase().includes(query)
     )
+
     return {
       countries: results,
       count: results.length,
