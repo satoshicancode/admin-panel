@@ -11,6 +11,7 @@ import {
   useInitiateReceiveReturn,
   useReturn,
 } from "../../../hooks/api/returns"
+import { getErrorMessage } from "@utils/error-helper"
 
 let IS_REQUEST_RUNNING = false
 
@@ -66,7 +67,7 @@ export function OrderReceiveReturn() {
           })),
         })
       } catch (e) {
-        toast.error(e.message)
+        toast.error(getErrorMessage(e))
       } finally {
         IS_REQUEST_RUNNING = false
       }

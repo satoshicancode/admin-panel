@@ -21,6 +21,7 @@ import { AllocateItemsSchema } from "./constants"
 import { OrderAllocateItemsItem } from "./order-allocate-items-item"
 import { checkInventoryKit } from "./utils"
 import { useDocumentDirection } from "../../../../../hooks/use-document-direction"
+import { getErrorMessage } from "@utils/error-helper"
 
 type OrderAllocateItemsFormProps = {
   order: AdminOrder
@@ -121,7 +122,7 @@ export function OrderAllocateItemsForm({ order }: OrderAllocateItemsFormProps) {
       }
     } catch (e) {
       toast.error(t("general.error"), {
-        description: e.message,
+        description: getErrorMessage(e),
         dismissLabel: t("actions.close"),
       })
     }

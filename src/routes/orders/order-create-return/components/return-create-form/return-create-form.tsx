@@ -27,6 +27,7 @@ import {
   useRouteModal,
   useStackedModal,
 } from "../../../../../components/modals"
+import { getErrorMessage } from "@utils/error-helper"
 
 import { Form } from "../../../../../components/common/form"
 import { Combobox } from "../../../../../components/inputs/combobox"
@@ -277,7 +278,7 @@ export const ReturnCreateForm = ({
       handleSuccess()
     } catch (e) {
       toast.error(t("general.error"), {
-        description: e.message,
+        description: getErrorMessage(e),
         dismissLabel: t("actions.close"),
       })
     }

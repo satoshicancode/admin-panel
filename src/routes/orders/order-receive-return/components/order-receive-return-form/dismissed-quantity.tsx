@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react"
 import { HeartBroken } from "@medusajs/icons"
-import { UseFormReturn } from "react-hook-form"
+import type { UseFormReturn } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 
-import { AdminOrderLineItem } from "@medusajs/types"
+import type { AdminOrderLineItem } from "@medusajs/types"
 import { Button, Input, Popover, toast } from "@medusajs/ui"
 
 import { ReceiveReturnSchema } from "./constants"
@@ -13,6 +13,7 @@ import {
   useRemoveDismissItem,
   useUpdateDismissItem,
 } from "../../../../../hooks/api/returns"
+import { getErrorMessage } from "@utils/error-helper"
 
 type DismissedQuantityProps = {
   returnId: string
@@ -107,7 +108,7 @@ function DismissedQuantity({
         }
       }
     } catch (e) {
-      toast.error(e.message)
+      toast.error(getErrorMessage(e))
     }
   }
 

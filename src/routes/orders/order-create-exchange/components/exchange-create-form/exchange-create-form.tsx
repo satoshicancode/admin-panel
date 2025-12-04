@@ -25,6 +25,7 @@ import { CreateExchangeSchemaType, ExchangeCreateSchema } from "./schema"
 
 import { AdminReturn } from "@medusajs/types"
 import { KeyboundForm } from "../../../../../components/utilities/keybound-form/keybound-form.tsx"
+import { getErrorMessage } from "@utils/error-helper"
 import {
   useCancelExchangeRequest,
   useExchangeConfirmRequest,
@@ -212,7 +213,7 @@ export const ExchangeCreateForm = ({
       handleSuccess()
     } catch (e) {
       toast.error(t("general.error"), {
-        description: e.message,
+        description: getErrorMessage(e),
       })
     }
   })

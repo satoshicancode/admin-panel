@@ -22,6 +22,7 @@ import {
 import { getStylizedAmount } from "../../../../../lib/money-amount-helpers"
 import { ReceiveReturnSchema } from "./constants"
 import DismissedQuantity from "./dismissed-quantity"
+import { getErrorMessage } from "@utils/error-helper"
 
 type OrderAllocateItemsFormProps = {
   order: AdminOrder
@@ -137,7 +138,7 @@ export function OrderReceiveReturnForm({
       })
     } catch (e) {
       toast.error(t("general.error"), {
-        description: e.message,
+        description: getErrorMessage(e),
         dismissLabel: t("actions.close"),
       })
     }
@@ -194,7 +195,7 @@ export function OrderReceiveReturnForm({
         }
       }
     } catch (e) {
-      toast.error(e.message)
+      toast.error(getErrorMessage(e))
     }
   }
 
@@ -204,7 +205,7 @@ export function OrderReceiveReturnForm({
         await cancelReceiveReturn()
       }
     } catch (e) {
-      toast.error(e.message)
+      toast.error(getErrorMessage(e))
     }
   }
 
