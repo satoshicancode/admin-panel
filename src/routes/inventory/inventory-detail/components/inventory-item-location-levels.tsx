@@ -1,13 +1,13 @@
-import { HttpTypes } from "@medusajs/types";
 import { Button, Container, Heading } from "@medusajs/ui";
 
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { ItemLocationListTable } from "./location-levels-table/location-list-table";
+import type { ExtendedAdminInventoryItem } from "@custom-types/inventory";
 
 type InventoryItemLocationLevelsSectionProps = {
-  inventoryItem: HttpTypes.AdminInventoryItemResponse["inventory_item"];
+  inventoryItem: ExtendedAdminInventoryItem;
 };
 export const InventoryItemLocationLevelsSection = ({
   inventoryItem,

@@ -147,7 +147,7 @@ const BadgeListRenderer: CellRenderer = (value, row, column, t, dataTestId) => {
   );
 };
 
-const ProductInfoRenderer: CellRenderer = (_, row, column, _t, dataTestId) => {
+const ProductInfoRenderer: CellRenderer = (_, row, _column, _t, dataTestId) => {
   return <ProductCell product={row} data-testid={dataTestId} />;
 };
 
@@ -182,7 +182,7 @@ const CustomerNameRenderer: CellRenderer = (_, row, _column, t) => {
   return t ? t("customers.guest", "Guest") : "Guest";
 };
 
-const AddressSummaryRenderer: CellRenderer = (_, row, column, _t) => {
+const AddressSummaryRenderer: CellRenderer = (_, row, column) => {
   let address = null;
   if (column.field === "shipping_address_display") {
     address = row.shipping_address;
@@ -216,7 +216,7 @@ const AddressSummaryRenderer: CellRenderer = (_, row, column, _t) => {
   return parts.join(" • ") || "-";
 };
 
-const CountryCodeRenderer: CellRenderer = (_, row, _column, _t) => {
+const CountryCodeRenderer: CellRenderer = (_, row) => {
   const countryCode = row.shipping_address?.country_code;
 
   if (!countryCode) return <div className="flex w-full justify-center">-</div>;
@@ -265,6 +265,7 @@ const CurrencyRenderer: CellRenderer = (
   dataTestId,
 ) => {
   const currencyCode = row.currency_code || "USD";
+
   return (
     <MoneyAmountCell
       currencyCode={currencyCode}
@@ -275,8 +276,9 @@ const CurrencyRenderer: CellRenderer = (
   );
 };
 
-const TotalRenderer: CellRenderer = (value, row, _column, _t) => {
+const TotalRenderer: CellRenderer = (value, row) => {
   const currencyCode = row.currency_code || "USD";
+
   return <TotalCell currencyCode={currencyCode} total={value} />;
 };
 
@@ -321,6 +323,7 @@ export function getCellRenderer(
         if (t) {
           return value ? t("fields.yes", "Yes") : t("fields.no", "No");
         }
+        
         return value ? "Yes" : "No";
       };
     case "enum":

@@ -13,7 +13,6 @@ import { KeyboundForm } from "../../../../../components/utilities/keybound-form"
 import { useUpdateShippingOptions } from "../../../../../hooks/api/shipping-options"
 import { useComboboxData } from "../../../../../hooks/use-combobox-data"
 import { sdk } from "../../../../../lib/client"
-import { pick } from "../../../../../lib/common"
 import { isOptionEnabledInStore } from "../../../../../lib/shipping-options"
 import {
   FulfillmentSetType,
@@ -85,9 +84,12 @@ export const EditShippingOptionForm = ({
   )
 
   const handleSubmit = form.handleSubmit(async (values) => {
-    const rules = shippingOption.rules.map((r) => ({
-      ...pick(r, ["id", "attribute", "operator", "value"]),
-    })) as HttpTypes.AdminUpdateShippingOptionRule[]
+    const rules: (HttpTypes.AdminUpdateShippingOptionRule | HttpTypes.AdminCreateShippingOptionRule)[] = shippingOption.rules.map((r) => ({
+      id: r.id,
+      attribute: r.attribute,
+      operator: r.operator,
+      value: r.value ?? "",
+    }))
 
     const storeRule = rules.find((r) => r.attribute === "enabled_in_store")
 

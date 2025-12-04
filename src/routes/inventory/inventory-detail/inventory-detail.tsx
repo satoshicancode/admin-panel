@@ -1,17 +1,15 @@
 import { useLoaderData, useParams } from "react-router-dom"
-
-import { TwoColumnPageSkeleton } from "../../../components/common/skeleton"
-import { TwoColumnPage } from "../../../components/layout/pages"
-import { useInventoryItem } from "../../../hooks/api/inventory"
-import { InventoryItemAttributeSection } from "./components/inventory-item-attributes/attributes-section"
+import { INVENTORY_DETAIL_FIELDS } from "./constants"
+import type { inventoryItemLoader } from "./loader"
+import { useInventoryItem } from "@hooks/api"
+import { useExtension } from "@providers/extension-provider"
+import { TwoColumnPageSkeleton } from "@components/common/skeleton"
+import { TwoColumnPage } from "@components/layout/pages"
 import { InventoryItemGeneralSection } from "./components/inventory-item-general-section"
 import { InventoryItemLocationLevelsSection } from "./components/inventory-item-location-levels"
 import { InventoryItemReservationsSection } from "./components/inventory-item-reservations"
 import { InventoryItemVariantsSection } from "./components/inventory-item-variants/variants-section"
-import { inventoryItemLoader } from "./loader"
-
-import { useExtension } from "../../../providers/extension-provider"
-import { INVENTORY_DETAIL_FIELDS } from "./constants"
+import { InventoryItemAttributeSection } from "./components/inventory-item-attributes/attributes-section"
 
 export const InventoryDetail = () => {
   const { id } = useParams()
@@ -71,10 +69,12 @@ export const InventoryDetail = () => {
           <InventoryItemReservationsSection inventoryItem={inventory_item} />
         </TwoColumnPage.Main>
         <TwoColumnPage.Sidebar data-testid="inventory-detail-sidebar">
-          <InventoryItemVariantsSection
-            variants={(inventory_item as any).variants}
-          />
-          <InventoryItemAttributeSection inventoryItem={inventory_item as any} />
+          {inventory_item.variants && inventory_item.variants?.length > 0 && (
+            <InventoryItemVariantsSection
+              variants={inventory_item.variants}
+            />
+          )}
+          <InventoryItemAttributeSection inventoryItem={inventory_item} />
         </TwoColumnPage.Sidebar>
       </TwoColumnPage>
     </div>

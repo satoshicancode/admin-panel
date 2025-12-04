@@ -1,17 +1,18 @@
-import { FetchError } from "@medusajs/js-sdk"
-import { HttpTypes } from "@medusajs/types"
+import type { FetchError } from "@medusajs/js-sdk"
+import type { HttpTypes } from "@medusajs/types"
 import {
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
+  type QueryKey,
+  type UseMutationOptions,
+  type UseQueryOptions,
   useMutation,
   useQuery,
 } from "@tanstack/react-query"
 
-import { sdk } from "../../lib/client"
-import { queryClient } from "../../lib/query-client"
-import { queryKeysFactory } from "../../lib/query-key-factory"
+import { sdk } from "@lib/client"
+import { queryClient } from "@lib/query-client"
+import { queryKeysFactory } from "@lib/query-key-factory"
 import { variantsQueryKeys } from "./products"
+import type { ExtendedAdminInventoryItemResponse, ExtendedInventoryItemLevelsResponse } from "@custom-types/inventory"
 
 const INVENTORY_ITEMS_QUERY_KEY = "inventory_items" as const
 export const inventoryItemsQueryKeys = queryKeysFactory(
@@ -46,19 +47,19 @@ export const useInventoryItems = (
 
 export const useInventoryItem = (
   id: string,
-  query?: Record<string, any>,
+  query?: Record<string, unknown>,
   options?: Omit<
     UseQueryOptions<
-      HttpTypes.AdminInventoryItemResponse,
+      ExtendedAdminInventoryItemResponse,
       FetchError,
-      HttpTypes.AdminInventoryItemResponse,
+      ExtendedAdminInventoryItemResponse,
       QueryKey
     >,
     "queryKey" | "queryFn"
   >
 ) => {
   const { data, ...rest } = useQuery({
-    queryFn: () => sdk.admin.inventoryItem.retrieve(id, query),
+    queryFn: () => sdk.admin.inventoryItem.retrieve(id, query) as Promise<ExtendedAdminInventoryItemResponse>,
     queryKey: inventoryItemsQueryKeys.detail(id),
     ...options,
   })
@@ -163,19 +164,19 @@ export const useDeleteInventoryItemLevel = (
 
 export const useInventoryItemLevels = (
   inventoryItemId: string,
-  query?: Record<string, any>,
+  query?: Record<string, unknown>,
   options?: Omit<
     UseQueryOptions<
-      HttpTypes.AdminInventoryLevelListResponse,
+      ExtendedInventoryItemLevelsResponse,
       FetchError,
-      HttpTypes.AdminInventoryLevelListResponse,
+      ExtendedInventoryItemLevelsResponse,
       QueryKey
     >,
     "queryKey" | "queryFn"
   >
 ) => {
   const { data, ...rest } = useQuery({
-    queryFn: () => sdk.admin.inventoryItem.listLevels(inventoryItemId, query),
+    queryFn: () => sdk.admin.inventoryItem.listLevels(inventoryItemId, query) as Promise<ExtendedInventoryItemLevelsResponse>,
     queryKey: inventoryItemLevelsQueryKeys.list({
       ...(query || {}),
       inventoryItemId,

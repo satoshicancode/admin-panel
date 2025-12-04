@@ -1,8 +1,4 @@
-import type {
-  HttpTypes,
-  InventoryLevelDTO,
-  StockLocationDTO,
-} from "@medusajs/types";
+import type { HttpTypes } from "@medusajs/types";
 import { Button, Input, Text, toast } from "@medusajs/ui";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,8 +15,8 @@ import { sanitizeNumberInput } from "@/lib/sanitize-number-input";
 
 type AdjustInventoryFormProps = {
   item: HttpTypes.AdminInventoryItem;
-  level: InventoryLevelDTO;
-  location: StockLocationDTO;
+  level: HttpTypes.AdminInventoryLevel;
+  location: HttpTypes.AdminStockLocation;
 };
 
 const AttributeGridRow = ({

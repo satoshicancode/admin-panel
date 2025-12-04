@@ -1,14 +1,14 @@
 import { Container, Heading } from "@medusajs/ui"
-import { HttpTypes } from "@medusajs/types"
 import { PencilSquare } from "@medusajs/icons"
 import { useTranslation } from "react-i18next"
-
-import { ActionMenu } from "../../../../components/common/action-menu"
-import { SectionRow } from "../../../../components/common/section"
+import { ActionMenu } from "@components/common/action-menu"
+import { SectionRow } from "@components/common/section"
+import type { ExtendedAdminInventoryItem } from "@custom-types/inventory"
 
 type InventoryItemGeneralSectionProps = {
-  inventoryItem: HttpTypes.AdminInventoryItemResponse["inventory_item"]
+  inventoryItem: ExtendedAdminInventoryItem
 }
+
 export const InventoryItemGeneralSection = ({
   inventoryItem,
 }: InventoryItemGeneralSectionProps) => {
@@ -24,6 +24,7 @@ export const InventoryItemGeneralSection = ({
 
     return "-"
   }
+
   return (
     <Container className="divide-y p-0" data-testid="inventory-item-general-section">
       <div className="flex items-center justify-between px-6 py-4" data-testid="inventory-item-general-header">

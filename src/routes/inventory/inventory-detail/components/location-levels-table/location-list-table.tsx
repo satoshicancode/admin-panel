@@ -1,10 +1,11 @@
-import { _DataTable } from "../../../../../components/table/data-table/data-table";
-import { useInventoryItemLevels } from "../../../../../hooks/api/inventory";
-import { useDataTable } from "../../../../../hooks/use-data-table";
-import {
-  ExtendedLocationLevel,
-  useLocationListTableColumns,
-} from "./use-location-list-table-columns";
+import type { ExtendedInventoryItemLevel } from "@custom-types/inventory";
+
+import { _DataTable } from "@components/table/data-table";
+
+import { useInventoryItemLevels } from "@hooks/api";
+import { useDataTable } from "@hooks/use-data-table";
+
+import { useLocationListTableColumns } from "./use-location-list-table-columns";
 import { useLocationLevelTableQuery } from "./use-location-list-table-query";
 
 const PAGE_SIZE = 20;

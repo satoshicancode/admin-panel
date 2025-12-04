@@ -3,7 +3,7 @@ import { useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
 import * as zod from "zod"
 
-import { HttpTypes } from "@medusajs/types"
+import type { HttpTypes } from "@medusajs/types"
 import { Button, toast } from "@medusajs/ui"
 import { useTranslation } from "react-i18next"
 
@@ -164,7 +164,7 @@ export function EditShippingOptionsPricingForm({
         currency_code,
         amount: castNumber(rule.amount),
         rules: buildShippingOptionPriceRules(rule),
-      }))
+      })) ?? []
     )
 
     /**
@@ -194,7 +194,7 @@ export function EditShippingOptionsPricingForm({
         region_id,
         amount: castNumber(rule.amount),
         rules: buildShippingOptionPriceRules(rule),
-      }))
+      })) ?? []
     )
 
     const allPrices = [
@@ -330,6 +330,7 @@ const getDefaultValues = (prices: HttpTypes.AdminShippingOptionPrice[]) => {
     forbidden: string[] = []
   ) => {
     const attributes = price.price_rules?.map((r) => r.attribute) || []
+
     return (
       required.every((attr) => attributes.includes(attr)) &&
       !forbidden.some((attr) => attributes.includes(attr))
@@ -345,6 +346,7 @@ const getDefaultValues = (prices: HttpTypes.AdminShippingOptionPrice[]) => {
   prices.forEach((price) => {
     if (!price.price_rules?.length) {
       currency_prices[price.currency_code!] = price.amount
+
       return
     }
 
@@ -354,6 +356,7 @@ const getDefaultValues = (prices: HttpTypes.AdminShippingOptionPrice[]) => {
         conditional_currency_prices[code] = []
       }
       conditional_currency_prices[code].push(mapToConditionalPrice(price))
+
       return
     }
 
@@ -362,7 +365,10 @@ const getDefaultValues = (prices: HttpTypes.AdminShippingOptionPrice[]) => {
         (r) => r.attribute === REGION_ID_ATTRIBUTE
       )?.value
 
-      region_prices[regionId] = price.amount
+      if (regionId !== undefined) {
+        region_prices[String(regionId)] = price.amount
+      }
+      
       return
     }
 
@@ -371,10 +377,13 @@ const getDefaultValues = (prices: HttpTypes.AdminShippingOptionPrice[]) => {
         (r) => r.attribute === REGION_ID_ATTRIBUTE
       )?.value
 
-      if (!conditional_region_prices[regionId]) {
-        conditional_region_prices[regionId] = []
+      if (regionId !== undefined) {
+        const key = String(regionId)
+        if (!conditional_region_prices[key]) {
+          conditional_region_prices[key] = []
+        }
+        conditional_region_prices[key].push(mapToConditionalPrice(price))
       }
-      conditional_region_prices[regionId].push(mapToConditionalPrice(price))
     }
   })
 
