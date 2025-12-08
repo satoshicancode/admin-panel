@@ -8,10 +8,14 @@ export const DEFAULT_PROPERTIES = [
   "fulfillment_status",
   "total",
   "currency_code",
-]
+];
 
-export const DEFAULT_RELATIONS = ["*customer", "*sales_channel"]
+export const DEFAULT_RELATIONS = [
+  "*customer",
+  "*sales_channel",
+  "orders.*",
+  "orders.seller.*",
+  "orders.total",
+];
 
-export const DEFAULT_FIELDS = `${DEFAULT_PROPERTIES.join(
-  ","
-)},${DEFAULT_RELATIONS.join(",")}`
+export const DEFAULT_FIELDS = `${DEFAULT_PROPERTIES.join(",")},${DEFAULT_RELATIONS.join(",")}`;

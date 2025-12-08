@@ -4,23 +4,16 @@ import { useOrderTableColumns } from '@hooks/table/columns';
 import { useOrderTableQuery } from '@hooks/table/query';
 import { useDataTable } from '@hooks/use-data-table';
 import { Container, Heading } from '@medusajs/ui';
-import { useFeatureFlag } from '@providers/feature-flag-provider';
 import { DEFAULT_FIELDS } from '@routes/orders/order-detail/constants';
 import { keepPreviousData } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { ConfigurableOrderListTable } from './configurable-order-list-table';
 import { useOrderLegacyTableFilters } from './use-order-legacy-table-filters';
 
 const PAGE_SIZE = 20;
 
 export const OrderListTable = () => {
   const { t } = useTranslation();
-  const isViewConfigEnabled = useFeatureFlag('view_configurations');
-
-  if (isViewConfigEnabled) {
-    return <ConfigurableOrderListTable />;
-  }
 
   const { searchParams, raw } = useOrderTableQuery({
     pageSize: PAGE_SIZE

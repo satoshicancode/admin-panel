@@ -1,4 +1,11 @@
-import type { AdminOrder, PaginatedResponse } from "@medusajs/types";
+import type {
+  AdminOrder,
+  CustomerDTO,
+  FulfillmentStatus,
+  PaginatedResponse,
+  PaymentStatus,
+  SalesChannelDTO,
+} from "@medusajs/types";
 
 import type { SellerDTO } from "@custom-types/seller";
 
@@ -23,6 +30,9 @@ export interface Order {
   billing_address_id: string;
   items: { id: string }[];
   seller: SellerDTO;
+  payment_status: PaymentStatus;
+  fulfillment_status: FulfillmentStatus;
+  total: number;
 }
 
 export interface OrderResponse {
@@ -48,9 +58,21 @@ export interface OrderQueryParams {
   q?: string;
 }
 
-export interface OrderSet extends Order {
+export interface OrderSet {
+  id: string;
+  display_id: number;
+  customer_id: string;
+  customer?: CustomerDTO;
+  sales_channel_id?: string;
+  sales_channel?: SalesChannelDTO;
+  created_at: string;
+  updated_at: string;
+  currency_code: string;
+  total: number;
   orders: Order[];
 }
+
+export type OrderTableRow = OrderSet;
 
 export type AdminOrderListResponse = PaginatedResponse<{
   orders: AdminOrder[];
