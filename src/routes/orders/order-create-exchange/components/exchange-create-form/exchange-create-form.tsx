@@ -35,10 +35,11 @@ import {
 import { currencies } from "../../../../../lib/data/currencies"
 import { ExchangeInboundSection } from "./exchange-inbound-section.tsx"
 import { ExchangeOutboundSection } from "./exchange-outbound-section"
+import type { ExtendedAdminExchange } from "@custom-types/exchanges/common.ts"
 
 type ReturnCreateFormProps = {
   order: AdminOrder
-  exchange: AdminExchange
+  exchange: ExtendedAdminExchange
   preview: AdminOrderPreview
   orderReturn?: AdminReturn
 }

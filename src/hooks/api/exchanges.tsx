@@ -12,8 +12,7 @@ import { queryClient } from "@lib/query-client"
 import { queryKeysFactory } from "@lib/query-key-factory"
 import { ordersQueryKeys } from "./orders"
 import { returnsQueryKeys } from "./returns"
-import type { ExtendedAdminExchange } from "@custom-types/exchanges"
-import type { ExtendedAdminExchangeListResponse } from "@custom-types/exchanges/common"
+import type { ExtendedAdminExchangeListResponse, ExtendedAdminExchangeResponse } from "@custom-types/exchanges/common"
 
 const EXCHANGES_QUERY_KEY = "exchanges" as const
 export const exchangesQueryKeys = queryKeysFactory(EXCHANGES_QUERY_KEY)
@@ -23,16 +22,16 @@ export const useExchange = (
   query?: HttpTypes.AdminExchangeListParams,
   options?: Omit<
     UseQueryOptions<
-      ExtendedAdminExchange,
+      ExtendedAdminExchangeResponse,
       FetchError,
-      ExtendedAdminExchange,
+      ExtendedAdminExchangeResponse,
       QueryKey
     >,
     "queryFn" | "queryKey"
   >
 ) => {
   const { data, ...rest } = useQuery({
-    queryFn: async () => sdk.admin.exchange.retrieve(id, query) as unknown as Promise<ExtendedAdminExchange>,
+    queryFn: async () => sdk.admin.exchange.retrieve(id, query) as unknown as Promise<ExtendedAdminExchangeResponse>,
     queryKey: exchangesQueryKeys.detail(id, query),
     ...options,
   })

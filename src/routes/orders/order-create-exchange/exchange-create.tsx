@@ -3,10 +3,10 @@ import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate, useParams } from "react-router-dom"
 
-import { RouteFocusModal } from "../../../components/modals"
-import { useCreateExchange, useExchange } from "../../../hooks/api/exchanges"
-import { useOrder, useOrderPreview } from "../../../hooks/api/orders"
-import { useReturn } from "../../../hooks/api/returns"
+import { RouteFocusModal } from "@components/modals"
+import { useCreateExchange, useExchange } from "@hooks/api/exchanges"
+import { useOrder, useOrderPreview } from "@hooks/api/orders"
+import { useReturn } from "@hooks/api/returns"
 import { DEFAULT_FIELDS } from "../order-detail/constants"
 import { ExchangeCreateForm } from "./components/exchange-create-form"
 import { getErrorMessage } from "@utils/error-helper"
@@ -26,11 +26,11 @@ export const ExchangeCreate = () => {
   const [activeExchangeId, setActiveExchangeId] = useState<string>()
   const { mutateAsync: createExchange } = useCreateExchange(order.id)
 
-  const { exchange } = useExchange(activeExchangeId!, undefined, {
+  const { exchange } = useExchange(activeExchangeId || "", undefined, {
     enabled: !!activeExchangeId,
   })
 
-  const { return: orderReturn } = useReturn(exchange?.return_id!, undefined, {
+  const { return: orderReturn } = useReturn(exchange?.return_id || "", undefined, {
     enabled: !!exchange?.return_id,
   })
 
