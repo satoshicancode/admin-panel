@@ -78,13 +78,6 @@ export type AdminOrderListResponse = PaginatedResponse<{
   orders: AdminOrder[];
 }>;
 
-export interface AdminOrderSetListParams {
-  offset?: number;
-  limit?: number;
-  fields?: string;
-  order_id?: string;
-}
-
 export interface AdminOrderSetListResponse {
   order_sets: OrderSet[];
   count?: number;

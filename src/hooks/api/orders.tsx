@@ -9,10 +9,9 @@ import {
   useQuery,
 } from "@tanstack/react-query";
 
-import {
-  AdminOrderSetListParams,
-  AdminOrderSetListResponse,
-} from "@custom-types/order";
+import { AdminOrderSetListResponse } from "@custom-types/order";
+
+import { ExtendedAdminOrderSetFilters } from "@hooks/table/query/use-order-sets-table-query";
 
 import { sdk } from "../../lib/client";
 import { queryClient } from "../../lib/query-client";
@@ -46,10 +45,14 @@ _orderKeys.shippingOptions = function (id: string) {
 
 export const ordersQueryKeys = _orderKeys;
 
+type AdminOrderSetListParams = ExtendedAdminOrderSetFilters & {
+  fields?: string;
+};
+
 const ORDER_SETS_QUERY_KEY = "order-sets" as const;
 export const orderSetsQueryKeys = queryKeysFactory<
   typeof ORDER_SETS_QUERY_KEY,
-  AdminOrderSetListParams
+  ExtendedAdminOrderSetFilters
 >(ORDER_SETS_QUERY_KEY);
 
 export const useOrder = (
