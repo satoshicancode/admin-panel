@@ -30,7 +30,7 @@ export const ReturnCreate = () => {
 
   const { mutateAsync: initiateReturn } = useInitiateReturn(order.id)
 
-  const { return: activeReturn } = useReturn(activeReturnId, undefined, {
+  const { return: activeReturn } = useReturn(activeReturnId ?? "", undefined, {
     enabled: !!activeReturnId,
   })
 

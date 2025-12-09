@@ -166,12 +166,13 @@ export const ExchangeInboundSection = ({
           const returnItemAction = i.actions?.find(
             (a) => a.action === "RETURN_ITEM"
           )
+          const reasonId = returnItemAction?.details?.reason_id
 
           update(ind, {
             ...inboundItems[ind],
             quantity: i.detail.return_requested_quantity,
             note: returnItemAction?.internal_note,
-            reason_id: returnItemAction?.details?.reason_id as string,
+            reason_id: typeof reasonId === "string" ? reasonId : undefined,
           })
         }
       } else {

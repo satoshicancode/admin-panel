@@ -141,12 +141,13 @@ export const ExchangeCreateForm = ({
           const inboundAction = i.actions?.find(
             (a) => a.action === "RETURN_ITEM"
           )
+          const reasonId = inboundAction?.details?.reason_id
 
           return {
             item_id: i.id,
             quantity: i.detail.return_requested_quantity,
             note: inboundAction?.internal_note,
-            reason_id: inboundAction?.details?.reason_id as string | undefined,
+            reason_id: typeof reasonId === "string" ? reasonId : undefined,
           }
         }),
         outbound_items: outboundPreviewItems
