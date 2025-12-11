@@ -421,9 +421,9 @@ export const ReturnCreateForm = ({
               <Heading level="h2" data-testid="order-create-return-inbound-heading">{t("orders.returns.inbound")}</Heading>
               <StackedFocusModal id="items" data-testid="order-create-return-add-items-modal">
                 <StackedFocusModal.Trigger asChild>
-                  <a className="focus-visible:shadow-borders-focus transition-fg txt-compact-small-plus cursor-pointer text-blue-500 outline-none hover:text-blue-400" data-testid="order-create-return-add-items-button">
+                  <Button type="button" variant="secondary" size="small" data-testid="order-create-return-add-items-button">
                     {t("actions.addItems")}
-                  </a>
+                  </Button>
                 </StackedFocusModal.Trigger>
                 <StackedFocusModal.Content>
                   <StackedFocusModal.Header />
