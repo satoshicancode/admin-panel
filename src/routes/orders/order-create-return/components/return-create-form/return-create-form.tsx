@@ -708,7 +708,7 @@ export const ReturnCreateForm = ({
                 </span>
               </div>
 
-              <div className="mt-4 flex items-center justify-between border-t border-dotted pt-4" data-testid="order-create-return-difference-row">
+              <div className="mt-4 flex items-center justify-between" data-testid="order-create-return-difference-row">
                 <span className="txt-small font-medium">
                   {t("orders.returns.estDifference")}
                 </span>

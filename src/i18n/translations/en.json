@@ -1183,7 +1183,7 @@
     },
     "returns": {
       "create": "Create Return",
-      "confirm": "Confirm Return",
+      "confirm": "Confirm",
       "confirmText": "You are about to confirm a Return. This action cannot be undone.",
       "inbound": "Inbound",
       "outbound": "Outbound",
@@ -1215,7 +1215,7 @@
       "damagedItemsReturned": "{{quantity}}x damaged items returned",
       "activeChangeError": "There is an active order change in progress on this order. Please finish or discard the change first.",
       "cancel": {
-        "title": "Cancel Return",
+        "title": "Cancel",
         "description": "Are you sure you want to cancel the return request?"
       },
       "placeholders": {
