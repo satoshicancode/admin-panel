@@ -1,5 +1,6 @@
 import { OnChangeFn, RowSelectionState } from "@tanstack/react-table"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useSearchParams } from "react-router-dom"
 
 import { useTranslation } from "react-i18next"
 import { _DataTable } from "../../../../../components/table/data-table"
@@ -22,6 +23,7 @@ export const AddOrderEditItemsTable = ({
   currencyCode,
 }: AddExchangeOutboundItemsTableProps) => {
   const { t } = useTranslation()
+  const [, setSearchParams] = useSearchParams()
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 
@@ -32,6 +34,18 @@ export const AddOrderEditItemsTable = ({
     setRowSelection(newState)
     onSelectionChange(Object.keys(newState))
   }
+
+  useEffect(() => {
+    const orderParam = `${PREFIX}_order`
+    setSearchParams((prev) => {
+      if (!prev.get(orderParam)) {
+        const newParams = new URLSearchParams(prev)
+        newParams.set(orderParam, "product.title")
+        return newParams
+      }
+      return prev
+    })
+  }, [setSearchParams])
 
   const { searchParams, raw } = useOrderEditItemTableQuery({
     pageSize: PAGE_SIZE,
@@ -75,7 +89,7 @@ export const AddOrderEditItemsTable = ({
         layout="fill"
         search
         orderBy={[
-          { key: "product_id", label: t("fields.product") },
+          { key: "product.title", label: t("fields.product") },
           { key: "title", label: t("fields.title") },
           { key: "sku", label: t("fields.sku") },
         ]}
