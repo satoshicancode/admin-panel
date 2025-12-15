@@ -31,6 +31,7 @@ import { ExchangeOutboundItem } from "./exchange-outbound-item"
 import { useOrderShippingOptions } from "../../../../../hooks/api/orders"
 import { CreateExchangeSchemaType } from "./schema"
 import { getFormattedShippingOptionLocationName } from "../../../../../lib/shipping-options"
+import type { ExtendedAdminProductVariantListResponse } from "@custom-types/product"
 
 type ExchangeOutboundSectionProps = {
   order: AdminOrder
@@ -282,12 +283,10 @@ export const ExchangeOutboundSection = ({
         .map((item) => item?.variant_id)
         .filter(Boolean)
 
-      const variants = (
-        await sdk.admin.productVariant.list({
-          id: variantIds,
-          fields: "*inventory.location_levels",
-        })
-      ).variants
+      const { variants } = (await sdk.admin.productVariant.list({
+        id: variantIds,
+        fields: "*inventory.location_levels",
+      })) as ExtendedAdminProductVariantListResponse
 
       variants.forEach((variant) => {
         ret[variant.id] = variant.inventory?.[0]?.location_levels || []
