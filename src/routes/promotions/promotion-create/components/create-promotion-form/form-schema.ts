@@ -1,11 +1,14 @@
 import { z } from "zod"
 import { CreateCampaignSchema } from "../../../../campaigns/campaign-create/components/create-campaign-form"
+import { PROMOTION_RULE_OPERATORS } from "@/routes/promotions/common/constants"
 
 const RuleSchema = z.array(
   z.object({
     id: z.string().optional(),
     attribute: z.string().min(1, { message: "Required field" }),
-    operator: z.string().min(1, { message: "Required field" }),
+    operator: z.enum(PROMOTION_RULE_OPERATORS, {
+      message: "Required field",
+    }),
     values: z.union([
       z.number().min(1, { message: "Required field" }),
       z.string().min(1, { message: "Required field" }),

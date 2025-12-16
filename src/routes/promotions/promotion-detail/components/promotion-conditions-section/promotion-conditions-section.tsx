@@ -1,14 +1,16 @@
 import { PencilSquare } from "@medusajs/icons"
-import { ApplicationMethodTargetTypeValues, HttpTypes, PromotionRuleTypes, } from "@medusajs/types"
+import type { ApplicationMethodTargetTypeValues } from "@medusajs/types"
 import { Badge, Container, Heading } from "@medusajs/ui"
 import { useTranslation } from "react-i18next"
 
-import { ActionMenu } from "../../../../../components/common/action-menu"
-import { BadgeListSummary } from "../../../../../components/common/badge-list-summary"
-import { NoRecords } from "../../../../../components/common/empty-table-content"
+import { ActionMenu } from "@/components/common/action-menu"
+import { BadgeListSummary } from "@/components/common/badge-list-summary"
+import { NoRecords } from "@/components/common/empty-table-content"
+import type { ExtendedAdminPromotionRule, FormattedPromotionRuleTypes } from "@custom-types/promotion"
+import { getConditionsTitleKey } from "./helpers"
 
 type RuleProps = {
-  rule: HttpTypes.AdminPromotionRule
+  rule: ExtendedAdminPromotionRule
 }
 
 function RuleBlock({ rule }: RuleProps) {
@@ -32,8 +34,8 @@ function RuleBlock({ rule }: RuleProps) {
           className="!txt-compact-small-plus"
           list={
             rule.field_type === "number"
-              ? [rule.values]
-              : rule.values?.map((v) => v.label)
+              ? [String(rule.values)]
+              : rule.values?.map((v) => v.label ?? "").filter(Boolean) ?? []
           }
         />
       </div>
@@ -42,9 +44,9 @@ function RuleBlock({ rule }: RuleProps) {
 }
 
 type PromotionConditionsSectionProps = {
-  rules: HttpTypes.AdminPromotionRule[]
-  ruleType: PromotionRuleTypes
-  applicationMethodTargetType: ApplicationMethodTargetTypeValues
+  rules: ExtendedAdminPromotionRule[]
+  ruleType: FormattedPromotionRuleTypes
+  applicationMethodTargetType?: ApplicationMethodTargetTypeValues
 }
 
 export const PromotionConditionsSection = ({
@@ -59,11 +61,7 @@ export const PromotionConditionsSection = ({
       <div className="flex items-center justify-between px-6 py-4" data-testid={`promotion-conditions-section-header-${ruleType}`}>
         <div className="flex flex-col">
           <Heading data-testid={`promotion-conditions-section-heading-${ruleType}`}>
-            {t(
-              ruleType === "target-rules"
-                ? `promotions.fields.conditions.${ruleType}.${applicationMethodTargetType}.title`
-                : `promotions.fields.conditions.${ruleType}.title`
-            )}
+            {t(getConditionsTitleKey(ruleType, applicationMethodTargetType))}
           </Heading>
         </div>
 

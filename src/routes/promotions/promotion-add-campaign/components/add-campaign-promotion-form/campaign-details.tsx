@@ -2,8 +2,9 @@ import { AdminCampaign } from "@medusajs/types"
 import { Heading, Text } from "@medusajs/ui"
 import { Fragment } from "react"
 import { useTranslation } from "react-i18next"
+import { ExtendedCampaignBudgetType } from "@custom-types/promotion"
 
-const translationKeyMap = {
+const translationKeyMap: Record<ExtendedCampaignBudgetType, string> = {
   spend: "spend",
   usage: "usage",
   use_by_attribute: "useByAttribute",
@@ -118,7 +119,7 @@ export const CampaignDetails = ({ campaign }: CampaignDetailsProps) => {
 
         <div className="text-ui-fg-subtle grid grid-cols-2 items-center py-1">
           <Text className="txt-small-plus">
-            {campaign.budget?.type === "use_by_attribute"
+            {(campaign.budget?.type as ExtendedCampaignBudgetType) === "use_by_attribute"
               ? t("campaigns.fields.totalUsedByAttribute")
               : t("campaigns.budget.fields.used")}
           </Text>

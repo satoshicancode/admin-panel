@@ -1,5 +1,5 @@
 import { PencilSquare, Trash } from "@medusajs/icons"
-import { HttpTypes } from "@medusajs/types"
+import type { HttpTypes } from "@medusajs/types"
 import {
   Badge,
   Container,
@@ -12,11 +12,11 @@ import {
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
-import { ActionMenu } from "../../../../../components/common/action-menu"
-import { useDeletePromotion } from "../../../../../hooks/api/promotions"
-import { formatCurrency } from "../../../../../lib/format-currency"
-import { formatPercentage } from "../../../../../lib/percentage-helpers"
-import { getPromotionStatus } from "../../../../../lib/promotions"
+import { ActionMenu } from "@components/common/action-menu"
+import { useDeletePromotion } from "@hooks/api/promotions"
+import { formatCurrency } from "@lib/format-currency"
+import { formatPercentage } from "@lib/percentage-helpers"
+import { getPromotionStatus } from "@lib/promotions"
 
 type PromotionGeneralSectionProps = {
   promotion: HttpTypes.AdminPromotion
@@ -180,7 +180,7 @@ export const PromotionGeneralSection = ({
         </Text>
 
         <Text size="small" leading="compact" className="text-pretty capitalize" data-testid="promotion-general-section-allocation-value">
-          {promotion.application_method?.allocation!}
+          {promotion.application_method?.allocation}
         </Text>
       </div>
 

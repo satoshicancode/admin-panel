@@ -1,5 +1,6 @@
 import i18n from "i18next"
 import { z } from "zod"
+import { PROMOTION_RULE_OPERATORS } from "@/routes/promotions/common/constants"
 
 export const EditRules = z.object({
   type: z.string().optional(),
@@ -9,9 +10,9 @@ export const EditRules = z.object({
       attribute: z
         .string()
         .min(1, { message: i18n.t("promotions.form.required") }),
-      operator: z
-        .string()
-        .min(1, { message: i18n.t("promotions.form.required") }),
+      operator: z.enum(PROMOTION_RULE_OPERATORS, {
+        message: i18n.t("promotions.form.required"),
+      }),
       values: z.union([
         z.number().min(1, { message: i18n.t("promotions.form.required") }),
         z.string().min(1, { message: i18n.t("promotions.form.required") }),

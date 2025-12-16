@@ -48,24 +48,27 @@ export const PromotionDetail = () => {
     >
       <TwoColumnPage.Main>
         <PromotionGeneralSection promotion={promotion} />
-        <PromotionConditionsSection rules={rules || []} ruleType={"rules"} />
+        <PromotionConditionsSection 
+          rules={rules || []} 
+          ruleType="rules"
+        />
         <PromotionConditionsSection
           rules={targetRules || []}
-          ruleType={"target-rules"}
+          ruleType="target-rules"
           applicationMethodTargetType={
-            promotion.application_method.target_type || "items"
+            promotion.application_method?.target_type || "items"
           }
         />
         {promotion.type === "buyget" && (
           <PromotionConditionsSection
             rules={buyRules || []}
-            ruleType={"buy-rules"}
-            applicationMethodTargetType={"items"}
+            ruleType="buy-rules"
+            applicationMethodTargetType="items"
           />
         )}
       </TwoColumnPage.Main>
       <TwoColumnPage.Sidebar>
-        <CampaignSection campaign={promotion.campaign!} />
+        <CampaignSection campaign={promotion.campaign || null} />
       </TwoColumnPage.Sidebar>
     </TwoColumnPage>
   )

@@ -1,20 +1,21 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { PromotionDTO, PromotionRuleDTO } from "@medusajs/types"
+import type { HttpTypes, PromotionRuleDTO } from "@medusajs/types"
 import { Button } from "@medusajs/ui"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { RouteDrawer } from "../../../../../../components/modals"
-import { KeyboundForm } from "../../../../../../components/utilities/keybound-form"
-import { RuleTypeValues } from "../../edit-rules"
+import type { RuleToRemove } from "@custom-types/promotion"
+import { RouteDrawer } from "@/components/modals"
+import { KeyboundForm } from "@/components/utilities/keybound-form"
+import type { RuleTypeValues } from "../../edit-rules"
 import { RulesFormField } from "../rules-form-field"
-import { EditRules, EditRulesType } from "./form-schema"
+import { EditRules, type EditRulesType } from "./form-schema"
 
 type EditPromotionFormProps = {
-  promotion: PromotionDTO
+  promotion: HttpTypes.AdminPromotion
   rules: PromotionRuleDTO[]
   ruleType: RuleTypeValues
-  handleSubmit: any
+  handleSubmit: (rulesToRemove?: RuleToRemove[]) => (data: EditRulesType) => Promise<void>
   isSubmitting: boolean
 }
 
@@ -25,20 +26,22 @@ export const EditRulesForm = ({
   isSubmitting,
 }: EditPromotionFormProps) => {
   const { t } = useTranslation()
-  const [rulesToRemove, setRulesToRemove] = useState([])
+  const [rulesToRemove, setRulesToRemove] = useState<RuleToRemove[]>([])
 
   const form = useForm<EditRulesType>({
     defaultValues: {
       rules: [],
       type: promotion.type,
       application_method: {
-        target_type: promotion.application_method?.target_type,
+        target_type: promotion.application_method?.target_type || "items",
       },
     },
     resolver: zodResolver(EditRules),
   })
 
-  const handleFormSubmit = form.handleSubmit(handleSubmit(rulesToRemove))
+  const handleFormSubmit = form.handleSubmit((data) => {
+    return handleSubmit(rulesToRemove)(data)
+  })
 
   return (
     <RouteDrawer.Form form={form} data-testid={`promotion-edit-rules-form-${ruleType}`}>
@@ -48,7 +51,7 @@ export const EditRulesForm = ({
       >
         <RouteDrawer.Body data-testid={`promotion-edit-rules-form-body-${ruleType}`}>
           <RulesFormField
-            form={form as any}
+            form={form}
             ruleType={ruleType}
             setRulesToRemove={setRulesToRemove}
             rulesToRemove={rulesToRemove}
