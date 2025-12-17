@@ -1,15 +1,14 @@
 import { _DataTable } from '@components/table/data-table/data-table';
-import { OrderSet } from '@custom-types/order';
+import type { Order, OrderSet } from '@custom-types/order';
 import { useOrderSets } from '@hooks/api/orders';
 import { useOrderSetTableColumns } from '@hooks/table/columns/use-order-set-table-columns';
 import { useOrderSetsTableFilters } from '@hooks/table/filters/use-order-sets-table-filters';
 import { useOrderSetsTableQuery } from '@hooks/table/query/use-order-sets-table-query';
 import { useDataTable } from '@hooks/use-data-table';
 import { Container, Heading } from '@medusajs/ui';
+import { hasMultipleOrders, isOrderSet } from '@routes/orders/order-list/utils/is-order-set';
 import { keepPreviousData } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-
-import { hasMultipleOrders } from '../../utils/is-order-set';
 
 const PAGE_SIZE = 20;
 
@@ -32,14 +31,19 @@ export const OrderListTable = () => {
   const filters = useOrderSetsTableFilters();
   const columns = useOrderSetTableColumns();
 
-  const { table } = useDataTable<OrderSet>({
+  const { table } = useDataTable<OrderSet | Order>({
     data: order_sets ?? [],
     columns,
     enablePagination: true,
     count,
     pageSize: PAGE_SIZE,
     getRowId: row => row.id,
-    getSubRows: row => (hasMultipleOrders(row) ? (row.orders as unknown as OrderSet[]) : []),
+    getSubRows: row => {
+      if (isOrderSet(row) && hasMultipleOrders(row)) {
+        return row.orders;
+      }
+      return [];
+    },
     enableExpandableRows: true
   });
 
@@ -48,34 +52,28 @@ export const OrderListTable = () => {
   }
 
   return (
-    <Container className="divide-y p-0">
-      <div className="flex items-center justify-between px-6 py-4">
-        <Heading>{t('orders.domain')}</Heading>
+    <Container
+      className="divide-y p-0"
+      data-testid="orders-container"
+    >
+      <div
+        className="flex items-center justify-between px-6 py-4"
+        data-testid="orders-header"
+      >
+        <Heading data-testid="orders-heading">{t('orders.domain')}</Heading>
       </div>
       <_DataTable
         columns={columns}
         table={table}
         pagination
-        navigateTo={row => {
-          const original = row.original;
-
-          if (row.depth > 0) {
-            return `/orders/${original.id}`;
-          }
-
-          if (!hasMultipleOrders(original)) {
-            return `/orders/${original.orders[0]?.id}`;
-          }
-
-          return '';
-        }}
+        navigateTo={row => `/orders/${row.original.id}`}
         filters={filters}
         count={count}
         search
         isLoading={isLoading}
         pageSize={PAGE_SIZE}
         orderBy={[
-          { key: 'display_id', label: t('fields.orderId') },
+          { key: 'display_id', label: t('orders.fields.displayId') },
           { key: 'created_at', label: t('fields.createdAt') },
           { key: 'updated_at', label: t('fields.updatedAt') }
         ]}
@@ -83,7 +81,6 @@ export const OrderListTable = () => {
         noRecords={{
           message: t('orders.list.noRecordsMessage')
         }}
-        enableExpandAll
       />
     </Container>
   );

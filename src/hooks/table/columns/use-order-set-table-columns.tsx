@@ -1,43 +1,32 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
-import { TriangleRightMini } from "@medusajs/icons";
-import { IconButton, clx } from "@medusajs/ui";
-
-import type { CellContext } from "@tanstack/react-table";
-import { createColumnHelper } from "@tanstack/react-table";
-import { useTranslation } from "react-i18next";
-
-import type { Order, OrderSet } from "@custom-types/order";
-
-import { DateCell } from "@components/table/table-cells/common/date-cell";
-import {
-  TextCell,
-  TextHeader,
-} from "@components/table/table-cells/common/text-cell";
+import { DateCell } from '@components/table/table-cells/common/date-cell';
+import { TextCell, TextHeader } from '@components/table/table-cells/common/text-cell';
 import {
   FulfillmentStatusCell,
-  FulfillmentStatusHeader,
-} from "@components/table/table-cells/order/fulfillment-status-cell";
+  FulfillmentStatusHeader
+} from '@components/table/table-cells/order/fulfillment-status-cell';
 import {
   PaymentStatusCell,
-  PaymentStatusHeader,
-} from "@components/table/table-cells/order/payment-status-cell";
-import {
-  TotalCell,
-  TotalHeader,
-} from "@components/table/table-cells/order/total-cell";
+  PaymentStatusHeader
+} from '@components/table/table-cells/order/payment-status-cell';
+import { TotalCell, TotalHeader } from '@components/table/table-cells/order/total-cell';
+import type { Order, OrderSet } from '@custom-types/order';
+import { TriangleRightMini } from '@medusajs/icons';
+import { clx, IconButton } from '@medusajs/ui';
+import { hasMultipleOrders, isOrderSet } from '@routes/orders/order-list/utils/is-order-set';
+import { createColumnHelper, type CellContext } from '@tanstack/react-table';
+import { useTranslation } from 'react-i18next';
 
-import { hasMultipleOrders } from "@routes/orders/order-list/utils/is-order-set";
+const columnHelper = createColumnHelper<OrderSet | Order>();
 
-const columnHelper = createColumnHelper<OrderSet>();
-
-type RowContext = CellContext<OrderSet, unknown>["row"];
+type RowContext = CellContext<OrderSet | Order, unknown>['row'];
 
 function getOrderFromRow(row: RowContext): Order | null {
   if (row.depth > 0) {
-    return row.original as unknown as Order;
+    return isOrderSet(row.original) ? null : row.original;
   }
-  if (!hasMultipleOrders(row.original)) {
+  if (isOrderSet(row.original) && !hasMultipleOrders(row.original)) {
     return row.original.orders[0] ?? null;
   }
 
@@ -47,7 +36,7 @@ function getOrderFromRow(row: RowContext): Order | null {
 function renderOrderCell<T>(
   row: RowContext,
   renderOrder: (order: Order) => T,
-  renderMultiple?: (orderSet: OrderSet) => T | null,
+  renderMultiple?: (orderSet: OrderSet) => T | null
 ): T | null {
   const order = getOrderFromRow(row);
 
@@ -55,7 +44,11 @@ function renderOrderCell<T>(
     return renderOrder(order);
   }
 
-  return renderMultiple?.(row.original) ?? null;
+  if (isOrderSet(row.original)) {
+    return renderMultiple?.(row.original) ?? null;
+  }
+
+  return null;
 }
 
 export const useOrderSetTableColumns = () => {
@@ -64,14 +57,14 @@ export const useOrderSetTableColumns = () => {
   return useMemo(
     () => [
       columnHelper.display({
-        id: "group_id",
-        header: () => <TextHeader text={t("fields.groupId")} />,
+        id: 'group_id',
+        header: () => <TextHeader text={t('fields.groupId')} />,
         cell: ({ row }) => {
           if (row.depth > 0) {
             return <div className="pl-10" />;
           }
 
-          if (!hasMultipleOrders(row.original)) {
+          if (!isOrderSet(row.original) || !hasMultipleOrders(row.original)) {
             return null;
           }
 
@@ -81,7 +74,7 @@ export const useOrderSetTableColumns = () => {
                 {row.getCanExpand() && (
                   <IconButton
                     type="button"
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       e.preventDefault();
                       row.getToggleExpandedHandler()();
@@ -92,84 +85,81 @@ export const useOrderSetTableColumns = () => {
                   >
                     <TriangleRightMini
                       className={clx({
-                        "rotate-90 transition-transform will-change-transform":
-                          row.getIsExpanded(),
+                        'rotate-90 transition-transform will-change-transform': row.getIsExpanded()
                       })}
                     />
                   </IconButton>
                 )}
               </div>
-              <span className="font-medium">
-                #{`G${row.original.display_id}`}
-              </span>
+              <span className="font-medium">#{`G${row.original.display_id}`}</span>
             </div>
           );
-        },
+        }
       }),
 
       columnHelper.display({
-        id: "display_id",
-        header: () => <TextHeader text={t("fields.orderId")} />,
+        id: 'display_id',
+        header: () => <TextHeader text={t('fields.orderId')} />,
         cell: ({ row }) =>
           renderOrderCell(
             row,
-            (order) => <TextCell text={`#${order.display_id}`} />,
-            (orderSet) => (
-              <TextCell
-                text={orderSet.orders.map((o) => `#${o.display_id}`).join(", ")}
-              />
-            ),
-          ),
+            order => <TextCell text={`#${order.display_id}`} />,
+            orderSet => <TextCell text={orderSet.orders.map(o => `#${o.display_id}`).join(', ')} />
+          )
       }),
 
       columnHelper.display({
-        id: "vendor",
-        header: () => <TextHeader text={t("fields.vendor")} />,
+        id: 'vendor',
+        header: () => <TextHeader text={t('fields.vendor')} />,
         cell: ({ row }) => {
-          const fallback = t("orders.list.vendorFallback");
+          const fallback = t('orders.list.vendorFallback');
 
           return renderOrderCell(
             row,
-            (order) => <TextCell text={order.seller?.name ?? fallback} />,
-            (orderSet) => {
+            order => <TextCell text={order.seller?.name ?? fallback} />,
+            orderSet => {
               const uniqueVendorIds = new Set(
-                orderSet.orders.map((o) => o.seller?.id).filter(Boolean),
+                orderSet.orders.map(o => o.seller?.id).filter(Boolean)
               );
               const text =
                 uniqueVendorIds.size === 1
                   ? (orderSet.orders[0]?.seller?.name ?? fallback)
-                  : t("orders.list.multipleVendors", {
-                      count: uniqueVendorIds.size,
+                  : t('orders.list.multipleVendors', {
+                      count: uniqueVendorIds.size
                     });
 
               return <TextCell text={text} />;
-            },
+            }
           );
-        },
+        }
       }),
 
       columnHelper.display({
-        id: "created_at",
-        header: () => <TextHeader text={t("fields.date")} />,
+        id: 'created_at',
+        header: () => <TextHeader text={t('fields.date')} />,
         cell: ({ row }) => {
           const order = getOrderFromRow(row);
 
-          return (
-            <DateCell date={order?.created_at ?? row.original.created_at} />
-          );
-        },
+          if (order) {
+            return <DateCell date={order.created_at} />;
+          }
+
+          if (isOrderSet(row.original)) {
+            return <DateCell date={row.original.created_at} />;
+          }
+
+          return null;
+        }
       }),
 
       columnHelper.display({
-        id: "customer",
-        header: () => <TextHeader text={t("fields.customer")} />,
+        id: 'customer',
+        header: () => <TextHeader text={t('fields.customer')} />,
         cell: ({ row }) => {
           const { customer } = row.original;
           if (customer?.first_name || customer?.last_name) {
             return (
-              <TextCell
-                text={`${customer.first_name ?? ""} ${customer.last_name ?? ""}`.trim()}
-              />
+              <TextCell text={`${customer.first_name ?? ''} ${customer.last_name ?? ''}`.trim()} />
             );
           }
           if (customer?.email) {
@@ -177,58 +167,52 @@ export const useOrderSetTableColumns = () => {
           }
 
           return null;
-        },
+        }
       }),
 
       columnHelper.display({
-        id: "payment_status",
+        id: 'payment_status',
         header: () => <PaymentStatusHeader />,
         cell: ({ row }) =>
           renderOrderCell(
             row,
-            (order) => <PaymentStatusCell status={order.payment_status} />,
-            (orderSet) => (
-              <PaymentStatusCell status={orderSet.payment_status} />
-            ),
-          ),
+            order => <PaymentStatusCell status={order.payment_status} />,
+            orderSet => <PaymentStatusCell status={orderSet.payment_status} />
+          )
       }),
 
       columnHelper.display({
-        id: "fulfillment_status",
+        id: 'fulfillment_status',
         header: () => <FulfillmentStatusHeader />,
         cell: ({ row }) =>
           renderOrderCell(
             row,
-            (order) => (
-              <FulfillmentStatusCell status={order.fulfillment_status} />
-            ),
-            (orderSet) => (
-              <FulfillmentStatusCell status={orderSet.fulfillment_status} />
-            ),
-          ),
+            order => <FulfillmentStatusCell status={order.fulfillment_status} />,
+            orderSet => <FulfillmentStatusCell status={orderSet.fulfillment_status} />
+          )
       }),
 
       columnHelper.display({
-        id: "total",
+        id: 'total',
         header: () => <TotalHeader />,
         cell: ({ row }) =>
           renderOrderCell(
             row,
-            (order) => (
+            order => (
               <TotalCell
                 currencyCode={order.currency_code}
                 total={order.total}
               />
             ),
-            (orderSet) => (
+            orderSet => (
               <TotalCell
                 currencyCode={orderSet.currency_code}
                 total={orderSet.total}
               />
-            ),
-          ),
-      }),
+            )
+          )
+      })
     ],
-    [t],
+    [t]
   );
 };

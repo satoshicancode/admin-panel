@@ -1,11 +1,11 @@
-import { Filter } from "..";
-import { DataTableExpandAll } from "../data-table-expand-all";
-import { DataTableFilter } from "../data-table-filter";
-import { DataTableOrderBy, DataTableOrderByKey } from "../data-table-order-by";
-import { DataTableSearch } from "../data-table-search";
+import { Filter } from '..';
+import { DataTableExpandAll } from '../data-table-expand-all';
+import { DataTableFilter } from '../data-table-filter';
+import { DataTableOrderBy, DataTableOrderByKey } from '../data-table-order-by';
+import { DataTableSearch } from '../data-table-search';
 
 export interface DataTableQueryProps<TData> {
-  search?: boolean | "autofocus";
+  search?: boolean | 'autofocus';
   orderBy?: DataTableOrderByKey<TData>[];
   filters?: Filter[];
   prefix?: string;
@@ -21,10 +21,13 @@ export const DataTableQuery = <TData,>({
   prefix,
   enableExpandAll,
   isAllExpanded,
-  onToggleExpandAll,
+  onToggleExpandAll
 }: DataTableQueryProps<TData>) => {
+  const hasQueryControls = search || orderBy || filters || prefix || enableExpandAll;
+  const shouldShowExpandAll = enableExpandAll && onToggleExpandAll && isAllExpanded !== undefined;
+
   return (
-    (search || orderBy || filters || prefix || enableExpandAll) && (
+    hasQueryControls && (
       <div
         className="flex items-start justify-between gap-x-4 px-6 py-4"
         data-testid="data-table-query"
@@ -34,7 +37,10 @@ export const DataTableQuery = <TData,>({
           data-testid="data-table-filters-container"
         >
           {filters && filters.length > 0 && (
-            <DataTableFilter filters={filters} prefix={prefix} />
+            <DataTableFilter
+              filters={filters}
+              prefix={prefix}
+            />
           )}
         </div>
         <div
@@ -44,18 +50,21 @@ export const DataTableQuery = <TData,>({
           {search && (
             <DataTableSearch
               prefix={prefix}
-              autofocus={search === "autofocus"}
+              autofocus={search === 'autofocus'}
             />
           )}
-          {orderBy && <DataTableOrderBy keys={orderBy} prefix={prefix} />}
-          {enableExpandAll &&
-            onToggleExpandAll &&
-            isAllExpanded !== undefined && (
-              <DataTableExpandAll
-                isAllExpanded={isAllExpanded}
-                onToggleExpandAll={onToggleExpandAll}
-              />
-            )}
+          {orderBy && (
+            <DataTableOrderBy
+              keys={orderBy}
+              prefix={prefix}
+            />
+          )}
+          {shouldShowExpandAll && (
+            <DataTableExpandAll
+              isAllExpanded={isAllExpanded}
+              onToggleExpandAll={onToggleExpandAll}
+            />
+          )}
         </div>
       </div>
     )

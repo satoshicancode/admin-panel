@@ -1,19 +1,19 @@
+import type { SellerDTO } from '@custom-types/seller';
 import type {
   AdminOrder,
   CustomerDTO,
   FulfillmentStatus,
   PaginatedResponse,
   PaymentStatus,
-  SalesChannelDTO,
-} from "@medusajs/types";
-
-import type { SellerDTO } from "@custom-types/seller";
+  SalesChannelDTO
+} from '@medusajs/types';
 
 export interface Order {
   id: string;
   display_id: number;
   region_id: string;
   customer_id: string;
+  customer?: CustomerDTO;
   version: number;
   sales_channel_id: string;
   status: string;
