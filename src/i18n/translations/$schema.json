@@ -8063,9 +8063,22 @@
                   },
                   "required": ["title", "description"],
                   "additionalProperties": false
+                },
+                "once": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["title", "description"],
+                  "additionalProperties": false
                 }
               },
-              "required": ["each", "across"],
+              "required": ["each", "across", "once"],
               "additionalProperties": false
             },
             "code": {
@@ -11893,9 +11906,22 @@
       "properties": {
         "domain": {
           "type": "string"
+        },
+        "create": {
+          "type": "object",
+          "properties": {
+            "fillNameWarning": {
+              "type": "string"
+            },
+            "possibleValuesRequired": {
+              "type": "string"
+            }
+          },
+          "required": ["fillNameWarning", "possibleValuesRequired"],
+          "additionalProperties": false
         }
       },
-      "required": ["domain"],
+      "required": ["domain", "create"],
       "additionalProperties": false
     },
     "requests": {
