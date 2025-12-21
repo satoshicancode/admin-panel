@@ -10,7 +10,7 @@ import { sdk } from "../../lib/client";
 import { queryKeysFactory } from "../../lib/query-key-factory";
 import { ExtendedAdminProductListResponse, ExtendedAdminProduct, VendorSeller } from "../../types";
 import type { AdminCustomerGroup, AdminOrder } from "@medusajs/types";
-import { OrderSet } from "../../types/order/common";
+import type { OrderSet } from "@custom-types/seller-orders";
 
 export const sellerQueryKeys = queryKeysFactory("seller");
 

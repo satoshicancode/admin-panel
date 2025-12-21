@@ -7,7 +7,7 @@ import { formatDate } from "@lib/date";
 import { getStylizedAmount } from "@lib/money-amount-helpers";
 import { createColumnHelper } from "@tanstack/react-table";
 
-import type { AdminOrderListResponse } from "@custom-types/order";
+import type { AdminOrderListResponse } from "@custom-types/seller-orders";
 
 import { FulfillmentStatusBadge } from "@components/common/fulfillment-status-badge";
 import { OrderStatusBadge } from "@components/common/order-status-badge";

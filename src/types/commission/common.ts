@@ -1,6 +1,6 @@
 import type { BigNumberValue } from "@medusajs/types";
 
-import type { Order } from "@custom-types/order/common";
+import type { Order } from "@custom-types/seller-orders/common";
 
 export type CommissionRateDTO = {
   id: string;
