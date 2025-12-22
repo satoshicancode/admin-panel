@@ -12,7 +12,7 @@ import { queryClient } from "../../lib/query-client"
 import { queryKeysFactory, TQueryKey } from "../../lib/query-key-factory"
 import { inventoryItemsQueryKeys } from "./inventory"
 import { reservationItemsQueryKeys } from "./reservations"
-import { ExtendedAdminOrder, ExtendedAdminOrderResponse } from "@custom-types/order"
+import type { ExtendedAdminOrderResponse, ExtendedAdminOrderChangesResponse } from "@custom-types/order"
 
 const ORDERS_QUERY_KEY = "orders" as const
 const _orderKeys = queryKeysFactory(ORDERS_QUERY_KEY) as TQueryKey<"orders"> & {
@@ -158,16 +158,16 @@ export const useOrderChanges = (
   query?: HttpTypes.AdminOrderChangesFilters,
   options?: Omit<
     UseQueryOptions<
-      HttpTypes.AdminOrderChangesResponse,
+      ExtendedAdminOrderChangesResponse,
       FetchError,
-      HttpTypes.AdminOrderChangesResponse,
+      ExtendedAdminOrderChangesResponse,
       QueryKey
     >,
     "queryFn" | "queryKey"
   >
 ) => {
   const { data, ...rest } = useQuery({
-    queryFn: async () => sdk.admin.order.listChanges(id, query),
+    queryFn: async () => sdk.admin.order.listChanges(id, query) as Promise<ExtendedAdminOrderChangesResponse>,
     queryKey: ordersQueryKeys.changes(id),
     ...options,
   })

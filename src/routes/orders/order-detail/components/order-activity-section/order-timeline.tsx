@@ -5,14 +5,16 @@ import { type PropsWithChildren, type ReactNode, useMemo, useState } from "react
 
 import type {
   AdminClaim,
-  AdminFulfillment,
-  AdminOrder,
-  AdminOrderChange,
   AdminReturn,
+  HttpTypes,
 } from "@medusajs/types"
 import { useTranslation } from "react-i18next"
-
-import type { AdminOrderLineItem } from "@medusajs/types"
+import type {
+  ExtendedAdminOrder,
+  ExtendedAdminOrderChange,
+  ExtendedAdminOrderFulfillment,
+  ExtendedAdminOrderLineItem,
+} from "@custom-types/order"
 import {
   useCancelOrderTransfer,
   useCustomer,
@@ -35,7 +37,7 @@ import type { ExtendedAdminExchange } from "@custom-types/exchanges"
 import { By } from "@components/common/user-link"
 
 type OrderTimelineProps = {
-  order: AdminOrder
+  order: ExtendedAdminOrder
 }
 
 /**
@@ -104,17 +106,17 @@ export const OrderTimeline = ({ order }: OrderTimelineProps) => {
 }
 
 type Activity = {
-  title: string
-  timestamp: string | Date
+  title: string | ReactNode
+  timestamp: string | Date | null
   children?: ReactNode
   itemsToSend?:
     | AdminClaim["additional_items"]
     | ExtendedAdminExchange["additional_items"]
   itemsToReturn?: AdminReturn["items"]
-  itemsMap?: Map<string, AdminOrderLineItem>
+  itemsMap?: Map<string, ExtendedAdminOrderLineItem>
 }
 
-const useActivityItems = (order: AdminOrder): Activity[] => {
+const useActivityItems = (order: ExtendedAdminOrder): Activity[] => {
   const { t } = useTranslation()
 
   const { order_changes: orderChanges = [] } = useOrderChanges(order.id, {
@@ -129,7 +131,7 @@ const useActivityItems = (order: AdminOrder): Activity[] => {
   })
 
   const rmaChanges = orderChanges.filter(
-    (oc) => !NON_RMA_CHANGE_TYPES.includes(oc.change_type)
+    (oc) => oc.change_type && !NON_RMA_CHANGE_TYPES.includes(oc.change_type)
   )
 
   const missingLineItemIds = getMissingLineItemIds(order, rmaChanges)
@@ -146,13 +148,18 @@ const useActivityItems = (order: AdminOrder): Activity[] => {
   )
 
   const itemsMap = useMemo(() => {
-    const _itemsMap = new Map(order?.items?.map((i) => [i.id, i]))
+    const _itemsMap = new Map<string, ExtendedAdminOrderLineItem>(
+      (order?.items || []).map((i) => [i.id, i as ExtendedAdminOrderLineItem])
+    )
 
     for (const id of missingLineItemIds) {
-      const i = removedLineItems.find((i) => i.item.id === id)
+      const i = removedLineItems.find((item) => item.item.id === id)
 
       if (i) {
-        _itemsMap.set(id, { ...i.item, quantity: i.quantity }) // copy quantity from OrderItem to OrderLineItem
+        const quantity = (i as { quantity?: number }).quantity
+        if (quantity !== undefined) {
+          _itemsMap.set(id, { ...i.item, quantity } as ExtendedAdminOrderLineItem) // copy quantity from OrderItem to OrderLineItem
+        }
       }
     }
 
@@ -176,7 +183,7 @@ const useActivityItems = (order: AdminOrder): Activity[] => {
   
   const payments = getPaymentsFromOrder(order)
 
-  const notes = []
+  const notes: { created_at: string; value: string; author_id: string }[] = []
   const isLoading = false
   // const { notes, isLoading, isError, error } = useNotes(
   //   {
@@ -273,7 +280,7 @@ const useActivityItems = (order: AdminOrder): Activity[] => {
           title: t("orders.activity.events.fulfillment.shipped"),
           timestamp: fulfillment.shipped_at,
           children: (
-            <FulfillmentCreatedBody fulfillment={fulfillment} isShipment />
+            <FulfillmentCreatedBody fulfillment={fulfillment} />
           ),
         })
       }
@@ -323,7 +330,7 @@ const useActivityItems = (order: AdminOrder): Activity[] => {
           timestamp: ret.received_at,
           itemsToReturn: ret?.items,
           itemsMap,
-          children: <ReturnBody orderReturn={ret} isReceived />,
+          children: <ReturnBody orderReturn={ret} isCreated={!ret.canceled_at} isReceived />,
         })
       }
     }
@@ -378,20 +385,35 @@ const useActivityItems = (order: AdminOrder): Activity[] => {
         continue
       }
 
+      const editId = edit.id.slice(-7)
+      
+      let editTitle: string
+      if (edit.status === "requested") {
+        editTitle = t("orders.activity.events.edit.requested", { editId })
+      } else if (edit.status === "confirmed") {
+        editTitle = t("orders.activity.events.edit.confirmed", { editId })
+      } else if (edit.status === "declined") {
+        editTitle = t("orders.activity.events.edit.declined", { editId })
+      } else if (edit.status === "canceled") {
+        editTitle = t("orders.activity.events.edit.canceled", { editId })
+      } else {
+        editTitle = t("orders.activity.events.edit.pending", { editId })
+      }
+
+      const timestamp = 
+        edit.status === "requested"
+          ? edit.requested_at
+          : edit.status === "confirmed"
+            ? edit.confirmed_at
+            : edit.status === "declined"
+              ? edit.declined_at
+              : edit.status === "canceled"
+                ? edit.canceled_at
+                : edit.created_at
+
       items.push({
-        title: t(`orders.activity.events.edit.${edit.status}`, {
-          editId: edit.id.slice(-7),
-        }),
-        timestamp:
-          edit.status === "requested"
-            ? edit.requested_at
-            : edit.status === "confirmed"
-              ? edit.confirmed_at
-              : edit.status === "declined"
-                ? edit.declined_at
-                : edit.status === "canceled"
-                  ? edit.canceled_at
-                  : edit.created_at,
+        title: editTitle,
+        timestamp: timestamp,
         children: isConfirmed ? <OrderEditBody edit={edit} /> : null,
       })
     }
@@ -431,64 +453,75 @@ const useActivityItems = (order: AdminOrder): Activity[] => {
       (oc) => oc.change_type === "update_order"
     )) {
       const updateType = update.actions[0]?.details?.type
-
       if (updateType === "shipping_address") {
+        const actionDetails = update.actions[0]?.details as Record<string, unknown> | undefined
+        const oldAddress = actionDetails?.old as HttpTypes.AdminOrderAddress | null | undefined
+        const newAddress = actionDetails?.new as HttpTypes.AdminOrderAddress | null | undefined
+
         items.push({
           title: (
             <ChangeDetailsTooltip
-              title={t(`orders.activity.events.update_order.shipping_address`)}
+              title={t("orders.activity.events.update_order.shipping_address")}
               previous={getFormattedAddress({
-                address: update.actions[0].details.old,
+                address: oldAddress,
               }).join(", ")}
               next={getFormattedAddress({
-                address: update.actions[0].details.new,
+                address: newAddress,
               }).join(", ")}
             />
           ),
           timestamp: update.created_at,
           children: (
             <div className="text-ui-fg-subtle mt-2 flex gap-x-2 text-sm">
-              {t("fields.by")} <By id={update.created_by} />
+              {t("fields.by")} <By id={update.created_by || ""} />
             </div>
           ),
         })
       }
 
       if (updateType === "billing_address") {
+        const actionDetails = update.actions[0]?.details as Record<string, unknown> | undefined
+        const oldAddress = actionDetails?.old as HttpTypes.AdminOrderAddress | null | undefined
+        const newAddress = actionDetails?.new as HttpTypes.AdminOrderAddress | null | undefined
+
         items.push({
           title: (
             <ChangeDetailsTooltip
-              title={t(`orders.activity.events.update_order.billing_address`)}
+              title={t("orders.activity.events.update_order.billing_address")}
               previous={getFormattedAddress({
-                address: update.actions[0].details.old,
+                address: oldAddress,
               }).join(", ")}
               next={getFormattedAddress({
-                address: update.actions[0].details.new,
+                address: newAddress,
               }).join(", ")}
             />
           ),
           timestamp: update.created_at,
           children: (
             <div className="text-ui-fg-subtle mt-2 flex gap-x-2 text-sm">
-              {t("fields.by")} <By id={update.created_by} />
+              {t("fields.by")} <By id={update.created_by || ""} />
             </div>
           ),
         })
       }
 
       if (updateType === "email") {
+        const actionDetails = update.actions[0]?.details as Record<string, unknown> | undefined
+        const oldEmail = actionDetails?.old as string | null | undefined
+        const newEmail = actionDetails?.new as string | null | undefined
+
         items.push({
           title: (
             <ChangeDetailsTooltip
-              title={t(`orders.activity.events.update_order.email`)}
-              previous={update.actions[0].details.old}
-              next={update.actions[0].details.new}
+              title={t("orders.activity.events.update_order.email")}
+              previous={oldEmail || ""}
+              next={newEmail || ""}
             />
           ),
           timestamp: update.created_at,
           children: (
             <div className="text-ui-fg-subtle mt-2 flex gap-x-2 text-sm">
-              {t("fields.by")} <By id={update.created_by} />
+              {t("fields.by")} <By id={update.created_by || ""} />
             </div>
           ),
         })
@@ -506,12 +539,15 @@ const useActivityItems = (order: AdminOrder): Activity[] => {
     if (order.canceled_at) {
       items.push({
         title: t("orders.activity.events.canceled.title"),
-        timestamp: order.canceled_at,
+        timestamp: order.canceled_at
       })
     }
 
     const sortedActivities = items.sort((a, b) => {
-      return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      const timestampA = a.timestamp ? new Date(a.timestamp).getTime() : 0
+      const timestampB = b.timestamp ? new Date(b.timestamp).getTime() : 0
+
+      return timestampB - timestampA
     })
 
     const createdAt = {
@@ -538,14 +574,14 @@ const useActivityItems = (order: AdminOrder): Activity[] => {
 }
 
 type OrderActivityItemProps = PropsWithChildren<{
-  title: string
-  timestamp: string | Date
+  title: string | ReactNode
+  timestamp: string | Date | null
   isFirst?: boolean
   itemsToSend?:
     | AdminClaim["additional_items"]
     | ExtendedAdminExchange["additional_items"]
   itemsToReturn?: AdminReturn["items"]
-  itemsMap?: Map<string, AdminOrderLineItem>
+  itemsMap?: Map<string, ExtendedAdminOrderLineItem>
 }>
 
 const OrderActivityItem = ({
@@ -577,8 +613,8 @@ const OrderActivityItem = ({
         <div className="flex items-center justify-between">
           {itemsToSend?.length || itemsToReturn?.length ? (
             <ActivityItems
-              key={title}
-              title={title}
+              key={typeof title === "string" ? title : String(title)}
+              title={typeof title === "string" ? title : ""}
               itemsToSend={itemsToSend}
               itemsToReturn={itemsToReturn}
               itemsMap={itemsMap}
@@ -731,7 +767,7 @@ const OrderActivityCollapsible = ({
 const FulfillmentCreatedBody = ({
   fulfillment,
 }: {
-  fulfillment: AdminFulfillment
+  fulfillment: ExtendedAdminOrderFulfillment
 }) => {
   const { t } = useTranslation()
 
@@ -961,7 +997,7 @@ const ExchangeBody = ({
   )
 }
 
-const OrderEditBody = ({ edit }: { edit: AdminOrderChange }) => {
+const OrderEditBody = ({ edit }: { edit: ExtendedAdminOrderChange }) => {
   const { t } = useTranslation()
 
   const [itemsAdded, itemsRemoved] = useMemo(
@@ -989,7 +1025,7 @@ const OrderEditBody = ({ edit }: { edit: AdminOrderChange }) => {
 const TransferOrderRequestBody = ({
   transfer,
 }: {
-  transfer: AdminOrderChange
+  transfer: ExtendedAdminOrderChange
 }) => {
   const prompt = usePrompt()
   const { t } = useTranslation()
@@ -1027,7 +1063,7 @@ const TransferOrderRequestBody = ({
   return (
     <div>
       <Text size="small" className="text-ui-fg-subtle">
-        {t("orders.activity.from")}: {action.details?.original_email}
+        {t("orders.activity.from")}: {action.details?.original_email || ""}
       </Text>
 
       <Text size="small" className="text-ui-fg-subtle">
@@ -1053,7 +1089,7 @@ const TransferOrderRequestBody = ({
 /**
  * Returns count of added and removed item quantity
  */
-function countItemsChange(actions: AdminOrderChange["actions"]) {
+function countItemsChange(actions: ExtendedAdminOrderChange["actions"]) {
   let added = 0
   let removed = 0
 
@@ -1078,7 +1114,7 @@ function countItemsChange(actions: AdminOrderChange["actions"]) {
 /**
  * Get IDs of missing line items that were removed from the order.
  */
-function getMissingLineItemIds(order: AdminOrder, changes: AdminOrderChange[]) {
+function getMissingLineItemIds(order: ExtendedAdminOrder, changes: ExtendedAdminOrderChange[]) {
   if (!changes?.length) {
     return []
   }
@@ -1088,15 +1124,13 @@ function getMissingLineItemIds(order: AdminOrder, changes: AdminOrderChange[]) {
 
   changes.forEach((change) => {
     change.actions.forEach((action) => {
-      if (!action.details?.reference_id) {
+      const referenceId = action.details?.reference_id
+      if (!referenceId || typeof referenceId !== "string") {
         return
       }
 
-      if (
-        (action.details.reference_id as string).startsWith("ordli_") &&
-        !existingItemsMap.has(action.details.reference_id as string)
-      ) {
-        retIds.add(action.details.reference_id as string)
+      if (referenceId.startsWith("ordli_") && !existingItemsMap.has(referenceId)) {
+        retIds.add(referenceId)
       }
     })
   })

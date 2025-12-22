@@ -5558,9 +5558,24 @@
                     },
                     "confirmed": {
                       "type": "string"
+                    },
+                    "declined": {
+                      "type": "string"
+                    },
+                    "canceled": {
+                      "type": "string"
+                    },
+                    "pending": {
+                      "type": "string"
                     }
                   },
-                  "required": ["requested", "confirmed"],
+                  "required": [
+                    "requested",
+                    "confirmed",
+                    "declined",
+                    "canceled",
+                    "pending"
+                  ],
                   "additionalProperties": false
                 },
                 "transfer": {
@@ -11893,9 +11908,22 @@
       "properties": {
         "domain": {
           "type": "string"
+        },
+        "create": {
+          "type": "object",
+          "properties": {
+            "fillNameWarning": {
+              "type": "string"
+            },
+            "possibleValuesRequired": {
+              "type": "string"
+            }
+          },
+          "required": ["fillNameWarning", "possibleValuesRequired"],
+          "additionalProperties": false
         }
       },
-      "required": ["domain"],
+      "required": ["domain", "create"],
       "additionalProperties": false
     },
     "requests": {
