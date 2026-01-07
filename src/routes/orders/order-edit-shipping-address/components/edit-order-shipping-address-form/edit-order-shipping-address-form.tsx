@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { HttpTypes } from '@medusajs/types';
 import { Button, Input, toast } from '@medusajs/ui';
+import i18n from 'i18next';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as zod from 'zod';
@@ -15,16 +16,34 @@ type EditOrderShippingAddressFormProps = {
   order: HttpTypes.AdminOrder;
 };
 
-const EditOrderShippingAddressSchema = zod.object({
-  address_1: zod.string().min(1),
-  address_2: zod.string().optional(),
-  country_code: zod.string().min(2).max(2),
-  city: zod.string().optional(),
-  postal_code: zod.string().optional(),
-  province: zod.string().optional(),
-  company: zod.string().optional(),
-  phone: zod.string().optional()
-});
+const EditOrderShippingAddressSchema = zod
+  .object({
+    address_1: zod.string(),
+    address_2: zod.string().optional(),
+    country_code: zod.string(),
+    city: zod.string().optional(),
+    postal_code: zod.string().optional(),
+    province: zod.string().optional(),
+    company: zod.string().optional(),
+    phone: zod.string().optional()
+  })
+  .superRefine(({ address_1, country_code }, ctx) => {
+    if (!address_1 || address_1.trim().length === 0) {
+      ctx.addIssue({
+        code: zod.ZodIssueCode.custom,
+        message: i18n.t('orders.edit.shippingAddress.validation.addressRequired'),
+        path: ['address_1']
+      });
+    }
+
+    if (!country_code || country_code.length !== 2) {
+      ctx.addIssue({
+        code: zod.ZodIssueCode.custom,
+        message: i18n.t('orders.edit.shippingAddress.validation.countryRequired'),
+        path: ['country_code']
+      });
+    }
+  });
 
 export function EditOrderShippingAddressForm({ order }: EditOrderShippingAddressFormProps) {
   const { t } = useTranslation();
@@ -278,6 +297,7 @@ export function EditOrderShippingAddressForm({ order }: EditOrderShippingAddress
               type="submit"
               variant="primary"
               size="small"
+              disabled={!!Object.keys(form.formState.errors || {}).length}
               data-testid="order-edit-shipping-address-save-button"
             >
               {t('actions.save')}
