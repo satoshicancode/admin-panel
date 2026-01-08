@@ -247,6 +247,7 @@ const Payment = ({
             size="small"
             leading="compact"
             className="capitalize"
+            data-testid={`order-payment-${payment.id}-provider`}
           >
             {payment.provider_id}
           </Text>
