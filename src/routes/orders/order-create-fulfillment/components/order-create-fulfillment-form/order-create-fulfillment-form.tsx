@@ -465,9 +465,6 @@ export function OrderCreateFulfillmentForm({
                       return (
                         <Form.Item data-testid="order-create-fulfillment-notification-item">
                           <div className="flex gap-x-3 rounded-lg bg-ui-bg-component p-3 shadow-elevation-card-rest">
-                            <Form.Label data-testid="order-create-fulfillment-notification-label">
-                              {t('orders.returns.sendNotification')}
-                            </Form.Label>
                             <Form.Control data-testid="order-create-fulfillment-notification-control">
                               <Form.Control>
                                 <Switch
@@ -481,18 +478,17 @@ export function OrderCreateFulfillmentForm({
                               </Form.Control>
                             </Form.Control>
                             <div>
-                              <Form.Label>{t('orders.returns.sendNotification')}</Form.Label>
-                              <Form.Hint className="!mt-1 text-ui-fg-subtle">
+                              <Form.Label data-testid="order-create-fulfillment-notification-label">
+                                {t('orders.returns.sendNotification')}
+                              </Form.Label>
+                              <Form.Hint
+                                className="!mt-1 text-ui-fg-subtle"
+                                data-testid="order-create-fulfillment-notification-hint"
+                              >
                                 {t('orders.fulfillment.sendNotificationHint')}
                               </Form.Hint>
                             </div>
                           </div>
-                          <Form.Hint
-                            className="!mt-1"
-                            data-testid="order-create-fulfillment-notification-hint"
-                          >
-                            {t('orders.fulfillment.sendNotificationHint')}
-                          </Form.Hint>
                           <Form.ErrorMessage data-testid="order-create-fulfillment-notification-error" />
                         </Form.Item>
                       );
