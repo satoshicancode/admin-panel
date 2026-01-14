@@ -1,81 +1,84 @@
-import { OnChangeFn, RowSelectionState } from "@tanstack/react-table"
-import { useEffect, useState } from "react"
-import { useSearchParams } from "react-router-dom"
+import { useEffect, useState } from 'react';
 
-import { useTranslation } from "react-i18next"
-import { _DataTable } from "../../../../../components/table/data-table"
-import { useVariants } from "../../../../../hooks/api"
-import { useDataTable } from "../../../../../hooks/use-data-table"
-import { useOrderEditItemsTableColumns } from "./use-order-edit-item-table-columns"
-import { useOrderEditItemTableFilters } from "./use-order-edit-item-table-filters"
-import { useOrderEditItemTableQuery } from "./use-order-edit-item-table-query"
+import type { OnChangeFn, RowSelectionState } from '@tanstack/react-table';
+import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 
-const PAGE_SIZE = 50
-const PREFIX = "rit"
+import { _DataTable } from '../../../../../components/table/data-table';
+import { useVariants } from '../../../../../hooks/api';
+import { useDataTable } from '../../../../../hooks/use-data-table';
+import { useOrderEditItemsTableColumns } from './use-order-edit-item-table-columns';
+import { useOrderEditItemTableFilters } from './use-order-edit-item-table-filters';
+import { useOrderEditItemTableQuery } from './use-order-edit-item-table-query';
+
+const PAGE_SIZE = 50;
+const PREFIX = 'rit';
 
 type AddExchangeOutboundItemsTableProps = {
-  onSelectionChange: (ids: string[]) => void
-  currencyCode: string
-}
+  onSelectionChange: (ids: string[]) => void;
+  currencyCode: string;
+};
 
 export const AddOrderEditItemsTable = ({
   onSelectionChange,
-  currencyCode,
+  currencyCode
 }: AddExchangeOutboundItemsTableProps) => {
-  const { t } = useTranslation()
-  const [, setSearchParams] = useSearchParams()
+  const { t } = useTranslation();
+  const [, setSearchParams] = useSearchParams();
 
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
-  const updater: OnChangeFn<RowSelectionState> = (fn) => {
-    const newState: RowSelectionState =
-      typeof fn === "function" ? fn(rowSelection) : fn
+  const updater: OnChangeFn<RowSelectionState> = fn => {
+    const newState: RowSelectionState = typeof fn === 'function' ? fn(rowSelection) : fn;
 
-    setRowSelection(newState)
-    onSelectionChange(Object.keys(newState))
-  }
+    setRowSelection(newState);
+    onSelectionChange(Object.keys(newState));
+  };
 
   useEffect(() => {
-    const orderParam = `${PREFIX}_order`
-    setSearchParams((prev) => {
+    const orderParam = `${PREFIX}_order`;
+    setSearchParams(prev => {
       if (!prev.get(orderParam)) {
-        const newParams = new URLSearchParams(prev)
-        newParams.set(orderParam, "product.title")
-        return newParams
+        const newParams = new URLSearchParams(prev);
+        newParams.set(orderParam, 'product.title');
+
+        return newParams;
       }
-      return prev
-    })
-  }, [setSearchParams])
+
+      return prev;
+    });
+  }, [setSearchParams]);
 
   const { searchParams, raw } = useOrderEditItemTableQuery({
     pageSize: PAGE_SIZE,
-    prefix: PREFIX,
-  })
+    prefix: PREFIX
+  });
 
   const { variants = [], count } = useVariants({
     ...searchParams,
-    fields: "*inventory_items.inventory.location_levels,+inventory_quantity",
-  })
+    fields:
+      '*inventory_items.inventory.location_levels,+inventory_quantity,*product.categories,*product.collection'
+  });
 
-  const columns = useOrderEditItemsTableColumns(currencyCode)
-  const filters = useOrderEditItemTableFilters()
+  const columns = useOrderEditItemsTableColumns(currencyCode);
+  const filters = useOrderEditItemTableFilters();
 
   const { table } = useDataTable({
     data: variants,
     columns: columns,
     count,
     enablePagination: true,
-    getRowId: (row) => row.id,
+    getRowId: row => row.id,
     pageSize: PAGE_SIZE,
-    enableRowSelection: (_row) => {
+    enableRowSelection: _row => {
       // TODO: Check inventory here. Check if other validations needs to be made
-      return true
+      return true;
     },
     rowSelection: {
       state: rowSelection,
-      updater,
-    },
-  })
+      updater
+    }
+  });
 
   return (
     <div className="flex size-full flex-col overflow-hidden">
@@ -89,13 +92,13 @@ export const AddOrderEditItemsTable = ({
         layout="fill"
         search
         orderBy={[
-          { key: "product.title", label: t("fields.product") },
-          { key: "title", label: t("fields.title") },
-          { key: "sku", label: t("fields.sku") },
+          { key: 'product.title', label: t('fields.product') },
+          { key: 'title', label: t('fields.title') },
+          { key: 'sku', label: t('fields.sku') }
         ]}
         prefix={PREFIX}
         queryObject={raw}
       />
     </div>
-  )
-}
+  );
+};
