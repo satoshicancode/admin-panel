@@ -1,28 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { clx } from "@medusajs/ui";
+import { useDataGridCell, useDataGridCellError } from '@components/data-grid/hooks';
+import type { DataGridCellProps, InputProps } from '@components/data-grid/types';
+import { useCombinedRefs } from '@hooks/use-combined-refs.tsx';
+import { clx } from '@medusajs/ui';
+import { Controller, type ControllerRenderProps } from 'react-hook-form';
 
-import type { ControllerRenderProps } from "react-hook-form";
-import { Controller } from "react-hook-form";
-
-import {
-  useDataGridCell,
-  useDataGridCellError,
-} from "@components/data-grid/hooks";
-import type {
-  DataGridCellProps,
-  InputProps,
-} from "@components/data-grid/types";
-
-import { useCombinedRefs } from "@hooks/use-combined-refs.tsx";
-
-import { DataGridCellContainer } from "./data-grid-cell-container";
+import { DataGridCellContainer } from './data-grid-cell-container';
 
 export const DataGridTextCell = <TData, TValue = unknown>({
-  context,
+  context
 }: DataGridCellProps<TData, TValue>) => {
   const { field, control, renderProps } = useDataGridCell({
-    context,
+    context
   });
   const errorProps = useDataGridCellError({ context });
 
@@ -33,8 +23,14 @@ export const DataGridTextCell = <TData, TValue = unknown>({
       control={control}
       name={field}
       render={({ field }) => (
-        <DataGridCellContainer {...container} {...errorProps}>
-          <Inner field={field} inputProps={input} />
+        <DataGridCellContainer
+          {...container}
+          {...errorProps}
+        >
+          <Inner
+            field={field}
+            inputProps={input}
+          />
         </DataGridCellContainer>
       )}
     />
@@ -43,7 +39,7 @@ export const DataGridTextCell = <TData, TValue = unknown>({
 
 const Inner = ({
   field,
-  inputProps,
+  inputProps
 }: {
   //@todo fix type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -65,13 +61,13 @@ const Inner = ({
   return (
     <input
       className={clx(
-        "txt-compact-small flex size-full cursor-pointer items-center justify-center bg-transparent text-ui-fg-subtle outline-none",
-        "focus:cursor-text",
+        'txt-compact-small flex size-full cursor-pointer items-center justify-center bg-transparent text-ui-fg-subtle outline-none',
+        'focus:cursor-text'
       )}
       autoComplete="off"
       tabIndex={-1}
       value={localValue}
-      onChange={(e) => setLocalValue(e.target.value)}
+      onChange={e => setLocalValue(e.target.value)}
       ref={combinedRefs}
       onBlur={() => {
         onBlur();

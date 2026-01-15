@@ -1,25 +1,26 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import type { Column, Table } from "@tanstack/react-table";
-import type { FieldValues } from "react-hook-form";
+import type { DataGridMatrix } from '@components/data-grid/models';
+import type { GridColumnOption } from '@components/data-grid/types';
+import type { Column, Table } from '@tanstack/react-table';
+import type { FieldValues } from 'react-hook-form';
 
-import type { DataGridMatrix } from "@components/data-grid/models";
-import type { GridColumnOption } from "@components/data-grid/types";
-
-export function useDataGridColumnVisibility<
-  TData,
-  TFieldValues extends FieldValues,
->(grid: Table<TData>, matrix: DataGridMatrix<TData, TFieldValues>) {
+export function useDataGridColumnVisibility<TData, TFieldValues extends FieldValues>(
+  grid: Table<TData>,
+  matrix: DataGridMatrix<TData, TFieldValues>
+) {
   const columns = grid.getAllLeafColumns();
 
-  const columnOptions: GridColumnOption[] = columns.map((column) => ({
+  const columnOptions: GridColumnOption[] = columns.map(column => ({
     id: column.id,
     name: getColumnName(column),
     checked: column.getIsVisible(),
-    disabled: !column.getCanHide(),
+    disabled: !column.getCanHide()
   }));
 
   const handleToggleColumn = useCallback(
+    //@todo fix this
+    // eslint-disable-next-line react-hooks/preserve-manual-memoization
     (index: number) => (value: boolean) => {
       const column = columns[index];
 
@@ -30,21 +31,23 @@ export function useDataGridColumnVisibility<
       matrix.toggleColumn(index, value);
       column.toggleVisibility(value);
     },
-    [columns, matrix],
+    //@todo fix this
+    // eslint-disable-next-line react-hooks/preserve-manual-memoization
+    [columns, matrix]
   );
 
   const handleResetColumns = useCallback(() => {
     grid.setColumnVisibility({});
   }, [grid]);
 
-  const optionCount = columnOptions.filter((c) => !c.disabled).length;
+  const optionCount = columnOptions.filter(c => !c.disabled).length;
   const isDisabled = optionCount === 0;
 
   return {
     columnOptions,
     handleToggleColumn,
     handleResetColumns,
-    isDisabled,
+    isDisabled
   };
 }
 
@@ -55,13 +58,13 @@ function getColumnName<TData>(column: Column<TData, unknown>): string {
 
   if (!id) {
     throw new Error(
-      "Column is missing an id, which is a required field. Please provide an id for the column.",
+      'Column is missing an id, which is a required field. Please provide an id for the column.'
     );
   }
 
-  if (process.env.NODE_ENV === "development" && !meta?.name && enableHiding) {
+  if (process.env.NODE_ENV === 'development' && !meta?.name && enableHiding) {
     console.warn(
-      `Column "${id}" does not have a name. You should add a name to the column definition. Falling back to the column id.`,
+      `Column "${id}" does not have a name. You should add a name to the column definition. Falling back to the column id.`
     );
   }
 

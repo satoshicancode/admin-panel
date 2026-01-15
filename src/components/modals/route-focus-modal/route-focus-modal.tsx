@@ -1,22 +1,18 @@
-import type { PropsWithChildren } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type PropsWithChildren } from 'react';
 
-import { FocusModal, clx } from "@medusajs/ui";
-
-import type { Path } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-
-import { useStateAwareTo } from "@components/modals/hooks/use-state-aware-to";
-import { RouteModalForm } from "@components/modals/route-modal-form";
-import { useRouteModal } from "@components/modals/route-modal-provider";
-import { RouteModalProvider } from "@components/modals/route-modal-provider/route-provider";
-import { StackedModalProvider } from "@components/modals/stacked-modal-provider";
+import { useStateAwareTo } from '@components/modals/hooks/use-state-aware-to';
+import { RouteModalForm } from '@components/modals/route-modal-form';
+import { useRouteModal } from '@components/modals/route-modal-provider';
+import { RouteModalProvider } from '@components/modals/route-modal-provider/route-provider';
+import { StackedModalProvider } from '@components/modals/stacked-modal-provider';
+import { clx, FocusModal } from '@medusajs/ui';
+import { useNavigate, type Path } from 'react-router-dom';
 
 type RouteFocusModalProps = PropsWithChildren<{
   prev?: string | Partial<Path>;
 }>;
 
-const Root = ({ prev = "..", children }: RouteFocusModalProps) => {
+const Root = ({ prev = '..', children }: RouteFocusModalProps) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [stackedModalOpen, onStackedModalOpen] = useState(false);
@@ -38,7 +34,7 @@ const Root = ({ prev = "..", children }: RouteFocusModalProps) => {
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
-      document.body.style.pointerEvents = "auto";
+      document.body.style.pointerEvents = 'auto';
       navigate(to, { replace: true });
 
       return;
@@ -48,7 +44,10 @@ const Root = ({ prev = "..", children }: RouteFocusModalProps) => {
   };
 
   return (
-    <FocusModal open={open} onOpenChange={handleOpenChange}>
+    <FocusModal
+      open={open}
+      onOpenChange={handleOpenChange}
+    >
       <RouteModalProvider prev={to}>
         <StackedModalProvider onOpenChange={onStackedModalOpen}>
           <Content stackedModalOpen={stackedModalOpen}>{children}</Content>
@@ -71,13 +70,13 @@ const Content = ({ stackedModalOpen, children }: ContentProps) => {
     <FocusModal.Content
       onEscapeKeyDown={
         shouldPreventClose
-          ? (e) => {
+          ? e => {
               e.preventDefault();
             }
           : undefined
       }
       className={clx({
-        "!inset-x-5 !inset-y-3 !bg-ui-bg-disabled": stackedModalOpen,
+        '!inset-x-5 !inset-y-3 !bg-ui-bg-disabled': stackedModalOpen
       })}
     >
       {children}
@@ -106,5 +105,5 @@ export const RouteFocusModal = Object.assign(Root, {
   Description,
   Footer,
   Close,
-  Form,
+  Form
 });

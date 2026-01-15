@@ -1,7 +1,7 @@
-import type { UniqueIdentifier } from "@dnd-kit/core";
-import { arrayMove } from "@dnd-kit/sortable";
+import type { UniqueIdentifier } from '@dnd-kit/core';
+import { arrayMove } from '@dnd-kit/sortable';
 
-import type { FlattenedItem, TreeItem } from "./types";
+import type { FlattenedItem, TreeItem } from './types';
 
 export const iOS = /iPad|iPhone|iPod/.test(navigator.platform);
 
@@ -14,7 +14,7 @@ export function getProjection(
   activeId: UniqueIdentifier,
   overId: UniqueIdentifier,
   dragOffset: number,
-  indentationWidth: number,
+  indentationWidth: number
 ) {
   const overItemIndex = items.findIndex(({ id }) => id === overId);
   const activeItemIndex = items.findIndex(({ id }) => id === activeId);
@@ -25,7 +25,7 @@ export function getProjection(
   const dragDepth = getDragDepth(dragOffset, indentationWidth);
   const projectedDepth = activeItem.depth + dragDepth;
   const maxDepth = getMaxDepth({
-    previousItem,
+    previousItem
   });
   const minDepth = getMinDepth({ nextItem });
   let depth = projectedDepth;
@@ -54,7 +54,7 @@ export function getProjection(
     const newParent = newItems
       .slice(0, overItemIndex)
       .reverse()
-      .find((item) => item.depth === depth)?.parentId;
+      .find(item => item.depth === depth)?.parentId;
 
     return newParent ?? null;
   }
@@ -80,7 +80,7 @@ function flatten<T extends TreeItem>(
   items: T[],
   parentId: UniqueIdentifier | null = null,
   depth = 0,
-  childrenProp: string,
+  childrenProp: string
 ): FlattenedItem[] {
   return items.reduce<FlattenedItem[]>((acc, item, index) => {
     const children = (item[childrenProp] || []) as T[];
@@ -88,15 +88,12 @@ function flatten<T extends TreeItem>(
     return [
       ...acc,
       { ...item, parentId, depth, index },
-      ...flatten(children, item.id, depth + 1, childrenProp),
+      ...flatten(children, item.id, depth + 1, childrenProp)
     ];
   }, []);
 }
 
-export function flattenTree<T extends TreeItem>(
-  items: T[],
-  childrenProp: string,
-): FlattenedItem[] {
+export function flattenTree<T extends TreeItem>(items: T[], childrenProp: string): FlattenedItem[] {
   return flatten(items, undefined, undefined, childrenProp);
 }
 
@@ -109,11 +106,11 @@ type ItemUpdate = {
 export function buildTree<T extends TreeItem>(
   flattenedItems: FlattenedItem[],
   newIndex: number,
-  childrenProp: string,
+  childrenProp: string
 ): { items: T[]; update: ItemUpdate } {
-  const root = { id: "root", [childrenProp]: [] } as T;
+  const root = { id: 'root', [childrenProp]: [] } as T;
   const nodes: Record<string, T> = { [root.id]: root };
-  const items = flattenedItems.map((item) => ({ ...item, [childrenProp]: [] }));
+  const items = flattenedItems.map(item => ({ ...item, [childrenProp]: [] }));
 
   let update: {
     id: UniqueIdentifier | null;
@@ -122,7 +119,7 @@ export function buildTree<T extends TreeItem>(
   } = {
     id: null,
     parentId: null,
-    index: 0,
+    index: 0
   };
 
   items.forEach((item, index) => {
@@ -144,7 +141,7 @@ export function buildTree<T extends TreeItem>(
     (parent[childrenProp] as T[]).push({
       id,
       ...rest,
-      [childrenProp]: children,
+      [childrenProp]: children
     } as T);
 
     /**
@@ -155,33 +152,30 @@ export function buildTree<T extends TreeItem>(
 
       update = {
         id: item.id,
-        parentId: parent.id === "root" ? null : parent.id,
-        index: parentChildren.length - 1,
+        parentId: parent.id === 'root' ? null : parent.id,
+        index: parentChildren.length - 1
       };
     }
   });
 
   if (!update.id) {
-    throw new Error("Could not find item");
+    throw new Error('Could not find item');
   }
 
   return {
     items: root[childrenProp] as T[],
-    update: update as ItemUpdate,
+    update: update as ItemUpdate
   };
 }
 
-export function findItem<T extends TreeItem>(
-  items: T[],
-  itemId: UniqueIdentifier,
-) {
+export function findItem<T extends TreeItem>(items: T[], itemId: UniqueIdentifier) {
   return items.find(({ id }) => id === itemId);
 }
 
 export function findItemDeep<T extends TreeItem>(
   items: T[],
   itemId: UniqueIdentifier,
-  childrenProp: string,
+  childrenProp: string
 ): TreeItem | undefined {
   for (const item of items) {
     const { id } = item;
@@ -208,13 +202,13 @@ export function setProperty<TItem extends TreeItem, T extends keyof TItem>(
   id: UniqueIdentifier,
   property: T,
   childrenProp: keyof TItem, // Make childrenProp a key of TItem
-  setter: (value: TItem[T]) => TItem[T],
+  setter: (value: TItem[T]) => TItem[T]
 ): TItem[] {
-  return items.map((item) => {
+  return items.map(item => {
     if (item.id === id) {
       return {
         ...item,
-        [property]: setter(item[property]),
+        [property]: setter(item[property])
       };
     }
 
@@ -223,13 +217,7 @@ export function setProperty<TItem extends TreeItem, T extends keyof TItem>(
     if (children && children.length) {
       return {
         ...item,
-        [childrenProp]: setProperty(
-          children,
-          id,
-          property,
-          childrenProp,
-          setter,
-        ),
+        [childrenProp]: setProperty(children, id, property, childrenProp, setter)
       } as TItem; // Explicitly cast to TItem
     }
 
@@ -237,11 +225,7 @@ export function setProperty<TItem extends TreeItem, T extends keyof TItem>(
   });
 }
 
-function countChildren<T extends TreeItem>(
-  items: T[],
-  count = 0,
-  childrenProp: string,
-): number {
+function countChildren<T extends TreeItem>(items: T[], count = 0, childrenProp: string): number {
   return items.reduce((acc, item) => {
     const children = (item[childrenProp] || []) as T[];
 
@@ -256,7 +240,7 @@ function countChildren<T extends TreeItem>(
 export function getChildCount<T extends TreeItem>(
   items: T[],
   id: UniqueIdentifier,
-  childrenProp: string,
+  childrenProp: string
 ) {
   const item = findItemDeep(items, id, childrenProp);
 
@@ -268,11 +252,11 @@ export function getChildCount<T extends TreeItem>(
 export function removeChildrenOf(
   items: FlattenedItem[],
   ids: UniqueIdentifier[],
-  childrenProp: string,
+  childrenProp: string
 ) {
   const excludeParentIds = [...ids];
 
-  return items.filter((item) => {
+  return items.filter(item => {
     if (item.parentId && excludeParentIds.includes(item.parentId)) {
       const children = (item[childrenProp] || []) as FlattenedItem[];
 
@@ -287,16 +271,13 @@ export function removeChildrenOf(
   });
 }
 
-export function listItemsWithChildren<T extends TreeItem>(
-  items: T[],
-  childrenProp: string,
-): T[] {
-  return items.map((item) => {
+export function listItemsWithChildren<T extends TreeItem>(items: T[], childrenProp: string): T[] {
+  return items.map(item => {
     return {
       ...item,
       [childrenProp]: item[childrenProp]
         ? listItemsWithChildren(item[childrenProp] as TreeItem[], childrenProp)
-        : [],
+        : []
     };
   });
 }

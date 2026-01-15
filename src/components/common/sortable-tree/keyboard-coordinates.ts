@@ -1,38 +1,34 @@
-import type {
-  DroppableContainer,
-  KeyboardCoordinateGetter,
-} from "@dnd-kit/core";
-import { KeyboardCode, closestCorners, getFirstCollision } from "@dnd-kit/core";
+import {
+  closestCorners,
+  getFirstCollision,
+  KeyboardCode,
+  type DroppableContainer,
+  type KeyboardCoordinateGetter
+} from '@dnd-kit/core';
 
-import type { SensorContext } from "./types";
-import { getProjection } from "./utils";
+import type { SensorContext } from './types';
+import { getProjection } from './utils';
 
 const directions: string[] = [
   KeyboardCode.Down,
   KeyboardCode.Right,
   KeyboardCode.Up,
-  KeyboardCode.Left,
+  KeyboardCode.Left
 ];
 
 const horizontal: string[] = [KeyboardCode.Left, KeyboardCode.Right];
 
 export const sortableTreeKeyboardCoordinates: (
   context: SensorContext,
-  indentationWidth: number,
+  indentationWidth: number
 ) => KeyboardCoordinateGetter =
   (context, indentationWidth) =>
   (
     event,
     {
       currentCoordinates,
-      context: {
-        active,
-        over,
-        collisionRect,
-        droppableRects,
-        droppableContainers,
-      },
-    },
+      context: { active, over, collisionRect, droppableRects, droppableContainers }
+    }
   ) => {
     if (directions.includes(event.code)) {
       if (!active || !collisionRect) {
@@ -42,7 +38,7 @@ export const sortableTreeKeyboardCoordinates: (
       event.preventDefault();
 
       const {
-        current: { items, offset },
+        current: { items, offset }
       } = context;
 
       if (horizontal.includes(event.code) && over?.id) {
@@ -51,7 +47,7 @@ export const sortableTreeKeyboardCoordinates: (
           active.id,
           over.id,
           offset,
-          indentationWidth,
+          indentationWidth
         );
 
         switch (event.code) {
@@ -59,7 +55,7 @@ export const sortableTreeKeyboardCoordinates: (
             if (depth > minDepth) {
               return {
                 ...currentCoordinates,
-                x: currentCoordinates.x - indentationWidth,
+                x: currentCoordinates.x - indentationWidth
               };
             }
             break;
@@ -67,7 +63,7 @@ export const sortableTreeKeyboardCoordinates: (
             if (depth < maxDepth) {
               return {
                 ...currentCoordinates,
-                x: currentCoordinates.x + indentationWidth,
+                x: currentCoordinates.x + indentationWidth
               };
             }
             break;
@@ -78,7 +74,7 @@ export const sortableTreeKeyboardCoordinates: (
 
       const containers: DroppableContainer[] = [];
 
-      droppableContainers.forEach((container) => {
+      droppableContainers.forEach(container => {
         if (container?.disabled || container.id === over?.id) {
           return;
         }
@@ -108,9 +104,9 @@ export const sortableTreeKeyboardCoordinates: (
         collisionRect,
         pointerCoordinates: null,
         droppableRects,
-        droppableContainers: containers,
+        droppableContainers: containers
       });
-      let closestId = getFirstCollision(collisions, "id");
+      let closestId = getFirstCollision(collisions, 'id');
 
       if (closestId === over?.id && collisions.length > 1) {
         closestId = collisions[1].id;
@@ -133,7 +129,7 @@ export const sortableTreeKeyboardCoordinates: (
               active.id,
               closestId,
               (newItem.depth - activeItem.depth) * indentationWidth,
-              indentationWidth,
+              indentationWidth
             );
             const isBelow = newIndex > activeIndex;
             const modifier = isBelow ? 1 : -1;
@@ -141,7 +137,7 @@ export const sortableTreeKeyboardCoordinates: (
 
             return {
               x: newRect.left + depth * indentationWidth,
-              y: newRect.top + modifier * offset,
+              y: newRect.top + modifier * offset
             };
           }
         }

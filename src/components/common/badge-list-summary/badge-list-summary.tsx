@@ -1,6 +1,5 @@
-import { Badge, Tooltip, clx } from "@medusajs/ui";
-
-import { useTranslation } from "react-i18next";
+import { Badge, clx, Tooltip } from '@medusajs/ui';
+import { useTranslation } from 'react-i18next';
 
 type BadgeListSummaryProps = {
   /**
@@ -29,28 +28,32 @@ export const BadgeListSummary = ({
   className,
   inline,
   rounded = false,
-  n = 2,
+  n = 2
 }: BadgeListSummaryProps) => {
   const { t } = useTranslation();
 
-  const title = t("general.plusCount", {
-    count: list.length - n,
+  const title = t('general.plusCount', {
+    count: list.length - n
   });
 
   return (
     <div
       className={clx(
-        "txt-compact-small gap-x-2 overflow-hidden text-ui-fg-subtle",
+        'txt-compact-small gap-x-2 overflow-hidden text-ui-fg-subtle',
         {
-          "inline-flex": inline,
-          flex: !inline,
+          'inline-flex': inline,
+          flex: !inline
         },
-        className,
+        className
       )}
     >
-      {list.slice(0, n).map((item) => {
+      {list.slice(0, n).map(item => {
         return (
-          <Badge rounded={rounded ? "full" : "base"} key={item} size="2xsmall">
+          <Badge
+            rounded={rounded ? 'full' : 'base'}
+            key={item}
+            size="2xsmall"
+          >
             {item}
           </Badge>
         );
@@ -61,14 +64,14 @@ export const BadgeListSummary = ({
           <Tooltip
             content={
               <ul>
-                {list.slice(n).map((c) => (
+                {list.slice(n).map(c => (
                   <li key={c}>{c}</li>
                 ))}
               </ul>
             }
           >
             <Badge
-              rounded={rounded ? "full" : "base"}
+              rounded={rounded ? 'full' : 'base'}
               size="2xsmall"
               className="cursor-default whitespace-nowrap"
             >

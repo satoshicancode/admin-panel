@@ -1,7 +1,5 @@
-import { clx } from "@medusajs/ui";
-
-import type { Transition } from "motion/react";
-import { motion } from "motion/react";
+import { clx } from '@medusajs/ui';
+import { motion, type Transition } from 'motion/react';
 
 type LogoBoxProps = {
   className?: string;
@@ -16,19 +14,19 @@ export const LogoBox = ({
   containerTransition = {
     duration: 0.8,
     delay: 0.5,
-    ease: [0, 0.71, 0.2, 1.01],
+    ease: [0, 0.71, 0.2, 1.01]
   },
   pathTransition = {
     duration: 0.8,
     delay: 0.6,
-    ease: [0.1, 0.8, 0.2, 1.01],
-  },
+    ease: [0.1, 0.8, 0.2, 1.01]
+  }
 }: LogoBoxProps) => (
   <div
     className={clx(
-      "relative flex size-14 items-center justify-center rounded-xl bg-ui-button-neutral shadow-buttons-neutral",
+      'relative flex size-14 items-center justify-center rounded-xl bg-ui-button-neutral shadow-buttons-neutral',
       "after:button-neutral-gradient after:inset-0 after:content-['']",
-      className,
+      className
     )}
   >
     {checked && (

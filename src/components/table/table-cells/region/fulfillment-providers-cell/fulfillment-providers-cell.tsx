@@ -1,17 +1,14 @@
-import type { HttpTypes } from "@medusajs/types";
-
-import { useTranslation } from "react-i18next";
-
-import { PlaceholderCell } from "@components/table/table-cells/common/placeholder-cell";
-
-import { formatProvider } from "@lib/format-provider";
+import { PlaceholderCell } from '@components/table/table-cells/common/placeholder-cell';
+import { formatProvider } from '@lib/format-provider';
+import type { HttpTypes } from '@medusajs/types';
+import { useTranslation } from 'react-i18next';
 
 type FulfillmentProvidersCellProps = {
   fulfillmentProviders?: HttpTypes.AdminFulfillmentProvider[] | null;
 };
 
 export const FulfillmentProvidersCell = ({
-  fulfillmentProviders,
+  fulfillmentProviders
 }: FulfillmentProvidersCellProps) => {
   const { t } = useTranslation();
 
@@ -21,17 +18,17 @@ export const FulfillmentProvidersCell = ({
 
   const displayValue = fulfillmentProviders
     .slice(0, 2)
-    .map((p) => formatProvider(p.id))
-    .join(", ");
+    .map(p => formatProvider(p.id))
+    .join(', ');
 
   const additionalProviders = fulfillmentProviders.slice(2).length;
 
   const text = `${displayValue}${
     additionalProviders > 0
-      ? ` ${t("general.plusCountMore", {
-          count: additionalProviders,
+      ? ` ${t('general.plusCountMore', {
+          count: additionalProviders
         })}`
-      : ""
+      : ''
   }`;
 
   return (
@@ -46,7 +43,7 @@ export const FulfillmentProvidersHeader = () => {
 
   return (
     <div className="flex size-full items-center overflow-hidden">
-      <span className="truncate">{t("fields.fulfillmentProviders")}</span>
+      <span className="truncate">{t('fields.fulfillmentProviders')}</span>
     </div>
   );
 };

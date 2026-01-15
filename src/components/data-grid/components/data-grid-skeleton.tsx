@@ -1,6 +1,5 @@
-import type { ColumnDef } from "@tanstack/react-table";
-
-import { Skeleton } from "@components/common/skeleton";
+import { Skeleton } from '@components/common/skeleton';
+import type { ColumnDef } from '@tanstack/react-table';
 
 type DataGridSkeletonProps<TData> = {
   columns: ColumnDef<TData>[];
@@ -9,7 +8,7 @@ type DataGridSkeletonProps<TData> = {
 
 export const DataGridSkeleton = <TData,>({
   columns,
-  rows: rowCount = 10,
+  rows: rowCount = 10
 }: DataGridSkeletonProps<TData>) => {
   const rows = Array.from({ length: rowCount }, (_, i) => i);
 
@@ -24,7 +23,7 @@ export const DataGridSkeleton = <TData,>({
         <div
           className="grid"
           style={{
-            gridTemplateColumns: `repeat(${colCount}, 1fr)`,
+            gridTemplateColumns: `repeat(${colCount}, 1fr)`
           }}
         >
           {columns.map((_col, i) => (

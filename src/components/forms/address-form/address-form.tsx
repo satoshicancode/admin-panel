@@ -1,48 +1,40 @@
-import type { HttpTypes } from "@medusajs/types";
-import { Heading, Input, Select, clx } from "@medusajs/ui";
-
-import type { Control } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import type { z } from "zod";
-
-import { Form } from "@components/common/form";
-import { CountrySelect } from "@components/inputs/country-select";
-
-import { useDocumentDirection } from "@hooks/use-document-direction";
-
-import type { AddressSchema } from "@lib/schemas";
+import { Form } from '@components/common/form';
+import { CountrySelect } from '@components/inputs/country-select';
+import { useDocumentDirection } from '@hooks/use-document-direction';
+import type { AddressSchema } from '@lib/schemas';
+import type { HttpTypes } from '@medusajs/types';
+import { clx, Heading, Input, Select } from '@medusajs/ui';
+import type { Control } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import type { z } from 'zod';
 
 type AddressFieldValues = z.infer<typeof AddressSchema>;
 
 type AddressFormProps = {
   control: Control<AddressFieldValues>;
   countries?: HttpTypes.AdminRegionCountry[];
-  layout: "grid" | "stack";
+  layout: 'grid' | 'stack';
 };
 
-export const AddressForm = ({
-  control,
-  countries,
-  layout,
-}: AddressFormProps) => {
+export const AddressForm = ({ control, countries, layout }: AddressFormProps) => {
   const { t } = useTranslation();
   const direction = useDocumentDirection();
-  const style = clx("gap-4", {
-    "flex flex-col": layout === "stack",
-    "grid grid-cols-2": layout === "grid",
+  const style = clx('gap-4', {
+    'flex flex-col': layout === 'stack',
+    'grid grid-cols-2': layout === 'grid'
   });
 
   return (
     <div className="flex flex-col gap-y-8">
       <div className="flex flex-col gap-y-4">
-        <Heading level="h2">{t("addresses.contactHeading")}</Heading>
+        <Heading level="h2">{t('addresses.contactHeading')}</Heading>
         <fieldset className={style}>
           <Form.Field
             control={control}
             name="first_name"
             render={({ field }) => (
               <Form.Item>
-                <Form.Label>{t("fields.firstName")}</Form.Label>
+                <Form.Label>{t('fields.firstName')}</Form.Label>
                 <Form.Control>
                   <Input {...field} />
                 </Form.Control>
@@ -55,7 +47,7 @@ export const AddressForm = ({
             name="last_name"
             render={({ field }) => (
               <Form.Item>
-                <Form.Label>{t("fields.lastName")}</Form.Label>
+                <Form.Label>{t('fields.lastName')}</Form.Label>
                 <Form.Control>
                   <Input {...field} />
                 </Form.Control>
@@ -68,7 +60,7 @@ export const AddressForm = ({
             name="company"
             render={({ field }) => (
               <Form.Item>
-                <Form.Label optional>{t("fields.company")}</Form.Label>
+                <Form.Label optional>{t('fields.company')}</Form.Label>
                 <Form.Control>
                   <Input {...field} />
                 </Form.Control>
@@ -81,7 +73,7 @@ export const AddressForm = ({
             name="phone"
             render={({ field }) => (
               <Form.Item>
-                <Form.Label>{t("fields.phone")}</Form.Label>
+                <Form.Label>{t('fields.phone')}</Form.Label>
                 <Form.Control>
                   <Input {...field} />
                 </Form.Control>
@@ -92,14 +84,14 @@ export const AddressForm = ({
         </fieldset>
       </div>
       <div className="flex flex-col gap-y-4">
-        <Heading level="h2">{t("addresses.locationHeading")}</Heading>
+        <Heading level="h2">{t('addresses.locationHeading')}</Heading>
         <fieldset className={style}>
           <Form.Field
             control={control}
             name="address_1"
             render={({ field }) => (
               <Form.Item>
-                <Form.Label>{t("fields.address")}</Form.Label>
+                <Form.Label>{t('fields.address')}</Form.Label>
                 <Form.Control>
                   <Input {...field} />
                 </Form.Control>
@@ -112,7 +104,7 @@ export const AddressForm = ({
             name="address_2"
             render={({ field }) => (
               <Form.Item>
-                <Form.Label optional>{t("fields.address2")}</Form.Label>
+                <Form.Label optional>{t('fields.address2')}</Form.Label>
                 <Form.Control>
                   <Input {...field} />
                 </Form.Control>
@@ -125,7 +117,7 @@ export const AddressForm = ({
             name="city"
             render={({ field }) => (
               <Form.Item>
-                <Form.Label>{t("fields.city")}</Form.Label>
+                <Form.Label>{t('fields.city')}</Form.Label>
                 <Form.Control>
                   <Input {...field} />
                 </Form.Control>
@@ -138,7 +130,7 @@ export const AddressForm = ({
             name="postal_code"
             render={({ field }) => (
               <Form.Item>
-                <Form.Label>{t("fields.postalCode")}</Form.Label>
+                <Form.Label>{t('fields.postalCode')}</Form.Label>
                 <Form.Control>
                   <Input {...field} />
                 </Form.Control>
@@ -151,7 +143,7 @@ export const AddressForm = ({
             name="province"
             render={({ field }) => (
               <Form.Item>
-                <Form.Label optional>{t("fields.province")}</Form.Label>
+                <Form.Label optional>{t('fields.province')}</Form.Label>
                 <Form.Control>
                   <Input {...field} />
                 </Form.Control>
@@ -164,15 +156,19 @@ export const AddressForm = ({
             name="country_code"
             render={({ field: { ref, onChange, ...field } }) => (
               <Form.Item>
-                <Form.Label>{t("fields.country")}</Form.Label>
+                <Form.Label>{t('fields.country')}</Form.Label>
                 <Form.Control>
                   {countries ? (
-                    <Select dir={direction} {...field} onValueChange={onChange}>
+                    <Select
+                      dir={direction}
+                      {...field}
+                      onValueChange={onChange}
+                    >
                       <Select.Trigger ref={ref}>
                         <Select.Value />
                       </Select.Trigger>
                       <Select.Content>
-                        {countries.map((country) => {
+                        {countries.map(country => {
                           /**
                            * If a country does not have an ISO 2 code, it is not
                            * a valid country and should not be selectable.
@@ -193,7 +189,11 @@ export const AddressForm = ({
                       </Select.Content>
                     </Select>
                   ) : (
-                    <CountrySelect {...field} ref={ref} onChange={onChange} /> // When no countries are provided, use the country select component that has a built-in list of all countries
+                    <CountrySelect
+                      {...field}
+                      ref={ref}
+                      onChange={onChange}
+                    /> // When no countries are provided, use the country select component that has a built-in list of all countries
                   )}
                 </Form.Control>
                 <Form.ErrorMessage />

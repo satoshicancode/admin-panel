@@ -1,7 +1,7 @@
-import type { MutableRefObject } from "react";
+import type { MutableRefObject } from 'react';
 
-import type { DraggableAttributes, UniqueIdentifier } from "@dnd-kit/core";
-import type { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
+import type { DraggableAttributes, UniqueIdentifier } from '@dnd-kit/core';
+import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 
 export interface TreeItem extends Record<string, unknown> {
   id: UniqueIdentifier;

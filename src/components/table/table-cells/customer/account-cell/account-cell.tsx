@@ -1,6 +1,5 @@
-import { useTranslation } from "react-i18next";
-
-import { StatusCell } from "@components/table/table-cells/common/status-cell";
+import { StatusCell } from '@components/table/table-cells/common/status-cell';
+import { useTranslation } from 'react-i18next';
 
 type AccountCellProps = {
   hasAccount: boolean;
@@ -9,10 +8,8 @@ type AccountCellProps = {
 export const AccountCell = ({ hasAccount }: AccountCellProps) => {
   const { t } = useTranslation();
 
-  const color = hasAccount ? "green" : ("orange" as const);
-  const text = hasAccount
-    ? t("customers.fields.registered")
-    : t("customers.fields.guest");
+  const color = hasAccount ? 'green' : ('orange' as const);
+  const text = hasAccount ? t('customers.fields.registered') : t('customers.fields.guest');
 
   return <StatusCell color={color}>{text}</StatusCell>;
 };
@@ -22,7 +19,7 @@ export const AccountHeader = () => {
 
   return (
     <div className="flex h-full w-full items-center">
-      <span className="truncate">{t("fields.account")}</span>
+      <span className="truncate">{t('fields.account')}</span>
     </div>
   );
 };

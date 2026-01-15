@@ -1,6 +1,6 @@
 // @todo fix types
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Command } from "@hooks/use-command-history.tsx";
+import type { Command } from '@hooks/use-command-history.tsx';
 
 export type DataGridUpdateCommandArgs = {
   prev: any;

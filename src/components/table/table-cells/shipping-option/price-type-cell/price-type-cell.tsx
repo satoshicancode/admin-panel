@@ -1,9 +1,8 @@
-import { useTranslation } from "react-i18next";
-
-import { PlaceholderCell } from "@components/table/table-cells/common/placeholder-cell";
+import { PlaceholderCell } from '@components/table/table-cells/common/placeholder-cell';
+import { useTranslation } from 'react-i18next';
 
 type PriceTypeCellProps = {
-  priceType?: "flat_rate" | "calculated";
+  priceType?: 'flat_rate' | 'calculated';
 };
 
 export const PriceTypeCell = ({ priceType }: PriceTypeCellProps) => {
@@ -13,12 +12,12 @@ export const PriceTypeCell = ({ priceType }: PriceTypeCellProps) => {
     return <PlaceholderCell />;
   }
 
-  const isFlatRate = priceType === "flat_rate";
+  const isFlatRate = priceType === 'flat_rate';
 
   return (
     <div className="flex items-center overflow-hidden">
       <span className="truncate">
-        {isFlatRate ? t("regions.flatRate") : t("regions.calculated")}
+        {isFlatRate ? t('regions.flatRate') : t('regions.calculated')}
       </span>
     </div>
   );
@@ -29,7 +28,7 @@ export const PriceTypeHeader = () => {
 
   return (
     <div className="flex items-center overflow-hidden">
-      <span className="truncate">{t("regions.priceType")}</span>
+      <span className="truncate">{t('regions.priceType')}</span>
     </div>
   );
 };

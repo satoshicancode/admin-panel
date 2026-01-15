@@ -1,20 +1,14 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import get from "lodash/get";
-import set from "lodash/set";
-import type {
-  FieldValues,
-  Path,
-  PathValue,
-  UseFormReturn,
-} from "react-hook-form";
-
-import type { DataGridMatrix } from "@components/data-grid/models";
+import type { DataGridMatrix } from '@components/data-grid/models';
 import type {
   DataGridColumnType,
   DataGridCoordinates,
-  DataGridToggleableNumber,
-} from "@components/data-grid/types";
+  DataGridToggleableNumber
+} from '@components/data-grid/types';
+import get from 'lodash/get';
+import set from 'lodash/set';
+import type { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form';
 
 type UseDataGridFormHandlersOptions<TData, TFieldValues extends FieldValues> = {
   matrix: DataGridMatrix<TData, TFieldValues>;
@@ -22,13 +16,10 @@ type UseDataGridFormHandlersOptions<TData, TFieldValues extends FieldValues> = {
   anchor: DataGridCoordinates | null;
 };
 
-export const useDataGridFormHandlers = <
-  TData,
-  TFieldValues extends FieldValues,
->({
+export const useDataGridFormHandlers = <TData, TFieldValues extends FieldValues>({
   matrix,
   form,
-  anchor,
+  anchor
 }: UseDataGridFormHandlersOptions<TData, TFieldValues>) => {
   const { getValues, reset } = form;
 
@@ -40,11 +31,11 @@ export const useDataGridFormHandlers = <
 
       const allValues = getValues();
 
-      return fields.map((field) => {
-        return field.split(".").reduce((obj, key) => obj?.[key], allValues);
+      return fields.map(field => {
+        return field.split('.').reduce((obj, key) => obj?.[key], allValues);
       }) as PathValue<TFieldValues, Path<TFieldValues>>[];
     },
-    [getValues],
+    [getValues]
   );
 
   const setSelectionValues = useCallback(
@@ -75,20 +66,20 @@ export const useDataGridFormHandlers = <
       reset(currentValues, {
         keepDirty: true,
         keepTouched: true,
-        keepDefaultValues: true,
+        keepDefaultValues: true
       });
     },
-    [matrix, anchor, getValues, reset],
+    [matrix, anchor, getValues, reset]
   );
 
   return {
     getSelectionValues,
-    setSelectionValues,
+    setSelectionValues
   };
 };
 
 function convertToNumber(value: string | number): number {
-  if (typeof value === "number") {
+  if (typeof value === 'number') {
     return value;
   }
 
@@ -102,18 +93,18 @@ function convertToNumber(value: string | number): number {
 }
 
 function convertToBoolean(value: string | boolean): boolean {
-  if (typeof value === "boolean") {
+  if (typeof value === 'boolean') {
     return value;
   }
 
-  if (typeof value === "undefined" || value === null) {
+  if (typeof value === 'undefined' || value === null) {
     return false;
   }
 
   const lowerValue = value.toLowerCase();
 
-  if (lowerValue === "true" || lowerValue === "false") {
-    return lowerValue === "true";
+  if (lowerValue === 'true' || lowerValue === 'false') {
+    return lowerValue === 'true';
   }
 
   throw new Error(`String "${value}" cannot be converted to boolean.`);
@@ -122,8 +113,8 @@ function convertToBoolean(value: string | boolean): boolean {
 // @todo fix type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function covertToString(value: any): string {
-  if (typeof value === "undefined" || value === null) {
-    return "";
+  if (typeof value === 'undefined' || value === null) {
+    return '';
   }
 
   return String(value);
@@ -137,7 +128,7 @@ function convertToggleableNumber(value: any): {
 } {
   let obj = value;
 
-  if (typeof obj === "string") {
+  if (typeof obj === 'string') {
     try {
       obj = JSON.parse(obj);
     } catch (_error) {
@@ -148,18 +139,16 @@ function convertToggleableNumber(value: any): {
   return obj;
 }
 
-function setValue<
-  T extends DataGridToggleableNumber = DataGridToggleableNumber,
->(
+function setValue<T extends DataGridToggleableNumber = DataGridToggleableNumber>(
   //@todo fix type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   currentValues: any,
   field: string,
   newValue: T,
   type: string,
-  isHistory?: boolean,
+  isHistory?: boolean
 ) {
-  if (type !== "togglable-number") {
+  if (type !== 'togglable-number') {
     set(currentValues, field, newValue);
 
     return;
@@ -174,13 +163,13 @@ function setValueToggleableNumber(
   currentValues: any,
   field: string,
   newValue: DataGridToggleableNumber,
-  isHistory?: boolean,
+  isHistory?: boolean
 ) {
   const currentValue = get(currentValues, field);
   const { disabledToggle } = currentValue;
 
   const normalizeQuantity = (value: number | string | null | undefined) => {
-    if (disabledToggle && value === "") {
+    if (disabledToggle && value === '') {
       return 0;
     }
 
@@ -192,7 +181,7 @@ function setValueToggleableNumber(
       return true;
     }
 
-    return quantity !== "" && quantity != null;
+    return quantity !== '' && quantity != null;
   };
 
   const quantity = normalizeQuantity(newValue.quantity);
@@ -205,7 +194,7 @@ function setValueToggleableNumber(
   set(currentValues, field, {
     ...currentValue,
     quantity,
-    checked,
+    checked
   });
 }
 
@@ -213,28 +202,28 @@ export function convertArrayToPrimitive(
   // @todo fix type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   values: any[],
-  type: DataGridColumnType,
+  type: DataGridColumnType
   // @todo fix type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): any[] {
   switch (type) {
-    case "number":
-      return values.map((v) => {
-        if (v === "") {
+    case 'number':
+      return values.map(v => {
+        if (v === '') {
           return v;
         }
 
         if (v == null) {
-          return "";
+          return '';
         }
 
         return convertToNumber(v);
       });
-    case "togglable-number":
+    case 'togglable-number':
       return values.map(convertToggleableNumber);
-    case "boolean":
+    case 'boolean':
       return values.map(convertToBoolean);
-    case "text":
+    case 'text':
       return values.map(covertToString);
     default:
       throw new Error(`Unsupported target type "${type}".`);

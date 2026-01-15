@@ -1,11 +1,9 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
-import { createDataTableFilterHelper } from "@medusajs/ui";
-
-import { subDays, subMonths } from "date-fns";
-import { useTranslation } from "react-i18next";
-
-import { useDate } from "@hooks/use-date.tsx";
+import { useDate } from '@hooks/use-date.tsx';
+import { createDataTableFilterHelper } from '@medusajs/ui';
+import { subDays, subMonths } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 // @todo fix any type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,37 +22,37 @@ const useDateFilterOptions = () => {
   return useMemo(
     () => [
       {
-        label: t("filters.date.today"),
+        label: t('filters.date.today'),
         value: {
-          $gte: today.toISOString(),
-        },
+          $gte: today.toISOString()
+        }
       },
       {
-        label: t("filters.date.lastSevenDays"),
+        label: t('filters.date.lastSevenDays'),
         value: {
-          $gte: subDays(today, 7).toISOString(), // 7 days ago
-        },
+          $gte: subDays(today, 7).toISOString() // 7 days ago
+        }
       },
       {
-        label: t("filters.date.lastThirtyDays"),
+        label: t('filters.date.lastThirtyDays'),
         value: {
-          $gte: subDays(today, 30).toISOString(), // 30 days ago
-        },
+          $gte: subDays(today, 30).toISOString() // 30 days ago
+        }
       },
       {
-        label: t("filters.date.lastNinetyDays"),
+        label: t('filters.date.lastNinetyDays'),
         value: {
-          $gte: subDays(today, 90).toISOString(), // 90 days ago
-        },
+          $gte: subDays(today, 90).toISOString() // 90 days ago
+        }
       },
       {
-        label: t("filters.date.lastTwelveMonths"),
+        label: t('filters.date.lastTwelveMonths'),
         value: {
-          $gte: subMonths(today, 12).toISOString(), // 12 months ago
-        },
-      },
+          $gte: subMonths(today, 12).toISOString() // 12 months ago
+        }
+      }
     ],
-    [today, t],
+    [today, t]
   );
 };
 
@@ -66,37 +64,37 @@ export const useDataTableDateFilters = (disableRangeOption?: boolean) => {
   const rangeOptions = useMemo(() => {
     if (disableRangeOption) {
       return {
-        disableRangeOption: true,
+        disableRangeOption: true
       };
     }
 
     return {
-      rangeOptionStartLabel: t("filters.date.starting"),
-      rangeOptionEndLabel: t("filters.date.ending"),
-      rangeOptionLabel: t("filters.date.custom"),
-      options: dateFilterOptions,
+      rangeOptionStartLabel: t('filters.date.starting'),
+      rangeOptionEndLabel: t('filters.date.ending'),
+      rangeOptionLabel: t('filters.date.custom'),
+      options: dateFilterOptions
     };
   }, [disableRangeOption, t, dateFilterOptions]);
 
   return useMemo(
     () => [
-      filterHelper.accessor("created_at", {
-        type: "date",
-        label: t("fields.createdAt"),
-        format: "date",
-        formatDateValue: (date) => getFullDate({ date }),
+      filterHelper.accessor('created_at', {
+        type: 'date',
+        label: t('fields.createdAt'),
+        format: 'date',
+        formatDateValue: date => getFullDate({ date }),
         options: dateFilterOptions,
-        ...rangeOptions,
+        ...rangeOptions
       }),
-      filterHelper.accessor("updated_at", {
-        type: "date",
-        label: t("fields.updatedAt"),
-        format: "date",
-        formatDateValue: (date) => getFullDate({ date }),
+      filterHelper.accessor('updated_at', {
+        type: 'date',
+        label: t('fields.updatedAt'),
+        format: 'date',
+        formatDateValue: date => getFullDate({ date }),
         options: dateFilterOptions,
-        ...rangeOptions,
-      }),
+        ...rangeOptions
+      })
     ],
-    [t, dateFilterOptions, getFullDate, rangeOptions],
+    [t, dateFilterOptions, getFullDate, rangeOptions]
   );
 };

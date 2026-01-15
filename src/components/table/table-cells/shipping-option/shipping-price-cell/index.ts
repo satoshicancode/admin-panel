@@ -1,1 +1,1 @@
-export * from "./shipping-price-cell";
+export * from './shipping-price-cell';

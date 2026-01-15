@@ -35,12 +35,14 @@ const getNestedValue = (obj: any, path: string) => {
 
 const TextRenderer: CellRenderer = (value, _row, _column, _t) => {
   if (value === null || value === undefined) return "-";
+
   return String(value);
 };
 
 const CountRenderer: CellRenderer = (value, _row, _column, t) => {
   const items = value || [];
   const count = Array.isArray(items) ? items.length : 0;
+
   return t("general.items", { count });
 };
 

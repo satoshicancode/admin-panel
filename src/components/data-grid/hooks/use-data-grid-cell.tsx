@@ -1,15 +1,14 @@
-import type React from "react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type React from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import type { CellContext } from "@tanstack/react-table";
-
-import { useDataGridContext } from "@components/data-grid/context";
+import { useDataGridContext } from '@components/data-grid/context';
 import type {
   DataGridCellContext,
   DataGridCellRenderProps,
-  DataGridCoordinates,
-} from "@components/data-grid/types";
-import { isCellMatch, isSpecialFocusKey } from "@components/data-grid/utils";
+  DataGridCoordinates
+} from '@components/data-grid/types';
+import { isCellMatch, isSpecialFocusKey } from '@components/data-grid/utils';
+import type { CellContext } from '@tanstack/react-table';
 
 type UseDataGridCellOptions<TData, TValue> = {
   context: CellContext<TData, TValue>;
@@ -19,7 +18,7 @@ const textCharacterRegex = /^.$/u;
 const numberCharacterRegex = /^[0-9]$/u;
 
 export const useDataGridCell = <TData, TValue>({
-  context,
+  context
 }: UseDataGridCellOptions<TData, TValue>) => {
   const {
     register,
@@ -34,17 +33,14 @@ export const useDataGridCell = <TData, TValue>({
     getInputChangeHandler,
     getIsCellSelected,
     getIsCellDragSelected,
-    getCellMetadata,
+    getCellMetadata
   } = useDataGridContext();
 
-  const { rowIndex, columnIndex } = context as DataGridCellContext<
-    TData,
-    TValue
-  >;
+  const { rowIndex, columnIndex } = context as DataGridCellContext<TData, TValue>;
 
   const coords: DataGridCoordinates = useMemo(
     () => ({ row: rowIndex, col: columnIndex }),
-    [rowIndex, columnIndex],
+    [rowIndex, columnIndex]
   );
 
   const { id, field, type, innerAttributes, inputAttributes } = useMemo(() => {
@@ -87,7 +83,7 @@ export const useDataGridCell = <TData, TValue>({
         containerRef.current.focus();
       }
     },
-    [coords, anchor, setRangeEnd, setSingleRange, setIsSelecting],
+    [coords, anchor, setRangeEnd, setSingleRange, setIsSelecting]
   );
 
   const handleBooleanInnerMouseDown = useCallback(
@@ -113,7 +109,7 @@ export const useDataGridCell = <TData, TValue>({
         containerRef.current.focus();
       }
     },
-    [setIsSelecting, setSingleRange, setRangeEnd, coords],
+    [setIsSelecting, setSingleRange, setRangeEnd, coords]
   );
 
   const handleInputBlur = useCallback(() => {
@@ -129,17 +125,17 @@ export const useDataGridCell = <TData, TValue>({
   const validateKeyStroke = useCallback(
     (key: string) => {
       switch (type) {
-        case "togglable-number":
-        case "number":
+        case 'togglable-number':
+        case 'number':
           return numberCharacterRegex.test(key);
-        case "text":
+        case 'text':
           return textCharacterRegex.test(key);
         default:
           // KeyboardEvents should not be forwareded to other types of cells
           return false;
       }
     },
-    [type],
+    [type]
   );
 
   const handleContainerKeyDown = useCallback(
@@ -149,21 +145,21 @@ export const useDataGridCell = <TData, TValue>({
       }
 
       // Allow the user to undo/redo
-      if (e.key.toLowerCase() === "z" && (e.ctrlKey || e.metaKey)) {
+      if (e.key.toLowerCase() === 'z' && (e.ctrlKey || e.metaKey)) {
         return;
       }
 
       // Allow the user to copy
-      if (e.key.toLowerCase() === "c" && (e.ctrlKey || e.metaKey)) {
+      if (e.key.toLowerCase() === 'c' && (e.ctrlKey || e.metaKey)) {
         return;
       }
 
       // Allow the user to paste
-      if (e.key.toLowerCase() === "v" && (e.ctrlKey || e.metaKey)) {
+      if (e.key.toLowerCase() === 'v' && (e.ctrlKey || e.metaKey)) {
         return;
       }
 
-      if (e.key === "Enter") {
+      if (e.key === 'Enter') {
         return;
       }
 
@@ -176,17 +172,17 @@ export const useDataGridCell = <TData, TValue>({
 
       if (inputRef.current instanceof HTMLInputElement) {
         // Clear the current value
-        inputRef.current.value = "";
+        inputRef.current.value = '';
 
         // Simulate typing the new key
         const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
           window.HTMLInputElement.prototype,
-          "value",
+          'value'
         )?.set;
         nativeInputValueSetter?.call(inputRef.current, e.key);
 
         // Trigger input event to notify react-hook-form
-        const event = new Event("input", { bubbles: true });
+        const event = new Event('input', { bubbles: true });
         inputRef.current.dispatchEvent(event);
       }
 
@@ -194,7 +190,7 @@ export const useDataGridCell = <TData, TValue>({
       e.stopPropagation();
       e.preventDefault();
     },
-    [showOverlay, validateKeyStroke],
+    [showOverlay, validateKeyStroke]
   );
 
   const isAnchor = useMemo(() => {
@@ -202,7 +198,7 @@ export const useDataGridCell = <TData, TValue>({
   }, [anchor, coords]);
 
   const fieldWithoutOverlay = useMemo(() => {
-    return type === "boolean";
+    return type === 'boolean';
   }, [type]);
 
   useEffect(() => {
@@ -221,23 +217,22 @@ export const useDataGridCell = <TData, TValue>({
       innerProps: {
         ref: containerRef,
         onMouseOver: getWrapperMouseOverHandler(coords),
-        onMouseDown:
-          type === "boolean" ? handleBooleanInnerMouseDown : undefined,
+        onMouseDown: type === 'boolean' ? handleBooleanInnerMouseDown : undefined,
         onKeyDown: handleContainerKeyDown,
         onFocus: getWrapperFocusHandler(coords),
-        ...innerAttributes,
+        ...innerAttributes
       },
       overlayProps: {
-        onMouseDown: handleOverlayMouseDown,
-      },
+        onMouseDown: handleOverlayMouseDown
+      }
     },
     input: {
       ref: inputRef,
       onBlur: handleInputBlur,
       onFocus: handleInputFocus,
       onChange: getInputChangeHandler(field),
-      ...inputAttributes,
-    },
+      ...inputAttributes
+    }
   };
 
   return {
@@ -245,6 +240,6 @@ export const useDataGridCell = <TData, TValue>({
     field,
     register,
     control,
-    renderProps,
+    renderProps
   };
 };

@@ -1,6 +1,6 @@
 // @todo fix types
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Command } from "@hooks/use-command-history.tsx";
+import type { Command } from '@hooks/use-command-history.tsx';
 
 export type DataGridBulkUpdateCommandArgs = {
   fields: string[];
@@ -15,11 +15,7 @@ export class DataGridBulkUpdateCommand implements Command {
   private readonly _prev: any[];
   private readonly _next: any[];
 
-  private readonly _setter: (
-    fields: string[],
-    values: any[],
-    isHistory?: boolean,
-  ) => void;
+  private readonly _setter: (fields: string[], values: any[], isHistory?: boolean) => void;
 
   constructor({ fields, prev, next, setter }: DataGridBulkUpdateCommandArgs) {
     this._fields = fields;

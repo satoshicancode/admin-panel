@@ -1,8 +1,6 @@
-import { Text, clx } from "@medusajs/ui";
-
-import { useTranslation } from "react-i18next";
-
-import { useDate } from "@hooks/use-date.tsx";
+import { useDate } from '@hooks/use-date.tsx';
+import { clx, Text } from '@medusajs/ui';
+import { useTranslation } from 'react-i18next';
 
 type DateRangeDisplayProps = {
   startsAt?: Date | string | null;
@@ -10,11 +8,7 @@ type DateRangeDisplayProps = {
   showTime?: boolean;
 };
 
-export const DateRangeDisplay = ({
-  startsAt,
-  endsAt,
-  showTime = false,
-}: DateRangeDisplayProps) => {
+export const DateRangeDisplay = ({ startsAt, endsAt, showTime = false }: DateRangeDisplayProps) => {
   const startDate = startsAt ? new Date(startsAt) : null;
   const endDate = endsAt ? new Date(endsAt) : null;
 
@@ -26,16 +20,22 @@ export const DateRangeDisplay = ({
       <div className="flex items-center gap-x-3 rounded-md bg-ui-bg-component px-3 py-1.5 text-ui-fg-subtle shadow-elevation-card-rest">
         <Bar date={startDate} />
         <div>
-          <Text weight="plus" size="small">
-            {t("fields.startDate")}
+          <Text
+            weight="plus"
+            size="small"
+          >
+            {t('fields.startDate')}
           </Text>
-          <Text size="small" className="tabular-nums">
+          <Text
+            size="small"
+            className="tabular-nums"
+          >
             {startDate
               ? getFullDate({
                   date: startDate,
-                  includeTime: showTime,
+                  includeTime: showTime
                 })
-              : "-"}
+              : '-'}
           </Text>
         </div>
       </div>
@@ -43,16 +43,22 @@ export const DateRangeDisplay = ({
       <div className="flex items-center gap-x-3 rounded-md bg-ui-bg-component px-3 py-1.5 text-ui-fg-subtle shadow-elevation-card-rest">
         <Bar date={endDate} />
         <div>
-          <Text size="small" weight="plus">
-            {t("fields.endDate")}
+          <Text
+            size="small"
+            weight="plus"
+          >
+            {t('fields.endDate')}
           </Text>
-          <Text size="small" className="tabular-nums">
+          <Text
+            size="small"
+            className="tabular-nums"
+          >
             {endDate
               ? getFullDate({
                   date: endDate,
-                  includeTime: showTime,
+                  includeTime: showTime
                 })
-              : "-"}
+              : '-'}
           </Text>
         </div>
       </div>
@@ -67,8 +73,8 @@ const Bar = ({ date }: { date: Date | null }) => {
 
   return (
     <div
-      className={clx("h-8 w-1 rounded-full bg-ui-tag-neutral-icon", {
-        "bg-ui-tag-orange-icon": isDateInFuture,
+      className={clx('h-8 w-1 rounded-full bg-ui-tag-neutral-icon', {
+        'bg-ui-tag-orange-icon': isDateInFuture
       })}
     />
   );

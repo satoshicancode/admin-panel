@@ -1,4 +1,4 @@
-import { Badge } from "@medusajs/ui";
+import { Badge } from '@medusajs/ui';
 
 type CellProps = {
   code: string;
@@ -10,7 +10,10 @@ type HeaderProps = {
 
 export const CodeCell = ({ code }: CellProps) => (
   <div className="flex h-full w-full items-center gap-x-3 overflow-hidden">
-    <Badge size="2xsmall" className="truncate">
+    <Badge
+      size="2xsmall"
+      className="truncate"
+    >
       {code}
     </Badge>
   </div>

@@ -1,20 +1,17 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState } from 'react';
 
-import { EllipseMiniSolid } from "@medusajs/icons";
-import { DatePicker, Text, clx } from "@medusajs/ui";
+import { useSelectedParams } from '@components/table/data-table/hooks';
+import { useDate } from '@hooks/use-date';
+import { EllipseMiniSolid } from '@medusajs/icons';
+import { clx, DatePicker, Text } from '@medusajs/ui';
+import { t } from 'i18next';
+import isEqual from 'lodash/isEqual';
+import { Popover as RadixPopover } from 'radix-ui';
+import { useTranslation } from 'react-i18next';
 
-import { t } from "i18next";
-import isEqual from "lodash/isEqual";
-import { Popover as RadixPopover } from "radix-ui";
-import { useTranslation } from "react-i18next";
-
-import { useSelectedParams } from "@components/table/data-table/hooks";
-
-import { useDate } from "@hooks/use-date";
-
-import { useDataTableFilterContext } from "./context";
-import FilterChip from "./filter-chip";
-import type { IFilter } from "./types";
+import { useDataTableFilterContext } from './context';
+import FilterChip from './filter-chip';
+import type { IFilter } from './types';
 
 type DateFilterProps = IFilter;
 
@@ -37,12 +34,7 @@ type DateComparisonOperator = {
   $gt?: string;
 };
 
-export const DateFilter = ({
-  filter,
-  prefix,
-  readonly,
-  openOnMount,
-}: DateFilterProps) => {
+export const DateFilter = ({ filter, prefix, readonly, openOnMount }: DateFilterProps) => {
   const [open, setOpen] = useState(openOnMount);
   const [showCustom, setShowCustom] = useState(false);
 
@@ -62,22 +54,22 @@ export const DateFilter = ({
 
   const handleSelectCustom = () => {
     selectedParams.delete();
-    setShowCustom((prev) => !prev);
+    setShowCustom(prev => !prev);
   };
 
   const currentValue = selectedParams.get();
 
   const currentDateComparison = parseDateComparison(currentValue);
-  const customStartValue = getDateFromComparison(currentDateComparison, "$gte");
-  const customEndValue = getDateFromComparison(currentDateComparison, "$lte");
+  const customStartValue = getDateFromComparison(currentDateComparison, '$gte');
+  const customEndValue = getDateFromComparison(currentDateComparison, '$lte');
 
-  const handleCustomDateChange = (value: Date | null, pos: "start" | "end") => {
-    const key = pos === "start" ? "$gte" : "$lte";
+  const handleCustomDateChange = (value: Date | null, pos: 'start' | 'end') => {
+    const key = pos === 'start' ? '$gte' : '$lte';
 
     let dateValue = value;
 
     // offset to the end of the day so the results include the selected end date
-    if (key === "$lte" && value) {
+    if (key === '$lte' && value) {
       dateValue = new Date(value.getTime());
       dateValue.setHours(23, 59, 59, 999);
     }
@@ -85,13 +77,13 @@ export const DateFilter = ({
     selectedParams.add(
       JSON.stringify({
         ...(currentDateComparison || {}),
-        [key]: dateValue?.toISOString(),
-      }),
+        [key]: dateValue?.toISOString()
+      })
     );
   };
 
   const getDisplayValueFromPresets = () => {
-    const preset = presets.find((p) => isEqual(p.value, currentDateComparison));
+    const preset = presets.find(p => isEqual(p.value, currentDateComparison));
 
     return preset?.label;
   };
@@ -101,18 +93,14 @@ export const DateFilter = ({
   };
 
   const getCustomDisplayValue = () => {
-    const formattedDates = [customStartValue, customEndValue].map(
-      formatCustomDate,
-    );
+    const formattedDates = [customStartValue, customEndValue].map(formatCustomDate);
 
-    return formattedDates.filter(Boolean).join(" - ");
+    return formattedDates.filter(Boolean).join(' - ');
   };
 
   const displayValue = getDisplayValueFromPresets() || getCustomDisplayValue();
 
-  const [previousValue, setPreviousValue] = useState<string | undefined>(
-    displayValue,
-  );
+  const [previousValue, setPreviousValue] = useState<string | undefined>(displayValue);
 
   const handleRemove = () => {
     selectedParams.delete();
@@ -137,7 +125,12 @@ export const DateFilter = ({
   };
 
   return (
-    <RadixPopover.Root modal open={open} onOpenChange={handleOpenChange} data-testid={`data-table-date-filter-${key}`}>
+    <RadixPopover.Root
+      modal
+      open={open}
+      onOpenChange={handleOpenChange}
+      data-testid={`data-table-date-filter-${key}`}
+    >
       <FilterChip
         hadPreviousValue={!!previousValue}
         label={label}
@@ -154,25 +147,25 @@ export const DateFilter = ({
             sideOffset={8}
             collisionPadding={24}
             className={clx(
-              "h-full max-h-[var(--radix-popper-available-height)] w-[300px] overflow-auto rounded-lg bg-ui-bg-base text-ui-fg-base shadow-elevation-flyout",
+              'h-full max-h-[var(--radix-popper-available-height)] w-[300px] overflow-auto rounded-lg bg-ui-bg-base text-ui-fg-base shadow-elevation-flyout'
             )}
             data-testid={`data-table-date-filter-content-${key}`}
-            onInteractOutside={(e) => {
+            onInteractOutside={e => {
               if (e.target instanceof HTMLElement) {
                 if (
-                  e.target.attributes.getNamedItem("data-name")?.value ===
-                  "filters_menu_content"
+                  e.target.attributes.getNamedItem('data-name')?.value === 'filters_menu_content'
                 ) {
                   e.preventDefault();
                 }
               }
             }}
           >
-            <ul className="w-full p-1" data-testid={`data-table-date-filter-presets-${key}`}>
-              {presets.map((preset) => {
-                const isSelected = selectedParams
-                  .get()
-                  .includes(JSON.stringify(preset.value));
+            <ul
+              className="w-full p-1"
+              data-testid={`data-table-date-filter-presets-${key}`}
+            >
+              {presets.map(preset => {
+                const isSelected = selectedParams.get().includes(JSON.stringify(preset.value));
 
                 return (
                   <li key={preset.label}>
@@ -182,16 +175,13 @@ export const DateFilter = ({
                       onClick={() => {
                         handleSelectPreset(preset.value);
                       }}
-                      data-testid={`data-table-date-filter-preset-${key}-${preset.label.toLowerCase().replace(/\s+/g, "-")}`}
+                      data-testid={`data-table-date-filter-preset-${key}-${preset.label.toLowerCase().replace(/\s+/g, '-')}`}
                     >
                       <div
-                        className={clx(
-                          "flex h-5 w-5 items-center justify-center transition-fg",
-                          {
-                            "[&_svg]:invisible": !isSelected,
-                          },
-                        )}
-                        data-testid={`data-table-date-filter-preset-checkbox-${key}-${preset.label.toLowerCase().replace(/\s+/g, "-")}`}
+                        className={clx('flex h-5 w-5 items-center justify-center transition-fg', {
+                          '[&_svg]:invisible': !isSelected
+                        })}
+                        data-testid={`data-table-date-filter-preset-checkbox-${key}-${preset.label.toLowerCase().replace(/\s+/g, '-')}`}
                       >
                         <EllipseMiniSolid />
                       </div>
@@ -208,26 +198,31 @@ export const DateFilter = ({
                   data-testid={`data-table-date-filter-custom-${key}`}
                 >
                   <div
-                    className={clx(
-                      "flex h-5 w-5 items-center justify-center transition-fg",
-                      {
-                        "[&_svg]:invisible": !showCustom,
-                      },
-                    )}
+                    className={clx('flex h-5 w-5 items-center justify-center transition-fg', {
+                      '[&_svg]:invisible': !showCustom
+                    })}
                     data-testid={`data-table-date-filter-custom-checkbox-${key}`}
                   >
                     <EllipseMiniSolid />
                   </div>
-                  {t("filters.date.custom")}
+                  {t('filters.date.custom')}
                 </button>
               </li>
             </ul>
             {showCustom && (
-              <div className="border-t px-1 pb-3 pt-1" data-testid={`data-table-date-filter-custom-form-${key}`}>
+              <div
+                className="border-t px-1 pb-3 pt-1"
+                data-testid={`data-table-date-filter-custom-form-${key}`}
+              >
                 <div data-testid={`data-table-date-filter-from-${key}`}>
                   <div className="px-2 py-1">
-                    <Text size="xsmall" leading="compact" weight="plus" data-testid={`data-table-date-filter-from-label-${key}`}>
-                      {t("filters.date.from")}
+                    <Text
+                      size="xsmall"
+                      leading="compact"
+                      weight="plus"
+                      data-testid={`data-table-date-filter-from-label-${key}`}
+                    >
+                      {t('filters.date.from')}
                     </Text>
                   </div>
                   <div className="px-2 py-1">
@@ -235,15 +230,20 @@ export const DateFilter = ({
                       modal
                       maxValue={customEndValue}
                       value={customStartValue}
-                      onChange={(d) => handleCustomDateChange(d, "start")}
+                      onChange={d => handleCustomDateChange(d, 'start')}
                       data-testid={`data-table-date-filter-from-picker-${key}`}
                     />
                   </div>
                 </div>
                 <div data-testid={`data-table-date-filter-to-${key}`}>
                   <div className="px-2 py-1">
-                    <Text size="xsmall" leading="compact" weight="plus" data-testid={`data-table-date-filter-to-label-${key}`}>
-                      {t("filters.date.to")}
+                    <Text
+                      size="xsmall"
+                      leading="compact"
+                      weight="plus"
+                      data-testid={`data-table-date-filter-to-label-${key}`}
+                    >
+                      {t('filters.date.to')}
                     </Text>
                   </div>
                   <div className="px-2 py-1">
@@ -251,8 +251,8 @@ export const DateFilter = ({
                       modal
                       minValue={customStartValue}
                       value={customEndValue || undefined}
-                      onChange={(d) => {
-                        handleCustomDateChange(d, "end");
+                      onChange={d => {
+                        handleCustomDateChange(d, 'end');
                       }}
                       data-testid={`data-table-date-filter-to-picker-${key}`}
                     />
@@ -276,65 +276,52 @@ const usePresets = () => {
   return useMemo(
     () => [
       {
-        label: t("filters.date.today"),
+        label: t('filters.date.today'),
         value: {
-          $gte: today.toISOString(),
-        },
+          $gte: today.toISOString()
+        }
       },
       {
-        label: t("filters.date.lastSevenDays"),
+        label: t('filters.date.lastSevenDays'),
         value: {
-          $gte: new Date(
-            today.getTime() - 7 * 24 * 60 * 60 * 1000,
-          ).toISOString(), // 7 days ago
-        },
+          $gte: new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days ago
+        }
       },
       {
-        label: t("filters.date.lastThirtyDays"),
+        label: t('filters.date.lastThirtyDays'),
         value: {
-          $gte: new Date(
-            today.getTime() - 30 * 24 * 60 * 60 * 1000,
-          ).toISOString(), // 30 days ago
-        },
+          $gte: new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days ago
+        }
       },
       {
-        label: t("filters.date.lastNinetyDays"),
+        label: t('filters.date.lastNinetyDays'),
         value: {
-          $gte: new Date(
-            today.getTime() - 90 * 24 * 60 * 60 * 1000,
-          ).toISOString(), // 90 days ago
-        },
+          $gte: new Date(today.getTime() - 90 * 24 * 60 * 60 * 1000).toISOString() // 90 days ago
+        }
       },
       {
-        label: t("filters.date.lastTwelveMonths"),
+        label: t('filters.date.lastTwelveMonths'),
         value: {
-          $gte: new Date(
-            today.getTime() - 365 * 24 * 60 * 60 * 1000,
-          ).toISOString(), // 365 days ago
-        },
-      },
+          $gte: new Date(today.getTime() - 365 * 24 * 60 * 60 * 1000).toISOString() // 365 days ago
+        }
+      }
     ],
-    [t],
+    [t]
   );
 };
 
 const parseDateComparison = (value: string[]) => {
-  return value?.length
-    ? (JSON.parse(value.join(",")) as DateComparisonOperator)
-    : null;
+  return value?.length ? (JSON.parse(value.join(',')) as DateComparisonOperator) : null;
 };
 
-const getDateFromComparison = (
-  comparison: DateComparisonOperator | null,
-  key: "$gte" | "$lte",
-) => {
+const getDateFromComparison = (comparison: DateComparisonOperator | null, key: '$gte' | '$lte') => {
   if (!comparison?.[key]) {
     return undefined;
   }
 
   const compareDate = new Date(comparison[key] as string);
 
-  if (key === "$lte") {
+  if (key === '$lte') {
     // offset back to the display date
     compareDate.setHours(0, 0, 0, 0);
   }

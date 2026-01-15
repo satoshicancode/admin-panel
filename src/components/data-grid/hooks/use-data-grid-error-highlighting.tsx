@@ -1,22 +1,17 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from 'react';
 
-import type { Table, VisibilityState } from "@tanstack/react-table";
-import type { FieldError, FieldErrors, FieldValues } from "react-hook-form";
+import type { DataGridMatrix } from '@components/data-grid/models';
+import type { VisibilitySnapshot } from '@components/data-grid/types';
+import type { Table, VisibilityState } from '@tanstack/react-table';
+import type { FieldError, FieldErrors, FieldValues } from 'react-hook-form';
 
-import type { DataGridMatrix } from "@components/data-grid/models";
-import type { VisibilitySnapshot } from "@components/data-grid/types";
-
-export const useDataGridErrorHighlighting = <
-  TData,
-  TFieldValues extends FieldValues,
->(
+export const useDataGridErrorHighlighting = <TData, TFieldValues extends FieldValues>(
   matrix: DataGridMatrix<TData, TFieldValues>,
   grid: Table<TData>,
-  errors: FieldErrors<TFieldValues>,
+  errors: FieldErrors<TFieldValues>
 ) => {
   const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
-  const [visibilitySnapshot, setVisibilitySnapshot] =
-    useState<VisibilitySnapshot | null>(null);
+  const [visibilitySnapshot, setVisibilitySnapshot] = useState<VisibilitySnapshot | null>(null);
 
   const { flatRows } = grid.getRowModel();
   const flatColumns = grid.getAllFlatColumns();
@@ -28,20 +23,16 @@ export const useDataGridErrorHighlighting = <
     const rowsWithErrors = new Set<number>();
     const columnsWithErrors = new Set<number>();
 
-    errorPaths.forEach((errorPath) => {
+    errorPaths.forEach(errorPath => {
       const rowIndex = matrix.rowAccessors.findIndex(
-        (accessor) =>
-          accessor &&
-          (errorPath === accessor || errorPath.startsWith(`${accessor}.`)),
+        accessor => accessor && (errorPath === accessor || errorPath.startsWith(`${accessor}.`))
       );
       if (rowIndex !== -1) {
         rowsWithErrors.add(rowIndex);
       }
 
       const columnIndex = matrix.columnAccessors.findIndex(
-        (accessor) =>
-          accessor &&
-          (errorPath === accessor || errorPath.endsWith(`.${accessor}`)),
+        accessor => accessor && (errorPath === accessor || errorPath.endsWith(`.${accessor}`))
       );
       if (columnIndex !== -1) {
         columnsWithErrors.add(columnIndex);
@@ -56,7 +47,7 @@ export const useDataGridErrorHighlighting = <
       currentRowVisibility: VisibilityState,
       currentColumnVisibility: VisibilityState,
       setRowVisibility: (visibility: VisibilityState) => void,
-      setColumnVisibility: (visibility: VisibilityState) => void,
+      setColumnVisibility: (visibility: VisibilityState) => void
     ) => {
       if (isHighlighted) {
         // Clear error highlights
@@ -68,7 +59,7 @@ export const useDataGridErrorHighlighting = <
         // Highlight errors
         setVisibilitySnapshot({
           rows: { ...currentRowVisibility },
-          columns: { ...currentColumnVisibility },
+          columns: { ...currentColumnVisibility }
         });
 
         const rowsToHide = flatRows
@@ -79,56 +70,37 @@ export const useDataGridErrorHighlighting = <
 
         const columnsToHide = flatColumns
           .map((column, index) => {
-            return !columnsWithErrors.has(index) && index !== 0
-              ? column.id
-              : undefined;
+            return !columnsWithErrors.has(index) && index !== 0 ? column.id : undefined;
           })
           .filter((id): id is string => id !== undefined);
 
-        setRowVisibility(
-          rowsToHide.reduce((acc, row) => ({ ...acc, [row]: false }), {}),
-        );
+        setRowVisibility(rowsToHide.reduce((acc, row) => ({ ...acc, [row]: false }), {}));
 
         setColumnVisibility(
-          columnsToHide.reduce(
-            (acc, column) => ({ ...acc, [column]: false }),
-            {},
-          ),
+          columnsToHide.reduce((acc, column) => ({ ...acc, [column]: false }), {})
         );
       }
 
-      setIsHighlighted((prev) => !prev);
+      setIsHighlighted(prev => !prev);
     },
-    [
-      isHighlighted,
-      visibilitySnapshot,
-      flatRows,
-      flatColumns,
-      rowsWithErrors,
-      columnsWithErrors,
-    ],
+    [isHighlighted, visibilitySnapshot, flatRows, flatColumns, rowsWithErrors, columnsWithErrors]
   );
 
   return {
     errorCount,
     isHighlighted,
-    toggleErrorHighlighting,
+    toggleErrorHighlighting
   };
 };
 
-function findErrorPaths(
-  obj: FieldErrors | FieldError,
-  path: string[] = [],
-): string[] {
-  if (typeof obj !== "object" || obj === null) {
+function findErrorPaths(obj: FieldErrors | FieldError, path: string[] = []): string[] {
+  if (typeof obj !== 'object' || obj === null) {
     return [];
   }
 
-  if ("message" in obj && "type" in obj) {
-    return [path.join(".")];
+  if ('message' in obj && 'type' in obj) {
+    return [path.join('.')];
   }
 
-  return Object.entries(obj).flatMap(([key, value]) =>
-    findErrorPaths(value, [...path, key]),
-  );
+  return Object.entries(obj).flatMap(([key, value]) => findErrorPaths(value, [...path, key]));
 }

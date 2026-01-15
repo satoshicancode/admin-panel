@@ -1,24 +1,20 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import type { FieldValues } from "react-hook-form";
-
-import type { DataGridMatrix } from "@components/data-grid/models";
+import type { DataGridMatrix } from '@components/data-grid/models';
 import type {
   CellErrorMetadata,
   CellMetadata,
-  DataGridCoordinates,
-} from "@components/data-grid/types";
-import { generateCellId } from "@components/data-grid/utils";
+  DataGridCoordinates
+} from '@components/data-grid/types';
+import { generateCellId } from '@components/data-grid/utils';
+import type { FieldValues } from 'react-hook-form';
 
 type UseDataGridCellMetadataOptions<TData, TFieldValues extends FieldValues> = {
   matrix: DataGridMatrix<TData, TFieldValues>;
 };
 
-export const useDataGridCellMetadata = <
-  TData,
-  TFieldValues extends FieldValues,
->({
-  matrix,
+export const useDataGridCellMetadata = <TData, TFieldValues extends FieldValues>({
+  matrix
 }: UseDataGridCellMetadataOptions<TData, TFieldValues>) => {
   /**
    * Creates metadata for a cell.
@@ -36,14 +32,14 @@ export const useDataGridCellMetadata = <
       }
 
       const inputAttributes = {
-        "data-row": row,
-        "data-col": col,
-        "data-cell-id": id,
-        "data-field": field,
+        'data-row': row,
+        'data-col': col,
+        'data-cell-id': id,
+        'data-field': field
       };
 
       const innerAttributes = {
-        "data-container-id": id,
+        'data-container-id': id
       };
 
       return {
@@ -51,10 +47,10 @@ export const useDataGridCellMetadata = <
         field,
         type,
         inputAttributes,
-        innerAttributes,
+        innerAttributes
       };
     },
-    [matrix],
+    [matrix]
   );
 
   /**
@@ -68,14 +64,14 @@ export const useDataGridCellMetadata = <
 
       return {
         accessor,
-        field,
+        field
       };
     },
-    [matrix],
+    [matrix]
   );
 
   return {
     getCellMetadata,
-    getCellErrorMetadata,
+    getCellErrorMetadata
   };
 };

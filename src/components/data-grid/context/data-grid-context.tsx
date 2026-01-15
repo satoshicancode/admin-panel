@@ -1,19 +1,11 @@
-import type { FocusEvent, MouseEvent } from "react";
-import { createContext } from "react";
-
-import type {
-  Control,
-  FieldErrors,
-  FieldValues,
-  Path,
-  UseFormRegister,
-} from "react-hook-form";
+import { createContext, type FocusEvent, type MouseEvent } from 'react';
 
 import type {
   CellErrorMetadata,
   CellMetadata,
-  DataGridCoordinates,
-} from "@components/data-grid/types";
+  DataGridCoordinates
+} from '@components/data-grid/types';
+import type { Control, FieldErrors, FieldValues, Path, UseFormRegister } from 'react-hook-form';
 
 type DataGridContextType<TFieldValues extends FieldValues> = {
   // Grid state
@@ -33,22 +25,21 @@ type DataGridContextType<TFieldValues extends FieldValues> = {
   register: UseFormRegister<TFieldValues>;
   control: Control<TFieldValues>;
   getInputChangeHandler: (
-    field: Path<TFieldValues>,
+    field: Path<TFieldValues>
     //@todo fix type
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) => (next: any, prev: any) => void;
   // Wrapper handlers
   getWrapperFocusHandler: (
-    coordinates: DataGridCoordinates,
+    coordinates: DataGridCoordinates
   ) => (e: FocusEvent<HTMLElement>) => void;
   getWrapperMouseOverHandler: (
-    coordinates: DataGridCoordinates,
+    coordinates: DataGridCoordinates
   ) => ((e: MouseEvent<HTMLElement>) => void) | undefined;
   getCellMetadata: (coords: DataGridCoordinates) => CellMetadata;
   getCellErrorMetadata: (coords: DataGridCoordinates) => CellErrorMetadata;
   navigateToField: (field: string) => void;
 };
-
-export const DataGridContext = createContext<DataGridContextType<any> | null>(
-  null,
-);
+//@todo fix type
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const DataGridContext = createContext<DataGridContextType<any> | null>(null);

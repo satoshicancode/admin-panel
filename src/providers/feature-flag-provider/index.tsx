@@ -15,6 +15,7 @@ export const useFeatureFlag = (flag: keyof FeatureFlags): boolean => {
     // If no context, assume feature is disabled
     return false
   }
+
   return context.isFeatureEnabled(flag)
 }
 
@@ -23,6 +24,7 @@ export const useFeatureFlagContext = () => {
   if (!context) {
     throw new Error("useFeatureFlagContext must be used within FeatureFlagProvider")
   }
+
   return context
 }
 
@@ -35,6 +37,7 @@ export const FeatureFlagProvider: React.FC<FeatureFlagProviderProps> = ({ childr
 
   const isFeatureEnabled = (flag: keyof FeatureFlags): boolean => {
     const enabled = flags[flag] === true
+
     return enabled
   }
 

@@ -1,25 +1,17 @@
-import type { ChangeEvent } from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ChangeEvent } from 'react';
 
-import { Input, Label, clx } from "@medusajs/ui";
+import { useSelectedParams } from '@components/table/data-table/hooks';
+import { clx, Input, Label } from '@medusajs/ui';
+import { debounce } from 'lodash';
+import { Popover as RadixPopover } from 'radix-ui';
 
-import { debounce } from "lodash";
-import { Popover as RadixPopover } from "radix-ui";
-
-import { useSelectedParams } from "@components/table/data-table/hooks";
-
-import { useDataTableFilterContext } from "./context";
-import FilterChip from "./filter-chip";
-import type { IFilter } from "./types";
+import { useDataTableFilterContext } from './context';
+import FilterChip from './filter-chip';
+import type { IFilter } from './types';
 
 type StringFilterProps = IFilter;
 
-export const StringFilter = ({
-  filter,
-  prefix,
-  readonly,
-  openOnMount,
-}: StringFilterProps) => {
+export const StringFilter = ({ filter, prefix, readonly, openOnMount }: StringFilterProps) => {
   const [open, setOpen] = useState(openOnMount);
 
   const { key, label } = filter;
@@ -29,9 +21,7 @@ export const StringFilter = ({
 
   const query = selectedParams.get();
 
-  const [previousValue, setPreviousValue] = useState<string | undefined>(
-    query?.[0],
-  );
+  const [previousValue, setPreviousValue] = useState<string | undefined>(query?.[0]);
 
   const debouncedOnChange = useCallback(
     debounce((e: ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +33,7 @@ export const StringFilter = ({
         selectedParams.add(value);
       }
     }, 500),
-    [selectedParams],
+    [selectedParams]
   );
 
   useEffect(() => {
@@ -75,7 +65,12 @@ export const StringFilter = ({
   };
 
   return (
-    <RadixPopover.Root modal open={open} onOpenChange={handleOpenChange} data-testid={`data-table-string-filter-${key}`}>
+    <RadixPopover.Root
+      modal
+      open={open}
+      onOpenChange={handleOpenChange}
+      data-testid={`data-table-string-filter-${key}`}
+    >
       <FilterChip
         hasOperator
         hadPreviousValue={!!previousValue}
@@ -93,14 +88,13 @@ export const StringFilter = ({
             sideOffset={8}
             collisionPadding={8}
             className={clx(
-              "z-[1] h-full max-h-[200px] w-[300px] overflow-hidden rounded-lg bg-ui-bg-base text-ui-fg-base shadow-elevation-flyout outline-none",
+              'z-[1] h-full max-h-[200px] w-[300px] overflow-hidden rounded-lg bg-ui-bg-base text-ui-fg-base shadow-elevation-flyout outline-none'
             )}
             data-testid={`data-table-string-filter-content-${key}`}
-            onInteractOutside={(e) => {
+            onInteractOutside={e => {
               if (e.target instanceof HTMLElement) {
                 if (
-                  e.target.attributes.getNamedItem("data-name")?.value ===
-                  "filters_menu_content"
+                  e.target.attributes.getNamedItem('data-name')?.value === 'filters_menu_content'
                 ) {
                   e.preventDefault();
                   e.stopPropagation();
@@ -108,9 +102,17 @@ export const StringFilter = ({
               }
             }}
           >
-            <div className="px-1 pb-3 pt-1" data-testid={`data-table-string-filter-form-${key}`}>
+            <div
+              className="px-1 pb-3 pt-1"
+              data-testid={`data-table-string-filter-form-${key}`}
+            >
               <div className="px-2 py-1.5">
-                <Label size="xsmall" weight="plus" htmlFor={key} data-testid={`data-table-string-filter-label-${key}`}>
+                <Label
+                  size="xsmall"
+                  weight="plus"
+                  htmlFor={key}
+                  data-testid={`data-table-string-filter-label-${key}`}
+                >
                   {label}
                 </Label>
               </div>

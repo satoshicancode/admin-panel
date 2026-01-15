@@ -1,7 +1,19 @@
-import { ComponentPropsWithoutRef, Fragment, UIEvent, useEffect, useRef, useState } from 'react';
+import {
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+  type ComponentPropsWithoutRef,
+  type UIEvent
+} from 'react';
 
 import { clx, CommandBar, Table } from '@medusajs/ui';
-import { ColumnDef, flexRender, Table as ReactTable, Row } from '@tanstack/react-table';
+import {
+  flexRender,
+  type ColumnDef,
+  type Table as ReactTable,
+  type Row
+} from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 

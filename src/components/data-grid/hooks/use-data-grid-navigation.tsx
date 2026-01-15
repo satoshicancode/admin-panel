@@ -1,15 +1,10 @@
-import type { Dispatch, SetStateAction } from "react";
-import { useCallback } from "react";
+import { useCallback, type Dispatch, type SetStateAction } from 'react';
 
-import type { Column, Row, VisibilityState } from "@tanstack/react-table";
-import type { ScrollToOptions, Virtualizer } from "@tanstack/react-virtual";
-import type { FieldValues } from "react-hook-form";
-
-import type {
-  DataGridMatrix,
-  DataGridQueryTool,
-} from "@components/data-grid/models";
-import type { DataGridCoordinates } from "@components/data-grid/types";
+import type { DataGridMatrix, DataGridQueryTool } from '@components/data-grid/models';
+import type { DataGridCoordinates } from '@components/data-grid/types';
+import type { Column, Row, VisibilityState } from '@tanstack/react-table';
+import type { ScrollToOptions, Virtualizer } from '@tanstack/react-virtual';
+import type { FieldValues } from 'react-hook-form';
 
 type UseDataGridNavigationOptions<TData, TFieldValues extends FieldValues> = {
   matrix: DataGridMatrix<TData, TFieldValues>;
@@ -34,13 +29,10 @@ export const useDataGridNavigation = <TData, TFieldValues extends FieldValues>({
   setColumnVisibility,
   flatColumns,
   queryTool,
-  setSingleRange,
+  setSingleRange
 }: UseDataGridNavigationOptions<TData, TFieldValues>) => {
   const scrollToCoordinates = useCallback(
-    (
-      coords: DataGridCoordinates,
-      direction: "horizontal" | "vertical" | "both",
-    ) => {
+    (coords: DataGridCoordinates, direction: 'horizontal' | 'vertical' | 'both') => {
       if (!anchor) {
         return;
       }
@@ -48,33 +40,33 @@ export const useDataGridNavigation = <TData, TFieldValues extends FieldValues>({
       const { row, col } = coords;
       const { row: anchorRow, col: anchorCol } = anchor;
 
-      const rowDirection = row >= anchorRow ? "down" : "up";
-      const colDirection = col >= anchorCol ? "right" : "left";
+      const rowDirection = row >= anchorRow ? 'down' : 'up';
+      const colDirection = col >= anchorCol ? 'right' : 'left';
 
-      let toRow = rowDirection === "down" ? row + 1 : row - 1;
+      let toRow = rowDirection === 'down' ? row + 1 : row - 1;
       if (visibleRows[toRow] === undefined) {
         toRow = row;
       }
 
-      let toCol = colDirection === "right" ? col + 1 : col - 1;
+      let toCol = colDirection === 'right' ? col + 1 : col - 1;
       if (visibleColumns[toCol] === undefined) {
         toCol = col;
       }
 
       const scrollOptions: ScrollToOptions = {
-        align: "auto",
-        behavior: "auto",
+        align: 'auto',
+        behavior: 'auto'
       };
 
-      if (direction === "horizontal" || direction === "both") {
+      if (direction === 'horizontal' || direction === 'both') {
         columnVirtualizer.scrollToIndex(toCol, scrollOptions);
       }
 
-      if (direction === "vertical" || direction === "both") {
+      if (direction === 'vertical' || direction === 'both') {
         rowVirtualizer.scrollToIndex(toRow, scrollOptions);
       }
     },
-    [anchor, columnVirtualizer, visibleRows, rowVirtualizer, visibleColumns],
+    [anchor, columnVirtualizer, visibleRows, rowVirtualizer, visibleColumns]
   );
 
   const navigateToField = useCallback(
@@ -88,15 +80,15 @@ export const useDataGridNavigation = <TData, TFieldValues extends FieldValues>({
       const column = flatColumns[coords.col];
 
       // Ensure that the column is visible
-      setColumnVisibility((prev) => {
+      setColumnVisibility(prev => {
         return {
           ...prev,
-          [column.id]: true,
+          [column.id]: true
         };
       });
 
       requestAnimationFrame(() => {
-        scrollToCoordinates(coords, "both");
+        scrollToCoordinates(coords, 'both');
         setSingleRange(coords);
       });
 
@@ -108,18 +100,11 @@ export const useDataGridNavigation = <TData, TFieldValues extends FieldValues>({
         }
       });
     },
-    [
-      matrix,
-      flatColumns,
-      setColumnVisibility,
-      scrollToCoordinates,
-      setSingleRange,
-      queryTool,
-    ],
+    [matrix, flatColumns, setColumnVisibility, scrollToCoordinates, setSingleRange, queryTool]
   );
 
   return {
     scrollToCoordinates,
-    navigateToField,
+    navigateToField
   };
 };

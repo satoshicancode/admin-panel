@@ -68,6 +68,7 @@ export const AttributeList = () => {
     setFilters((prev) => {
       const newFilters = { ...prev };
       delete newFilters[key];
+
       return newFilters;
     });
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
@@ -106,6 +107,7 @@ export const AttributeList = () => {
     if (filters.global !== undefined) {
       filtered = filtered.filter((attr) => {
         const isGlobal = !attr.product_categories?.length;
+
         return isGlobal === filters.global;
       });
     }
@@ -143,6 +145,7 @@ export const AttributeList = () => {
 
         if (aValue < bValue) return sorting.order === "asc" ? -1 : 1;
         if (aValue > bValue) return sorting.order === "asc" ? 1 : -1;
+
         return 0;
       });
     }
@@ -154,6 +157,7 @@ export const AttributeList = () => {
   const paginatedAttributes = useMemo(() => {
     const startIndex = pagination.pageIndex * pagination.pageSize;
     const endIndex = startIndex + pagination.pageSize;
+
     return processedAttributes.slice(startIndex, endIndex);
   }, [processedAttributes, pagination]);
 

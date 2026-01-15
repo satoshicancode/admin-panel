@@ -1,9 +1,12 @@
-import type { ComponentPropsWithoutRef, PropsWithChildren } from "react";
-import { forwardRef, useEffect } from "react";
+import {
+  forwardRef,
+  useEffect,
+  type ComponentPropsWithoutRef,
+  type PropsWithChildren
+} from 'react';
 
-import { Drawer, clx } from "@medusajs/ui";
-
-import { useStackedModal } from "@components/modals/stacked-modal-provider";
+import { useStackedModal } from '@components/modals/stacked-modal-provider';
+import { clx, Drawer } from '@medusajs/ui';
 
 type StackedDrawerProps = PropsWithChildren<{
   /**
@@ -26,49 +29,51 @@ export const Root = ({ id, children }: StackedDrawerProps) => {
   }, []);
 
   return (
-    <Drawer open={getIsOpen(id)} onOpenChange={(open) => setIsOpen(id, open)}>
+    <Drawer
+      open={getIsOpen(id)}
+      onOpenChange={open => setIsOpen(id, open)}
+    >
       {children}
     </Drawer>
   );
 };
 
 const Close = Drawer.Close;
-Close.displayName = "StackedDrawer.Close";
+Close.displayName = 'StackedDrawer.Close';
 
 const Header = Drawer.Header;
-Header.displayName = "StackedDrawer.Header";
+Header.displayName = 'StackedDrawer.Header';
 
 const Body = Drawer.Body;
-Body.displayName = "StackedDrawer.Body";
+Body.displayName = 'StackedDrawer.Body';
 
 const Trigger = Drawer.Trigger;
-Trigger.displayName = "StackedDrawer.Trigger";
+Trigger.displayName = 'StackedDrawer.Trigger';
 
 const Footer = Drawer.Footer;
-Footer.displayName = "StackedDrawer.Footer";
+Footer.displayName = 'StackedDrawer.Footer';
 
 const Title = Drawer.Title;
-Title.displayName = "StackedDrawer.Title";
+Title.displayName = 'StackedDrawer.Title';
 
 const Description = Drawer.Description;
-Description.displayName = "StackedDrawer.Description";
+Description.displayName = 'StackedDrawer.Description';
 
-const Content = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithoutRef<typeof Drawer.Content>
->(({ className, ...props }, ref) => {
-  return (
-    <Drawer.Content
-      ref={ref}
-      className={clx(className)}
-      overlayProps={{
-        className: "bg-transparent",
-      }}
-      {...props}
-    />
-  );
-});
-Content.displayName = "StackedDrawer.Content";
+const Content = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<typeof Drawer.Content>>(
+  ({ className, ...props }, ref) => {
+    return (
+      <Drawer.Content
+        ref={ref}
+        className={clx(className)}
+        overlayProps={{
+          className: 'bg-transparent'
+        }}
+        {...props}
+      />
+    );
+  }
+);
+Content.displayName = 'StackedDrawer.Content';
 
 export const StackedDrawer = Object.assign(Root, {
   Close,
@@ -78,5 +83,5 @@ export const StackedDrawer = Object.assign(Root, {
   Trigger,
   Footer,
   Description,
-  Title,
+  Title
 });

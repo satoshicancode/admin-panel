@@ -1,10 +1,8 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
-import { Button, DropdownMenu } from "@medusajs/ui";
-
-import { useSearchParams } from "react-router-dom";
-
-import { useDocumentDirection } from "@hooks/use-document-direction";
+import { useDocumentDirection } from '@hooks/use-document-direction';
+import { Button, DropdownMenu } from '@medusajs/ui';
+import { useSearchParams } from 'react-router-dom';
 
 type FilterGroupProps = {
   filters: {
@@ -20,15 +18,18 @@ export const FilterGroup = ({ filters }: FilterGroupProps) => {
     return null;
   }
 
-  const isClearable = filterKeys.some((key) => searchParams.get(key));
-  const hasMore = !filterKeys.every((key) => searchParams.get(key));
-  const availableKeys = filterKeys.filter((key) => !searchParams.get(key));
+  const isClearable = filterKeys.some(key => searchParams.get(key));
+  const hasMore = !filterKeys.every(key => searchParams.get(key));
+  const availableKeys = filterKeys.filter(key => !searchParams.get(key));
 
   return (
     <div className="flex flex-wrap items-center gap-2">
       {hasMore && <AddFilterMenu availableKeys={availableKeys} />}
       {isClearable && (
-        <Button variant="transparent" size="small">
+        <Button
+          variant="transparent"
+          size="small"
+        >
           Clear all
         </Button>
       )}
@@ -46,12 +47,15 @@ const AddFilterMenu = ({ availableKeys }: AddFilterMenuProps) => {
   return (
     <DropdownMenu dir={direction}>
       <DropdownMenu.Trigger asChild>
-        <Button variant="secondary" size="small">
+        <Button
+          variant="secondary"
+          size="small"
+        >
           Add filter
         </Button>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
-        {availableKeys.map((key) => (
+        {availableKeys.map(key => (
           <DropdownMenu.Item key={key}>{key}</DropdownMenu.Item>
         ))}
       </DropdownMenu.Content>

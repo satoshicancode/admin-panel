@@ -33,6 +33,7 @@ export const useApiKeyManagementTableColumns = () => {
         header: "Token",
         cell: ({ getValue }) => {
           const token = getValue()
+
           return <Badge size="2xsmall">{prettifyRedactedToken(token)}</Badge>
         },
       }),

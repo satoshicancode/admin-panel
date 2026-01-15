@@ -1,29 +1,20 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
-import type { CellContext } from "@tanstack/react-table";
-import type { FieldError, FieldErrors } from "react-hook-form";
-import { get } from "react-hook-form";
-
-import { useDataGridContext } from "@components/data-grid/context";
-import type {
-  DataGridCellContext,
-  DataGridRowError,
-} from "@components/data-grid/types";
+import { useDataGridContext } from '@components/data-grid/context';
+import type { DataGridCellContext, DataGridRowError } from '@components/data-grid/types';
+import type { CellContext } from '@tanstack/react-table';
+import { get, type FieldError, type FieldErrors } from 'react-hook-form';
 
 type UseDataGridCellErrorOptions<TData, TValue> = {
   context: CellContext<TData, TValue>;
 };
 
 export const useDataGridCellError = <TextData, TValue>({
-  context,
+  context
 }: UseDataGridCellErrorOptions<TextData, TValue>) => {
-  const { errors, getCellErrorMetadata, navigateToField } =
-    useDataGridContext();
+  const { errors, getCellErrorMetadata, navigateToField } = useDataGridContext();
 
-  const { rowIndex, columnIndex } = context as DataGridCellContext<
-    TextData,
-    TValue
-  >;
+  const { rowIndex, columnIndex } = context as DataGridCellContext<TextData, TValue>;
 
   const { accessor, field } = useMemo(() => {
     return getCellErrorMetadata({ row: rowIndex, col: columnIndex });
@@ -34,10 +25,7 @@ export const useDataGridCellError = <TextData, TValue>({
 
   const rowErrors: DataGridRowError[] = [];
 
-  function collectErrors(
-    errorObject: FieldErrors | FieldError | undefined,
-    baseAccessor: string,
-  ) {
+  function collectErrors(errorObject: FieldErrors | FieldError | undefined, baseAccessor: string) {
     if (!errorObject) {
       return;
     }
@@ -53,11 +41,11 @@ export const useDataGridCellError = <TextData, TValue>({
       }
     } else {
       // Traverse nested objects
-      Object.keys(errorObject).forEach((key) => {
+      Object.keys(errorObject).forEach(key => {
         const nestedError = errorObject[key];
         const fieldAccessor = `${baseAccessor}.${key}`;
 
-        if (nestedError && typeof nestedError === "object") {
+        if (nestedError && typeof nestedError === 'object') {
           collectErrors(nestedError, fieldAccessor);
         }
       });
@@ -68,17 +56,15 @@ export const useDataGridCellError = <TextData, TValue>({
     collectErrors(rowErrorsObject, accessor);
   }
 
-  const cellError: FieldError | undefined = field
-    ? get(errors, field)
-    : undefined;
+  const cellError: FieldError | undefined = field ? get(errors, field) : undefined;
 
   return {
     errors,
     rowErrors,
-    cellError,
+    cellError
   };
 };
 
 function isFieldError(errors: FieldErrors | FieldError): errors is FieldError {
-  return typeof errors === "object" && "message" in errors && "type" in errors;
+  return typeof errors === 'object' && 'message' in errors && 'type' in errors;
 }

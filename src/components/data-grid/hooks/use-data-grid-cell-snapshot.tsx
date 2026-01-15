@@ -1,27 +1,19 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
 
-import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
-
-import type { DataGridMatrix } from "@components/data-grid/models";
-import type {
-  DataGridCellSnapshot,
-  DataGridCoordinates,
-} from "@components/data-grid/types";
+import type { DataGridMatrix } from '@components/data-grid/models';
+import type { DataGridCellSnapshot, DataGridCoordinates } from '@components/data-grid/types';
+import type { FieldValues, Path, UseFormReturn } from 'react-hook-form';
 
 type UseDataGridCellSnapshotOptions<TData, TFieldValues extends FieldValues> = {
   matrix: DataGridMatrix<TData, TFieldValues>;
   form: UseFormReturn<TFieldValues>;
 };
 
-export const useDataGridCellSnapshot = <
-  TData,
-  TFieldValues extends FieldValues,
->({
+export const useDataGridCellSnapshot = <TData, TFieldValues extends FieldValues>({
   matrix,
-  form,
+  form
 }: UseDataGridCellSnapshotOptions<TData, TFieldValues>) => {
-  const [snapshot, setSnapshot] =
-    useState<DataGridCellSnapshot<TFieldValues> | null>(null);
+  const [snapshot, setSnapshot] = useState<DataGridCellSnapshot<TFieldValues> | null>(null);
 
   const { getValues, setValue } = form;
 
@@ -42,7 +34,7 @@ export const useDataGridCellSnapshot = <
 
       const value = getValues(field as Path<TFieldValues>);
 
-      setSnapshot((curr) => {
+      setSnapshot(curr => {
         /**
          * If there already exists a snapshot for this field, we don't want to create a new one.
          * A case where this happens is when the user presses the space key on a field. In that case
@@ -55,7 +47,7 @@ export const useDataGridCellSnapshot = <
         return { field, value };
       });
     },
-    [getValues, matrix],
+    [getValues, matrix]
   );
 
   /**
@@ -75,6 +67,6 @@ export const useDataGridCellSnapshot = <
 
   return {
     createSnapshot,
-    restoreSnapshot,
+    restoreSnapshot
   };
 };

@@ -82,6 +82,7 @@ export const useComboboxData = <
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       const moreItemsExist = lastPage.count > lastPage.offset + lastPage.limit;
+
       return moreItemsExist ? lastPage.offset + lastPage.limit : undefined;
     },
     placeholderData: keepPreviousData,

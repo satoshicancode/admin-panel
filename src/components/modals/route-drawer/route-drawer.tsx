@@ -1,21 +1,17 @@
-import type { PropsWithChildren } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type PropsWithChildren } from 'react';
 
-import { Drawer, clx } from "@medusajs/ui";
-
-import type { Path } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-
-import { useStateAwareTo } from "@components/modals/hooks/use-state-aware-to";
-import { RouteModalForm } from "@components/modals/route-modal-form";
-import { RouteModalProvider } from "@components/modals/route-modal-provider/route-provider";
-import { StackedModalProvider } from "@components/modals/stacked-modal-provider";
+import { useStateAwareTo } from '@components/modals/hooks/use-state-aware-to';
+import { RouteModalForm } from '@components/modals/route-modal-form';
+import { RouteModalProvider } from '@components/modals/route-modal-provider/route-provider';
+import { StackedModalProvider } from '@components/modals/stacked-modal-provider';
+import { clx, Drawer } from '@medusajs/ui';
+import { useNavigate, type Path } from 'react-router-dom';
 
 type RouteDrawerProps = PropsWithChildren<{
   prev?: string | Partial<Path>;
 }>;
 
-const Root = ({ prev = "..", children }: RouteDrawerProps) => {
+const Root = ({ prev = '..', children }: RouteDrawerProps) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [stackedModalOpen, onStackedModalOpen] = useState(false);
@@ -37,7 +33,7 @@ const Root = ({ prev = "..", children }: RouteDrawerProps) => {
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
-      document.body.style.pointerEvents = "auto";
+      document.body.style.pointerEvents = 'auto';
       navigate(to, { replace: true });
 
       return;
@@ -47,13 +43,16 @@ const Root = ({ prev = "..", children }: RouteDrawerProps) => {
   };
 
   return (
-    <Drawer open={open} onOpenChange={handleOpenChange}>
+    <Drawer
+      open={open}
+      onOpenChange={handleOpenChange}
+    >
       <RouteModalProvider prev={to}>
         <StackedModalProvider onOpenChange={onStackedModalOpen}>
           <Drawer.Content
             aria-describedby={undefined}
             className={clx({
-              "!inset-y-5 !right-5 !bg-ui-bg-disabled": stackedModalOpen,
+              '!inset-y-5 !right-5 !bg-ui-bg-disabled': stackedModalOpen
             })}
           >
             {children}
@@ -84,5 +83,5 @@ export const RouteDrawer = Object.assign(Root, {
   Description,
   Footer,
   Close,
-  Form,
+  Form
 });

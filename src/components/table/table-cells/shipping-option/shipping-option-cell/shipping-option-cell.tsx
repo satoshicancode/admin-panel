@@ -1,6 +1,5 @@
-import { useTranslation } from "react-i18next";
-
-import { PlaceholderCell } from "@components/table/table-cells/common/placeholder-cell";
+import { PlaceholderCell } from '@components/table/table-cells/common/placeholder-cell';
+import { useTranslation } from 'react-i18next';
 
 type ShippingOptionCellProps = {
   name?: string | null;
@@ -23,7 +22,7 @@ export const ShippingOptionHeader = () => {
 
   return (
     <div className="flex items-center overflow-hidden">
-      <span className="truncate">{t("fields.name")}</span>
+      <span className="truncate">{t('fields.name')}</span>
     </div>
   );
 };

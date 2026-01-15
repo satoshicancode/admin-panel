@@ -1,11 +1,8 @@
-import type { FocusEvent, MouseEvent } from "react";
-import { useCallback } from "react";
+import { useCallback, type FocusEvent, type MouseEvent } from 'react';
 
-import type { FieldValues, UseFormSetValue } from "react-hook-form";
-
-import type { DataGridMatrix } from "@components/data-grid/models";
-import { DataGridUpdateCommand } from "@components/data-grid/models";
-import type { DataGridCoordinates } from "@components/data-grid/types";
+import { DataGridUpdateCommand, type DataGridMatrix } from '@components/data-grid/models';
+import type { DataGridCoordinates } from '@components/data-grid/types';
+import type { FieldValues, UseFormSetValue } from 'react-hook-form';
 
 type UseDataGridCellHandlersOptions<TData, TFieldValues extends FieldValues> = {
   matrix: DataGridMatrix<TData, TFieldValues>;
@@ -24,10 +21,7 @@ type UseDataGridCellHandlersOptions<TData, TFieldValues extends FieldValues> = {
   multiColumnSelection?: boolean;
 };
 
-export const useDataGridCellHandlers = <
-  TData,
-  TFieldValues extends FieldValues,
->({
+export const useDataGridCellHandlers = <TData, TFieldValues extends FieldValues>({
   matrix,
   anchor,
   rangeEnd,
@@ -41,13 +35,13 @@ export const useDataGridCellHandlers = <
   setDragEnd,
   setValue,
   execute,
-  multiColumnSelection,
+  multiColumnSelection
 }: UseDataGridCellHandlersOptions<TData, TFieldValues>) => {
   const getWrapperFocusHandler = useCallback(
     (coords: DataGridCoordinates) => (_e: FocusEvent<HTMLElement>) => {
       setSingleRange(coords);
     },
-    [setSingleRange],
+    [setSingleRange]
   );
 
   const getOverlayMouseDownHandler = useCallback(
@@ -65,7 +59,7 @@ export const useDataGridCellHandlers = <
 
       setSingleRange(coords);
     },
-    [setIsSelecting, setRangeEnd, setSingleRange],
+    [setIsSelecting, setRangeEnd, setSingleRange]
   );
 
   const getWrapperMouseOverHandler = useCallback(
@@ -91,14 +85,7 @@ export const useDataGridCellHandlers = <
         }
       };
     },
-    [
-      anchor?.col,
-      isDragging,
-      isSelecting,
-      setDragEnd,
-      setRangeEnd,
-      multiColumnSelection,
-    ],
+    [anchor?.col, isDragging, isSelecting, setDragEnd, setRangeEnd, multiColumnSelection]
   );
 
   const getInputChangeHandler = useCallback(
@@ -108,24 +95,24 @@ export const useDataGridCellHandlers = <
       const command = new DataGridUpdateCommand({
         next,
         prev,
-        setter: (value) => {
+        setter: value => {
           setValue(field, value, {
             shouldDirty: true,
-            shouldTouch: true,
+            shouldTouch: true
           });
-        },
+        }
       });
 
       execute(command);
     },
-    [setValue, execute],
+    [setValue, execute]
   );
 
   const onDragToFillStart = useCallback(
     (_e: MouseEvent<HTMLElement>) => {
       setIsDragging(true);
     },
-    [setIsDragging],
+    [setIsDragging]
   );
 
   const getIsCellSelected = useCallback(
@@ -136,7 +123,7 @@ export const useDataGridCellHandlers = <
 
       return matrix.getIsCellSelected(cell, anchor, rangeEnd);
     },
-    [anchor, rangeEnd, matrix],
+    [anchor, rangeEnd, matrix]
   );
 
   const getIsCellDragSelected = useCallback(
@@ -147,7 +134,7 @@ export const useDataGridCellHandlers = <
 
       return matrix.getIsCellSelected(cell, anchor, dragEnd);
     },
-    [anchor, dragEnd, matrix],
+    [anchor, dragEnd, matrix]
   );
 
   return {
@@ -157,6 +144,6 @@ export const useDataGridCellHandlers = <
     getInputChangeHandler,
     getIsCellSelected,
     getIsCellDragSelected,
-    onDragToFillStart,
+    onDragToFillStart
   };
 };

@@ -1,60 +1,56 @@
-import { EllipsisHorizontal, Trash } from "@medusajs/icons";
-import { Button, DropdownMenu, Heading, Input, Text } from "@medusajs/ui";
-
-import type {
-  ArrayPath,
-  FieldArray,
-  FieldError,
-  FieldErrors,
-  FieldValues,
-  Path,
-  UseFormReturn,
-} from "react-hook-form";
-import { useFieldArray } from "react-hook-form";
+import { EllipsisHorizontal, Trash } from '@medusajs/icons';
+import { Button, DropdownMenu, Heading, Input, Text } from '@medusajs/ui';
+import {
+  useFieldArray,
+  type ArrayPath,
+  type FieldArray,
+  type FieldError,
+  type FieldErrors,
+  type FieldValues,
+  type Path,
+  type UseFormReturn
+} from 'react-hook-form';
 
 interface MetadataField {
   key: string;
   value: string;
 }
 
-interface MetadataEditorProps<
-  T extends FieldValues & { metadata: MetadataField[] },
-> {
+interface MetadataEditorProps<T extends FieldValues & { metadata: MetadataField[] }> {
   form: UseFormReturn<T>;
   name?: ArrayPath<T>;
   title?: string;
 }
 
-export const MetadataEditor = <
-  T extends FieldValues & { metadata: MetadataField[] },
->({
+export const MetadataEditor = <T extends FieldValues & { metadata: MetadataField[] }>({
   form,
-  name = "metadata" as ArrayPath<T>,
-  title = "Metadata",
+  name = 'metadata' as ArrayPath<T>,
+  title = 'Metadata'
 }: MetadataEditorProps<T>) => {
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name,
+    name
   });
 
   const getErrorMessage = (error: FieldError | undefined) => {
-    return error?.message ? String(error.message) : "";
+    return error?.message ? String(error.message) : '';
   };
 
   const getFieldErrors = (index: number) => {
-    const errors = form.formState.errors[name] as
-      | FieldErrors<MetadataField[]>
-      | undefined;
+    const errors = form.formState.errors[name] as FieldErrors<MetadataField[]> | undefined;
 
     return {
       key: errors?.[index]?.key,
-      value: errors?.[index]?.value,
+      value: errors?.[index]?.value
     };
   };
 
   return (
     <div className="col-span-2 mt-4">
-      <Heading level="h3" className="inter-small-semibold mb-2">
+      <Heading
+        level="h3"
+        className="inter-small-semibold mb-2"
+      >
         {title}
       </Heading>
       <div className="overflow-hidden rounded-lg border">
@@ -98,7 +94,10 @@ export const MetadataEditor = <
               <div className="flex justify-end pr-3">
                 <DropdownMenu>
                   <DropdownMenu.Trigger asChild>
-                    <Button variant="transparent" size="small">
+                    <Button
+                      variant="transparent"
+                      size="small"
+                    >
                       <EllipsisHorizontal />
                     </Button>
                   </DropdownMenu.Trigger>
@@ -121,9 +120,7 @@ export const MetadataEditor = <
             type="button"
             variant="secondary"
             size="small"
-            onClick={() =>
-              append({ key: "", value: "" } as FieldArray<T, ArrayPath<T>>)
-            }
+            onClick={() => append({ key: '', value: '' } as FieldArray<T, ArrayPath<T>>)}
             className="w-full"
           >
             + Add Row

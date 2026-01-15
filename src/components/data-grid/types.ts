@@ -1,28 +1,18 @@
 // @todo fix types
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { PropsWithChildren, ReactNode, RefObject } from "react";
-import type React from "react";
+import type { PropsWithChildren, ReactNode, RefObject } from 'react';
+import type React from 'react';
 
 import type {
   CellContext,
   ColumnDef,
   ColumnMeta,
   Row,
-  VisibilityState,
-} from "@tanstack/react-table";
-import type {
-  FieldErrors,
-  FieldPath,
-  FieldValues,
-  Path,
-  PathValue,
-} from "react-hook-form";
+  VisibilityState
+} from '@tanstack/react-table';
+import type { FieldErrors, FieldPath, FieldValues, Path, PathValue } from 'react-hook-form';
 
-export type DataGridColumnType =
-  | "text"
-  | "number"
-  | "boolean"
-  | "togglable-number";
+export type DataGridColumnType = 'text' | 'number' | 'boolean' | 'togglable-number';
 
 export type DataGridCoordinates = {
   row: number;
@@ -61,10 +51,10 @@ export interface DataGridCellRenderProps {
 }
 
 type InputAttributes = {
-  "data-row": number;
-  "data-col": number;
-  "data-cell-id": string;
-  "data-field": string;
+  'data-row': number;
+  'data-col': number;
+  'data-cell-id': string;
+  'data-field': string;
 };
 
 export interface InputProps {
@@ -72,14 +62,14 @@ export interface InputProps {
   onBlur: () => void;
   onFocus: () => void;
   onChange: (next: any, prev: any) => void;
-  "data-row": number;
-  "data-col": number;
-  "data-cell-id": string;
-  "data-field": string;
+  'data-row': number;
+  'data-col': number;
+  'data-cell-id': string;
+  'data-field': string;
 }
 
 type InnerAttributes = {
-  "data-container-id": string;
+  'data-container-id': string;
 };
 
 interface InnerProps {
@@ -88,7 +78,7 @@ interface InnerProps {
   onMouseDown: ((e: React.MouseEvent<HTMLElement>) => void) | undefined;
   onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void;
   onFocus: (e: React.FocusEvent<HTMLElement>) => void;
-  "data-container-id": string;
+  'data-container-id': string;
 }
 
 interface OverlayProps {
@@ -107,9 +97,7 @@ export interface DataGridCellContainerProps extends PropsWithChildren<object> {
   outerComponent?: ReactNode;
 }
 
-export type DataGridCellSnapshot<
-  TFieldValues extends FieldValues = FieldValues,
-> = {
+export type DataGridCellSnapshot<TFieldValues extends FieldValues = FieldValues> = {
   field: string;
   value: PathValue<TFieldValues, Path<TFieldValues>>;
 };
@@ -120,7 +108,7 @@ export type FieldContext<TData> = {
 };
 
 export type FieldFunction<TData, TFieldValues extends FieldValues> = (
-  context: FieldContext<TData>,
+  context: FieldContext<TData>
 ) => FieldPath<TFieldValues> | null;
 
 export type InternalColumnMeta<TData, TFieldValues extends FieldValues> = {
@@ -141,8 +129,7 @@ export type GridCell<TFieldValues extends FieldValues> = {
   enabled: boolean;
 };
 
-export type Grid<TFieldValues extends FieldValues> =
-  (GridCell<TFieldValues> | null)[][];
+export type Grid<TFieldValues extends FieldValues> = (GridCell<TFieldValues> | null)[][];
 
 export type CellMetadata = {
   id: string;

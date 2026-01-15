@@ -1,20 +1,18 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { ArrowUpDown } from "@medusajs/icons";
-import { DropdownMenu, IconButton } from "@medusajs/ui";
-
-import { useTranslation } from "react-i18next";
-import { useSearchParams } from "react-router-dom";
-
-import { useDocumentDirection } from "@hooks/use-document-direction";
+import { useDocumentDirection } from '@hooks/use-document-direction';
+import { ArrowUpDown } from '@medusajs/icons';
+import { DropdownMenu, IconButton } from '@medusajs/ui';
+import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 
 type OrderByProps = {
   keys: string[];
 };
 
 enum SortDirection {
-  ASC = "asc",
-  DESC = "desc",
+  ASC = 'asc',
+  DESC = 'desc'
 }
 
 type SortState = {
@@ -23,27 +21,25 @@ type SortState = {
 };
 
 const initState = (params: URLSearchParams): SortState => {
-  const sortParam = params.get("order");
+  const sortParam = params.get('order');
 
   if (!sortParam) {
     return {
-      dir: SortDirection.ASC,
+      dir: SortDirection.ASC
     };
   }
 
-  const dir = sortParam.startsWith("-")
-    ? SortDirection.DESC
-    : SortDirection.ASC;
-  const key = sortParam.replace("-", "");
+  const dir = sortParam.startsWith('-') ? SortDirection.DESC : SortDirection.ASC;
+  const key = sortParam.replace('-', '');
 
   return {
     key,
-    dir,
+    dir
   };
 };
 
 const formatKey = (key: string) => {
-  const words = key.split("_");
+  const words = key.split('_');
   const formattedWords = words.map((word, index) => {
     if (index === 0) {
       return word.charAt(0).toUpperCase() + word.slice(1);
@@ -52,7 +48,7 @@ const formatKey = (key: string) => {
     }
   });
 
-  return formattedWords.join(" ");
+  return formattedWords.join(' ');
 };
 
 export const OrderBy = ({ keys }: OrderByProps) => {
@@ -66,32 +62,32 @@ export const OrderBy = ({ keys }: OrderByProps) => {
   const direction = useDocumentDirection();
 
   const handleDirChange = (dir: string) => {
-    setState((prev) => ({
+    setState(prev => ({
       ...prev,
-      dir: dir as SortDirection,
+      dir: dir as SortDirection
     }));
     updateOrderParam({
       key: state.key,
-      dir: dir as SortDirection,
+      dir: dir as SortDirection
     });
   };
 
   const handleKeyChange = (value: string) => {
-    setState((prev) => ({
+    setState(prev => ({
       ...prev,
-      key: value,
+      key: value
     }));
 
     updateOrderParam({
       key: value,
-      dir: state.dir,
+      dir: state.dir
     });
   };
 
   const updateOrderParam = (state: SortState) => {
     if (!state.key) {
-      setSearchParams((prev) => {
-        prev.delete("order");
+      setSearchParams(prev => {
+        prev.delete('order');
 
         return prev;
       });
@@ -99,10 +95,9 @@ export const OrderBy = ({ keys }: OrderByProps) => {
       return;
     }
 
-    const orderParam =
-      state.dir === SortDirection.ASC ? state.key : `-${state.key}`;
-    setSearchParams((prev) => {
-      prev.set("order", orderParam);
+    const orderParam = state.dir === SortDirection.ASC ? state.key : `-${state.key}`;
+    setSearchParams(prev => {
+      prev.set('order', orderParam);
 
       return prev;
     });
@@ -120,11 +115,11 @@ export const OrderBy = ({ keys }: OrderByProps) => {
           value={state.key}
           onValueChange={handleKeyChange}
         >
-          {keys.map((key) => (
+          {keys.map(key => (
             <DropdownMenu.RadioItem
               key={key}
               value={key}
-              onSelect={(event) => event.preventDefault()}
+              onSelect={event => event.preventDefault()}
             >
               {formatKey(key)}
             </DropdownMenu.RadioItem>
@@ -138,17 +133,17 @@ export const OrderBy = ({ keys }: OrderByProps) => {
           <DropdownMenu.RadioItem
             className="flex items-center justify-between"
             value="asc"
-            onSelect={(event) => event.preventDefault()}
+            onSelect={event => event.preventDefault()}
           >
-            {t("general.ascending")}
+            {t('general.ascending')}
             <DropdownMenu.Label>1 - 30</DropdownMenu.Label>
           </DropdownMenu.RadioItem>
           <DropdownMenu.RadioItem
             className="flex items-center justify-between"
             value="desc"
-            onSelect={(event) => event.preventDefault()}
+            onSelect={event => event.preventDefault()}
           >
-            {t("general.descending")}
+            {t('general.descending')}
             <DropdownMenu.Label>30 - 1</DropdownMenu.Label>
           </DropdownMenu.RadioItem>
         </DropdownMenu.RadioGroup>

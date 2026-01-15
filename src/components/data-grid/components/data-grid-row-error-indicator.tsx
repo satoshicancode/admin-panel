@@ -1,16 +1,12 @@
-import { Badge, Tooltip } from "@medusajs/ui";
-
-import { useTranslation } from "react-i18next";
-
-import type { DataGridRowError } from "@components/data-grid/types";
+import type { DataGridRowError } from '@components/data-grid/types';
+import { Badge, Tooltip } from '@medusajs/ui';
+import { useTranslation } from 'react-i18next';
 
 type DataGridRowErrorIndicatorProps = {
   rowErrors: DataGridRowError[];
 };
 
-export const DataGridRowErrorIndicator = ({
-  rowErrors,
-}: DataGridRowErrorIndicatorProps) => {
+export const DataGridRowErrorIndicator = ({ rowErrors }: DataGridRowErrorIndicatorProps) => {
   const rowErrorCount = rowErrors ? rowErrors.length : 0;
 
   if (!rowErrors || rowErrorCount <= 0) {
@@ -22,24 +18,27 @@ export const DataGridRowErrorIndicator = ({
       content={
         <ul className="flex flex-col gap-y-3">
           {rowErrors.map((error, index) => (
-            <DataGridRowErrorLine key={index} error={error} />
+            <DataGridRowErrorLine
+              key={index}
+              error={error}
+            />
           ))}
         </ul>
       }
       delayDuration={0}
     >
-      <Badge color="red" size="2xsmall" className="cursor-default">
+      <Badge
+        color="red"
+        size="2xsmall"
+        className="cursor-default"
+      >
         {rowErrorCount}
       </Badge>
     </Tooltip>
   );
 };
 
-const DataGridRowErrorLine = ({
-  error,
-}: {
-  error: { message: string; to: () => void };
-}) => {
+const DataGridRowErrorLine = ({ error }: { error: { message: string; to: () => void } }) => {
   const { t } = useTranslation();
 
   return (
@@ -50,7 +49,7 @@ const DataGridRowErrorLine = ({
         onClick={error.to}
         className="text-ui-fg-interactive transition-fg hover:text-ui-fg-interactive-hover"
       >
-        {t("dataGrid.errors.fixError")}
+        {t('dataGrid.errors.fixError')}
       </button>
     </li>
   );

@@ -1,4 +1,4 @@
-import { Badge } from "@medusajs/ui";
+import { Badge } from '@medusajs/ui';
 
 type CellProps = {
   is_combinable: boolean;
@@ -12,11 +12,14 @@ export const TypeCell = ({ is_combinable }: CellProps) => (
   <div className="flex h-full w-full items-center gap-x-3 overflow-hidden">
     <span className="truncate">
       {is_combinable ? (
-        <Badge size="2xsmall" color="green">
+        <Badge
+          size="2xsmall"
+          color="green"
+        >
           Combinable
         </Badge>
       ) : (
-        ""
+        ''
       )}
     </span>
   </div>

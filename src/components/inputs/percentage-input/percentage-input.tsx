@@ -1,30 +1,24 @@
-import type { ComponentProps, ElementRef } from "react";
-import { forwardRef } from "react";
+import { forwardRef, type ComponentProps, type ElementRef } from 'react';
 
-import { Input, Text, clx } from "@medusajs/ui";
-
-import Primitive from "react-currency-input-field";
-
-import { getNumberOfDecimalPlaces } from "@lib/number-helpers";
+import { getNumberOfDecimalPlaces } from '@lib/number-helpers';
+import { clx, Input, Text } from '@medusajs/ui';
+import Primitive from 'react-currency-input-field';
 
 const MIN_DECIMAL_SCALE = 2;
 
 function resolveDecimalScale(
-  value: string | readonly string[] | number | undefined | null,
+  value: string | readonly string[] | number | undefined | null
 ): number | undefined {
   if (value == null || Array.isArray(value)) {
     return MIN_DECIMAL_SCALE;
   }
 
-  return Math.max(
-    getNumberOfDecimalPlaces(parseFloat(value.toString())),
-    MIN_DECIMAL_SCALE,
-  );
+  return Math.max(getNumberOfDecimalPlaces(parseFloat(value.toString())), MIN_DECIMAL_SCALE);
 }
 
 export const DeprecatedPercentageInput = forwardRef<
   ElementRef<typeof Input>,
-  Omit<ComponentProps<typeof Input>, "type">
+  Omit<ComponentProps<typeof Input>, 'type'>
 >(({ min = 0, max = 100, step = 0.0001, ...props }, ref) => (
   <div className="relative">
     <div className="absolute inset-y-0 left-0 z-10 flex w-8 items-center justify-center border-r">
@@ -48,24 +42,10 @@ export const DeprecatedPercentageInput = forwardRef<
     />
   </div>
 ));
-DeprecatedPercentageInput.displayName = "PercentageInput";
+DeprecatedPercentageInput.displayName = 'PercentageInput';
 
-export const PercentageInput = forwardRef<
-  ElementRef<"input">,
-  ComponentProps<typeof Primitive>
->(
-  (
-    {
-      min = 0,
-      max = 100,
-      decimalScale,
-      decimalsLimit,
-      value,
-      className,
-      ...props
-    },
-    ref,
-  ) => {
+export const PercentageInput = forwardRef<ElementRef<'input'>, ComponentProps<typeof Primitive>>(
+  ({ min = 0, max = 100, decimalScale, decimalsLimit, value, className, ...props }, ref) => {
     const resolvedDecimalScale = decimalScale ?? resolveDecimalScale(value);
     const resolvedDecimalsLimit = decimalsLimit ?? resolvedDecimalScale;
 
@@ -83,14 +63,14 @@ export const PercentageInput = forwardRef<
           value={value}
           {...props}
           className={clx(
-            "txt-compact-small flex w-full select-none appearance-none items-center justify-between rounded-md bg-ui-bg-field px-2 py-1.5 pl-10 text-left caret-ui-fg-base shadow-buttons-neutral outline-none transition-fg",
-            "text-ui-fg-base placeholder:text-ui-fg-muted",
-            "hover:bg-ui-bg-field-hover",
-            "focus-visible:shadow-borders-interactive-with-active data-[state=open]:!shadow-borders-interactive-with-active",
-            "aria-[invalid=true]:border-ui-border-error aria-[invalid=true]:shadow-borders-error",
-            "invalid::border-ui-border-error invalid:shadow-borders-error",
-            "disabled:!bg-ui-bg-disabled disabled:!text-ui-fg-disabled",
-            className,
+            'txt-compact-small flex w-full select-none appearance-none items-center justify-between rounded-md bg-ui-bg-field px-2 py-1.5 pl-10 text-left caret-ui-fg-base shadow-buttons-neutral outline-none transition-fg',
+            'text-ui-fg-base placeholder:text-ui-fg-muted',
+            'hover:bg-ui-bg-field-hover',
+            'focus-visible:shadow-borders-interactive-with-active data-[state=open]:!shadow-borders-interactive-with-active',
+            'aria-[invalid=true]:border-ui-border-error aria-[invalid=true]:shadow-borders-error',
+            'invalid::border-ui-border-error invalid:shadow-borders-error',
+            'disabled:!bg-ui-bg-disabled disabled:!text-ui-fg-disabled',
+            className
           )}
         />
         <div className="absolute inset-y-0 left-0 z-10 flex w-8 items-center justify-center border-r">
@@ -105,6 +85,6 @@ export const PercentageInput = forwardRef<
         </div>
       </div>
     );
-  },
+  }
 );
-PercentageInput.displayName = "PercentageInput";
+PercentageInput.displayName = 'PercentageInput';

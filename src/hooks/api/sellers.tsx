@@ -36,6 +36,7 @@ const sortOrders = (orders: any[], order: string) => {
     if (field === "created_at" || field === "updated_at") {
       const aDate = new Date(String(aValue)).getTime();
       const bDate = new Date(String(bValue)).getTime();
+
       return isDesc ? bDate - aDate : aDate - bDate;
     }
 
@@ -43,6 +44,7 @@ const sortOrders = (orders: any[], order: string) => {
     if (field === "display_id") {
       const aNum = Number(aValue);
       const bNum = Number(bValue);
+
       return isDesc ? bNum - aNum : aNum - bNum;
     }
 
@@ -52,6 +54,7 @@ const sortOrders = (orders: any[], order: string) => {
 
     if (aString < bString) return isDesc ? 1 : -1;
     if (aString > bString) return isDesc ? -1 : 1;
+
     return 0;
   });
 };
@@ -74,6 +77,7 @@ const sortProducts = (products: any[], order: string) => {
     if (field === "created_at" || field === "updated_at") {
       const aDate = new Date(String(aValue)).getTime();
       const bDate = new Date(String(bValue)).getTime();
+
       return isDesc ? bDate - aDate : aDate - bDate;
     }
 
@@ -83,6 +87,7 @@ const sortProducts = (products: any[], order: string) => {
 
     if (aString < bString) return isDesc ? 1 : -1;
     if (aString > bString) return isDesc ? -1 : 1;
+
     return 0;
   });
 };
@@ -105,6 +110,7 @@ const sortCustomerGroups = (customerGroups: any[], order: string) => {
     if (field === "created_at" || field === "updated_at") {
       const aDate = new Date(String(aValue)).getTime();
       const bDate = new Date(String(bValue)).getTime();
+
       return isDesc ? bDate - aDate : aDate - bDate;
     }
 
@@ -114,6 +120,7 @@ const sortCustomerGroups = (customerGroups: any[], order: string) => {
 
     if (aString < bString) return isDesc ? 1 : -1;
     if (aString > bString) return isDesc ? -1 : 1;
+
     return 0;
   });
 };
@@ -222,6 +229,7 @@ export const useSellerOrders = (
       const filterDate = new Date(dateFilter.$gte);
       processedOrders = processedOrders.filter((order) => {
         const orderCreatedAt = new Date(order.created_at || "");
+
         return orderCreatedAt >= filterDate;
       });
     }
@@ -229,6 +237,7 @@ export const useSellerOrders = (
       const filterDate = new Date(dateFilter.$lte);
       processedOrders = processedOrders.filter((order) => {
         const orderCreatedAt = new Date(order.created_at || "");
+
         return orderCreatedAt <= filterDate;
       });
     }
@@ -242,6 +251,7 @@ export const useSellerOrders = (
       const filterDate = new Date(dateFilter.$gte);
       processedOrders = processedOrders.filter((order) => {
         const orderUpdatedAt = new Date(order.updated_at || "");
+
         return orderUpdatedAt >= filterDate;
       });
     }
@@ -249,6 +259,7 @@ export const useSellerOrders = (
       const filterDate = new Date(dateFilter.$lte);
       processedOrders = processedOrders.filter((order) => {
         const orderUpdatedAt = new Date(order.updated_at || "");
+
         return orderUpdatedAt <= filterDate;
       });
     }
@@ -366,6 +377,7 @@ export const useSellerProducts = (
       const filterDate = new Date(dateFilter.$gte);
       processedProducts = processedProducts.filter((product) => {
         const productCreatedAt = new Date(product.created_at || "");
+
         return productCreatedAt >= filterDate;
       });
     }
@@ -373,6 +385,7 @@ export const useSellerProducts = (
       const filterDate = new Date(dateFilter.$lte);
       processedProducts = processedProducts.filter((product) => {
         const productCreatedAt = new Date(product.created_at || "");
+
         return productCreatedAt <= filterDate;
       });
     }
@@ -385,6 +398,7 @@ export const useSellerProducts = (
       const filterDate = new Date(dateFilter.$gte);
       processedProducts = processedProducts.filter((product) => {
         const productUpdatedAt = new Date(product.updated_at || "");
+
         return productUpdatedAt >= filterDate;
       });
     }
@@ -392,6 +406,7 @@ export const useSellerProducts = (
       const filterDate = new Date(dateFilter.$lte);
       processedProducts = processedProducts.filter((product) => {
         const productUpdatedAt = new Date(product.updated_at || "");
+
         return productUpdatedAt <= filterDate;
       });
     }
@@ -474,6 +489,7 @@ export const useSellerCustomerGroups = (
       const filterDate = new Date(dateFilter.$gte);
       processedCustomerGroups = processedCustomerGroups.filter((group) => {
         const groupCreatedAt = new Date(group.created_at || "");
+
         return groupCreatedAt >= filterDate;
       });
     }
@@ -481,6 +497,7 @@ export const useSellerCustomerGroups = (
       const filterDate = new Date(dateFilter.$lte);
       processedCustomerGroups = processedCustomerGroups.filter((group) => {
         const groupCreatedAt = new Date(group.created_at || "");
+
         return groupCreatedAt <= filterDate;
       });
     }
@@ -493,6 +510,7 @@ export const useSellerCustomerGroups = (
       const filterDate = new Date(dateFilter.$gte);
       processedCustomerGroups = processedCustomerGroups.filter((group) => {
         const groupUpdatedAt = new Date(group.updated_at || "");
+
         return groupUpdatedAt >= filterDate;
       });
     }
@@ -500,6 +518,7 @@ export const useSellerCustomerGroups = (
       const filterDate = new Date(dateFilter.$lte);
       processedCustomerGroups = processedCustomerGroups.filter((group) => {
         const groupUpdatedAt = new Date(group.updated_at || "");
+
         return groupUpdatedAt <= filterDate;
       });
     }

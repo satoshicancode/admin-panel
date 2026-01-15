@@ -1,19 +1,14 @@
-import type { PropsWithChildren } from "react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, type PropsWithChildren } from 'react';
 
-import type { Path } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, type Path } from 'react-router-dom';
 
-import { RouteModalProviderContext } from "./route-modal-context";
+import { RouteModalProviderContext } from './route-modal-context';
 
 type RouteModalProviderProps = PropsWithChildren<{
   prev: string | Partial<Path>;
 }>;
 
-export const RouteModalProvider = ({
-  prev,
-  children,
-}: RouteModalProviderProps) => {
+export const RouteModalProvider = ({ prev, children }: RouteModalProviderProps) => {
   const navigate = useNavigate();
 
   const [closeOnEscape, setCloseOnEscape] = useState(true);
@@ -23,16 +18,16 @@ export const RouteModalProvider = ({
       const to = path || prev;
       navigate(to, { replace: true, state: { isSubmitSuccessful: true } });
     },
-    [navigate, prev],
+    [navigate, prev]
   );
 
   const value = useMemo(
     () => ({
       handleSuccess,
       setCloseOnEscape,
-      __internal: { closeOnEscape },
+      __internal: { closeOnEscape }
     }),
-    [handleSuccess, setCloseOnEscape, closeOnEscape],
+    [handleSuccess, setCloseOnEscape, closeOnEscape]
   );
 
   return (

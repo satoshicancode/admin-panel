@@ -23,6 +23,7 @@ export function calculateRequiredFields(
     if (Object.keys(visibleColumns).length > 0) {
       return visibleColumns[column.field] === true
     }
+
     return column.default_visible
   })
 
@@ -54,12 +55,14 @@ export function calculateRequiredFields(
     const isAlreadyCovered = defaults.relations.some(rel =>
       rel === `*${relationName}` || rel === relationName
     )
+
     return !isAlreadyCovered
   })
 
   // Check which direct fields need to be added
   const additionalDirectFields = visibleDirectFields.filter(field => {
     const isAlreadyIncluded = defaults.properties.includes(field)
+
     return !isAlreadyIncluded
   })
 

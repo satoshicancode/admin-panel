@@ -1,4 +1,4 @@
-import type { DataGridCoordinates } from "@components/data-grid/types";
+import type { DataGridCoordinates } from '@components/data-grid/types';
 
 export function generateCellId(coords: DataGridCoordinates) {
   return `${coords.row}:${coords.col}`;
@@ -10,10 +10,7 @@ export function generateCellId(coords: DataGridCoordinates) {
  * @param coords - The coords to compare
  * @returns Whether the cell is equal to the coords
  */
-export function isCellMatch(
-  cell: DataGridCoordinates,
-  coords?: DataGridCoordinates | null,
-) {
+export function isCellMatch(cell: DataGridCoordinates, coords?: DataGridCoordinates | null) {
   if (!coords) {
     return false;
   }
@@ -21,10 +18,8 @@ export function isCellMatch(
   return cell.row === coords.row && cell.col === coords.col;
 }
 
-const SPECIAL_FOCUS_KEYS = [".", ","];
+const SPECIAL_FOCUS_KEYS = ['.', ','];
 
 export function isSpecialFocusKey(event: KeyboardEvent) {
-  return (
-    SPECIAL_FOCUS_KEYS.includes(event.key) && event.ctrlKey && event.altKey
-  );
+  return SPECIAL_FOCUS_KEYS.includes(event.key) && event.ctrlKey && event.altKey;
 }

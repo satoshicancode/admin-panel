@@ -1,11 +1,8 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
-import type { DataTableColumnDef } from "@medusajs/ui";
-import { Tooltip, createDataTableColumnHelper } from "@medusajs/ui";
-
-import { useTranslation } from "react-i18next";
-
-import { useDate } from "@hooks/use-date.tsx";
+import { useDate } from '@hooks/use-date.tsx';
+import { createDataTableColumnHelper, Tooltip, type DataTableColumnDef } from '@medusajs/ui';
+import { useTranslation } from 'react-i18next';
 
 type EntityWithDates = {
   created_at: string;
@@ -21,14 +18,14 @@ export const useDataTableDateColumns = <TData extends EntityWithDates>() => {
   return useMemo(
     () =>
       [
-        columnHelper.accessor("created_at", {
-          header: t("fields.createdAt"),
+        columnHelper.accessor('created_at', {
+          header: t('fields.createdAt'),
           cell: ({ row }) => {
             return (
               <Tooltip
                 content={getFullDate({
                   date: row.original.created_at,
-                  includeTime: true,
+                  includeTime: true
                 })}
               >
                 <span>{getFullDate({ date: row.original.created_at })}</span>
@@ -36,17 +33,17 @@ export const useDataTableDateColumns = <TData extends EntityWithDates>() => {
             );
           },
           enableSorting: true,
-          sortAscLabel: t("filters.sorting.dateAsc"),
-          sortDescLabel: t("filters.sorting.dateDesc"),
+          sortAscLabel: t('filters.sorting.dateAsc'),
+          sortDescLabel: t('filters.sorting.dateDesc')
         }),
-        columnHelper.accessor("updated_at", {
-          header: t("fields.updatedAt"),
+        columnHelper.accessor('updated_at', {
+          header: t('fields.updatedAt'),
           cell: ({ row }) => {
             return (
               <Tooltip
                 content={getFullDate({
                   date: row.original.updated_at,
-                  includeTime: true,
+                  includeTime: true
                 })}
               >
                 <span>{getFullDate({ date: row.original.updated_at })}</span>
@@ -54,10 +51,10 @@ export const useDataTableDateColumns = <TData extends EntityWithDates>() => {
             );
           },
           enableSorting: true,
-          sortAscLabel: t("filters.sorting.dateAsc"),
-          sortDescLabel: t("filters.sorting.dateDesc"),
-        }),
+          sortAscLabel: t('filters.sorting.dateAsc'),
+          sortDescLabel: t('filters.sorting.dateDesc')
+        })
       ] as DataTableColumnDef<TData>[],
-    [t, getFullDate],
+    [t, getFullDate]
   );
 };

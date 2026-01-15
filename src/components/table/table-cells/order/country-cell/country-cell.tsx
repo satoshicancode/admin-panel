@@ -1,15 +1,9 @@
-import type { HttpTypes } from "@medusajs/types";
-import { Tooltip } from "@medusajs/ui";
+import { PlaceholderCell } from '@components/table/table-cells/common/placeholder-cell';
+import type { HttpTypes } from '@medusajs/types';
+import { Tooltip } from '@medusajs/ui';
+import ReactCountryFlag from 'react-country-flag';
 
-import ReactCountryFlag from "react-country-flag";
-
-import { PlaceholderCell } from "@components/table/table-cells/common/placeholder-cell";
-
-export const CountryCell = ({
-  country,
-}: {
-  country?: HttpTypes.AdminRegionCountry | null;
-}) => {
+export const CountryCell = ({ country }: { country?: HttpTypes.AdminRegionCountry | null }) => {
   if (!country) {
     return <PlaceholderCell />;
   }
@@ -22,8 +16,8 @@ export const CountryCell = ({
             countryCode={country.iso_2!.toUpperCase()}
             svg
             style={{
-              width: "16px",
-              height: "16px",
+              width: '16px',
+              height: '16px'
             }}
             aria-label={country.display_name}
           />

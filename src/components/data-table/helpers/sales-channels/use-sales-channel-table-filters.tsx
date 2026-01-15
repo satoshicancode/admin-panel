@@ -1,11 +1,9 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
-import type { HttpTypes } from "@medusajs/types";
-import { createDataTableFilterHelper } from "@medusajs/ui";
-
-import { useTranslation } from "react-i18next";
-
-import { useDataTableDateFilters } from "@components/data-table/helpers/general/use-data-table-date-filters";
+import { useDataTableDateFilters } from '@components/data-table/helpers/general/use-data-table-date-filters';
+import type { HttpTypes } from '@medusajs/types';
+import { createDataTableFilterHelper } from '@medusajs/ui';
+import { useTranslation } from 'react-i18next';
 
 const filterHelper = createDataTableFilterHelper<HttpTypes.AdminSalesChannel>();
 
@@ -15,22 +13,22 @@ export const useSalesChannelTableFilters = () => {
 
   return useMemo(
     () => [
-      filterHelper.accessor("is_disabled", {
-        label: t("fields.status"),
-        type: "radio",
+      filterHelper.accessor('is_disabled', {
+        label: t('fields.status'),
+        type: 'radio',
         options: [
           {
-            label: t("general.enabled"),
-            value: "false",
+            label: t('general.enabled'),
+            value: 'false'
           },
           {
-            label: t("general.disabled"),
-            value: "true",
-          },
-        ],
+            label: t('general.disabled'),
+            value: 'true'
+          }
+        ]
       }),
-      ...dateFilters,
+      ...dateFilters
     ],
-    [dateFilters, t],
+    [dateFilters, t]
   );
 };

@@ -1,22 +1,19 @@
-import { memo } from "react";
+import { memo } from 'react';
 
-import { clx } from "@medusajs/ui";
+import { clx } from '@medusajs/ui';
 
-import type { NoResultsProps } from "../../common/empty-table-content";
-import { NoRecords } from "../../common/empty-table-content";
-import { TableSkeleton } from "../../common/skeleton";
-import type { DataTableQueryProps } from "./data-table-query";
-import { DataTableQuery } from "./data-table-query";
-import type { DataTableRootProps } from "./data-table-root";
-import { DataTableRoot } from "./data-table-root";
+import { NoRecords, type NoResultsProps } from '../../common/empty-table-content';
+import { TableSkeleton } from '../../common/skeleton';
+import { DataTableQuery, type DataTableQueryProps } from './data-table-query';
+import { DataTableRoot, type DataTableRootProps } from './data-table-root';
 
 interface DataTableProps<TData>
-  extends Omit<DataTableRootProps<TData>, "noResults">,
+  extends Omit<DataTableRootProps<TData>, 'noResults'>,
     DataTableQueryProps<TData> {
   isLoading?: boolean;
   pageSize: number;
   queryObject?: Record<string, any>;
-  noRecords?: Pick<NoResultsProps, "title" | "message">;
+  noRecords?: Pick<NoResultsProps, 'title' | 'message'>;
 }
 
 // Maybe we should use the memoized version of DataTableRoot
@@ -41,8 +38,8 @@ export const _DataTable = <TData,>({
   pageSize,
   isLoading = false,
   noHeader = false,
-  layout = "fit",
-  noRecords: noRecordsProps = {},
+  layout = 'fit',
+  noRecords: noRecordsProps = {}
 }: DataTableProps<TData>) => {
   if (isLoading) {
     return (
@@ -57,8 +54,7 @@ export const _DataTable = <TData,>({
     );
   }
 
-  const noQuery =
-    Object.values(queryObject).filter((v) => Boolean(v)).length === 0;
+  const noQuery = Object.values(queryObject).filter(v => Boolean(v)).length === 0;
   const noResults = !isLoading && count === 0 && !noQuery;
   const noRecords = !isLoading && count === 0 && noQuery;
 
@@ -66,7 +62,7 @@ export const _DataTable = <TData,>({
     return (
       <NoRecords
         className={clx({
-          "flex h-full flex-col overflow-hidden": layout === "fill",
+          'flex h-full flex-col overflow-hidden': layout === 'fill'
         })}
         {...noRecordsProps}
       />
@@ -75,8 +71,8 @@ export const _DataTable = <TData,>({
 
   return (
     <div
-      className={clx("divide-y", {
-        "flex h-full flex-col overflow-hidden": layout === "fill",
+      className={clx('divide-y', {
+        'flex h-full flex-col overflow-hidden': layout === 'fill'
       })}
     >
       <MemoizedDataTableQuery

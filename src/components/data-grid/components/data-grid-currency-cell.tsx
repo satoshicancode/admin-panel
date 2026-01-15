@@ -1,30 +1,17 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 
-import type { CurrencyInputProps } from "react-currency-input-field";
-import CurrencyInput, { formatValue } from "react-currency-input-field";
-import type { ControllerRenderProps } from "react-hook-form";
-import { Controller } from "react-hook-form";
+import { useDataGridCell, useDataGridCellError } from '@components/data-grid/hooks';
+import type { DataGridCellProps, InputProps } from '@components/data-grid/types';
+import { useCombinedRefs } from '@hooks/use-combined-refs.tsx';
+import { currencies, type CurrencyInfo } from '@lib/data/currencies.ts';
+import CurrencyInput, { formatValue, type CurrencyInputProps } from 'react-currency-input-field';
+import { Controller, type ControllerRenderProps } from 'react-hook-form';
 
-import {
-  useDataGridCell,
-  useDataGridCellError,
-} from "@components/data-grid/hooks";
-import type {
-  DataGridCellProps,
-  InputProps,
-} from "@components/data-grid/types";
-
-import { useCombinedRefs } from "@hooks/use-combined-refs.tsx";
-
-import type { CurrencyInfo } from "@lib/data/currencies.ts";
-import { currencies } from "@lib/data/currencies.ts";
-
-import { DataGridCellContainer } from "./data-grid-cell-container";
+import { DataGridCellContainer } from './data-grid-cell-container';
 
 //@todo fix type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-interface DataGridCurrencyCellProps<TData, TValue = any>
-  extends DataGridCellProps<TData, TValue> {
+interface DataGridCurrencyCellProps<TData, TValue = any> extends DataGridCellProps<TData, TValue> {
   code: string;
 }
 
@@ -32,10 +19,10 @@ interface DataGridCurrencyCellProps<TData, TValue = any>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const DataGridCurrencyCell = <TData, TValue = any>({
   context,
-  code,
+  code
 }: DataGridCurrencyCellProps<TData, TValue>) => {
   const { field, control, renderProps } = useDataGridCell({
-    context,
+    context
   });
   const errorProps = useDataGridCellError({ context });
 
@@ -48,8 +35,15 @@ export const DataGridCurrencyCell = <TData, TValue = any>({
       control={control}
       name={field}
       render={({ field }) => (
-        <DataGridCellContainer {...container} {...errorProps}>
-          <Inner field={field} inputProps={input} currencyInfo={currency} />
+        <DataGridCellContainer
+          {...container}
+          {...errorProps}
+        >
+          <Inner
+            field={field}
+            inputProps={input}
+            currencyInfo={currency}
+          />
         </DataGridCellContainer>
       )}
     />
@@ -59,7 +53,7 @@ export const DataGridCurrencyCell = <TData, TValue = any>({
 const Inner = ({
   field,
   inputProps,
-  currencyInfo,
+  currencyInfo
 }: {
   //@todo fix type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -68,34 +62,27 @@ const Inner = ({
   currencyInfo: CurrencyInfo;
 }) => {
   const { value, onBlur, ref, ...rest } = field;
-  const {
-    ref: inputRef,
-    onBlur: onInputBlur,
-    onFocus,
-    onChange,
-    ...attributes
-  } = inputProps;
+  const { ref: inputRef, onBlur: onInputBlur, onFocus, onChange, ...attributes } = inputProps;
 
   const formatter = useCallback(
     (value?: string | number) => {
-      const ensuredValue =
-        typeof value === "number" ? value.toString() : value || "";
+      const ensuredValue = typeof value === 'number' ? value.toString() : value || '';
 
       return formatValue({
         value: ensuredValue,
         decimalScale: currencyInfo.decimal_digits,
         disableGroupSeparators: true,
-        decimalSeparator: ".",
+        decimalSeparator: '.'
       });
     },
-    [currencyInfo],
+    [currencyInfo]
   );
 
-  const [localValue, setLocalValue] = useState<string | number>(value || "");
+  const [localValue, setLocalValue] = useState<string | number>(value || '');
 
-  const handleValueChange: CurrencyInputProps["onValueChange"] = (value) => {
+  const handleValueChange: CurrencyInputProps['onValueChange'] = value => {
     if (!value) {
-      setLocalValue("");
+      setLocalValue('');
 
       return;
     }
@@ -113,6 +100,7 @@ const Inner = ({
       update = formatter(update);
     }
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLocalValue(update);
   }, [value, formatter]);
 

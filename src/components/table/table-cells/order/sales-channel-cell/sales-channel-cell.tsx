@@ -1,12 +1,7 @@
-import type { HttpTypes } from "@medusajs/types";
+import type { HttpTypes } from '@medusajs/types';
+import { useTranslation } from 'react-i18next';
 
-import { useTranslation } from "react-i18next";
-
-export const SalesChannelCell = ({
-  channel,
-}: {
-  channel?: HttpTypes.AdminSalesChannel | null;
-}) => {
+export const SalesChannelCell = ({ channel }: { channel?: HttpTypes.AdminSalesChannel | null }) => {
   if (!channel) {
     return <span className="text-ui-fg-muted">-</span>;
   }
@@ -25,7 +20,7 @@ export const SalesChannelHeader = () => {
 
   return (
     <div className="flex h-full w-full items-center">
-      <span className="truncate">{t("fields.salesChannel")}</span>
+      <span className="truncate">{t('fields.salesChannel')}</span>
     </div>
   );
 };

@@ -1,20 +1,20 @@
-import { Photo } from "@medusajs/icons";
-import { clx } from "@medusajs/ui";
+import { Photo } from '@medusajs/icons';
+import { clx } from '@medusajs/ui';
 
 type ThumbnailProps = {
   src?: string | null;
   alt?: string;
-  size?: "small" | "base";
+  size?: 'small' | 'base';
 };
 
-export const Thumbnail = ({ src, alt, size = "base" }: ThumbnailProps) => (
+export const Thumbnail = ({ src, alt, size = 'base' }: ThumbnailProps) => (
   <div
     className={clx(
-      "flex items-center justify-center overflow-hidden rounded border border-ui-border-base bg-ui-bg-component",
+      'flex items-center justify-center overflow-hidden rounded border border-ui-border-base bg-ui-bg-component',
       {
-        "h-8 w-6": size === "base",
-        "h-5 w-4": size === "small",
-      },
+        'h-8 w-6': size === 'base',
+        'h-5 w-4': size === 'small'
+      }
     )}
   >
     {src ? (

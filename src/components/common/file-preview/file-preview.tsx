@@ -1,8 +1,6 @@
-import { ArrowDownTray, Spinner } from "@medusajs/icons";
-import { IconButton, Text } from "@medusajs/ui";
-
-import type { ActionGroup } from "@components/common/action-menu";
-import { ActionMenu } from "@components/common/action-menu";
+import { ActionMenu, type ActionGroup } from '@components/common/action-menu';
+import { ArrowDownTray, Spinner } from '@medusajs/icons';
+import { IconButton, Text } from '@medusajs/ui';
 
 export const FilePreview = ({
   filename,
@@ -10,7 +8,7 @@ export const FilePreview = ({
   loading,
   activity,
   actions,
-  hideThumbnail,
+  hideThumbnail
 }: {
   filename: string;
   url?: string;
@@ -47,8 +45,14 @@ export const FilePreview = ({
       {loading && <Spinner className="animate-spin" />}
       {!loading && actions && <ActionMenu groups={actions} />}
       {!loading && url && (
-        <IconButton variant="transparent" asChild>
-          <a href={url} download={filename ?? `${Date.now()}`}>
+        <IconButton
+          variant="transparent"
+          asChild
+        >
+          <a
+            href={url}
+            download={filename ?? `${Date.now()}`}
+          >
             <ArrowDownTray />
           </a>
         </IconButton>
@@ -89,7 +93,10 @@ const FileThumbnail = () => {
           gradientUnits="userSpaceOnUse"
         >
           <stop stopColor="#F4F4F5" />
-          <stop offset="1" stopColor="#E4E4E7" />
+          <stop
+            offset="1"
+            stopColor="#E4E4E7"
+          />
         </linearGradient>
         <linearGradient
           id="paint1_linear_6594_388107"
@@ -100,7 +107,10 @@ const FileThumbnail = () => {
           gradientUnits="userSpaceOnUse"
         >
           <stop stopColor="#E4E4E7" />
-          <stop offset="1" stopColor="#D4D4D8" />
+          <stop
+            offset="1"
+            stopColor="#D4D4D8"
+          />
         </linearGradient>
         <linearGradient
           id="paint2_linear_6594_388107"
@@ -111,7 +121,10 @@ const FileThumbnail = () => {
           gradientUnits="userSpaceOnUse"
         >
           <stop stopColor="#52525B" />
-          <stop offset="1" stopColor="#A1A1AA" />
+          <stop
+            offset="1"
+            stopColor="#A1A1AA"
+          />
         </linearGradient>
         <linearGradient
           id="paint3_linear_6594_388107"
@@ -122,7 +135,10 @@ const FileThumbnail = () => {
           gradientUnits="userSpaceOnUse"
         >
           <stop stopColor="#18181B" />
-          <stop offset="1" stopColor="#52525B" />
+          <stop
+            offset="1"
+            stopColor="#52525B"
+          />
         </linearGradient>
       </defs>
     </svg>

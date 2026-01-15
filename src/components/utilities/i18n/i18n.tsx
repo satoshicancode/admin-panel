@@ -1,8 +1,8 @@
-import i18n from "i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
-import { initReactI18next } from "react-i18next";
+import i18n from 'i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import { initReactI18next } from 'react-i18next';
 
-import { defaultI18nOptions } from "@/i18n/config.ts";
+import { defaultI18nOptions } from '@/i18n/config.ts';
 
 export const I18n = () => {
   if (i18n.isInitialized) {
@@ -12,9 +12,9 @@ export const I18n = () => {
   i18n
     .use(
       new LanguageDetector(null, {
-        lookupCookie: "lng",
-        lookupLocalStorage: "lng",
-      }),
+        lookupCookie: 'lng',
+        lookupLocalStorage: 'lng'
+      })
     )
     .use(initReactI18next)
     .init(defaultI18nOptions);

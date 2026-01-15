@@ -1,7 +1,6 @@
-import { useTranslation } from "react-i18next";
-
-import { MoneyAmountCell } from "@components/table/table-cells/common/money-amount-cell";
-import { PlaceholderCell } from "@components/table/table-cells/common/placeholder-cell";
+import { MoneyAmountCell } from '@components/table/table-cells/common/money-amount-cell';
+import { PlaceholderCell } from '@components/table/table-cells/common/placeholder-cell';
+import { useTranslation } from 'react-i18next';
 
 type ShippingPriceCellProps = {
   isCalculated: boolean;
@@ -12,13 +11,18 @@ type ShippingPriceCellProps = {
 export const ShippingPriceCell = ({
   price,
   currencyCode,
-  isCalculated,
+  isCalculated
 }: ShippingPriceCellProps) => {
   if (isCalculated || !price) {
     return <PlaceholderCell />;
   }
 
-  return <MoneyAmountCell currencyCode={currencyCode} amount={price} />;
+  return (
+    <MoneyAmountCell
+      currencyCode={currencyCode}
+      amount={price}
+    />
+  );
 };
 
 export const ShippingPriceHeader = () => {
@@ -26,7 +30,7 @@ export const ShippingPriceHeader = () => {
 
   return (
     <div className="flex items-center overflow-hidden">
-      <span className="truncate">{t("fields.price")}</span>
+      <span className="truncate">{t('fields.price')}</span>
     </div>
   );
 };

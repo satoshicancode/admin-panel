@@ -1,40 +1,30 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import type { FieldValues, Path, PathValue } from "react-hook-form";
+import { DataGridBulkUpdateCommand, type DataGridMatrix } from '@components/data-grid/models';
+import type { DataGridCoordinates } from '@components/data-grid/types';
+import type { FieldValues, Path, PathValue } from 'react-hook-form';
 
-import type { DataGridMatrix } from "@components/data-grid/models";
-import { DataGridBulkUpdateCommand } from "@components/data-grid/models";
-import type { DataGridCoordinates } from "@components/data-grid/types";
-
-type UseDataGridClipboardEventsOptions<
-  TData,
-  TFieldValues extends FieldValues,
-> = {
+type UseDataGridClipboardEventsOptions<TData, TFieldValues extends FieldValues> = {
   matrix: DataGridMatrix<TData, TFieldValues>;
   isEditing: boolean;
   anchor: DataGridCoordinates | null;
   rangeEnd: DataGridCoordinates | null;
-  getSelectionValues: (
-    fields: string[],
-  ) => PathValue<TFieldValues, Path<TFieldValues>>[];
+  getSelectionValues: (fields: string[]) => PathValue<TFieldValues, Path<TFieldValues>>[];
   setSelectionValues: (
     fields: string[],
-    values: PathValue<TFieldValues, Path<TFieldValues>>[],
+    values: PathValue<TFieldValues, Path<TFieldValues>>[]
   ) => void;
   execute: (command: DataGridBulkUpdateCommand) => void;
 };
 
-export const useDataGridClipboardEvents = <
-  TData,
-  TFieldValues extends FieldValues,
->({
+export const useDataGridClipboardEvents = <TData, TFieldValues extends FieldValues>({
   matrix,
   anchor,
   rangeEnd,
   isEditing,
   getSelectionValues,
   setSelectionValues,
-  execute,
+  execute
 }: UseDataGridClipboardEventsOptions<TData, TFieldValues>) => {
   const handleCopyEvent = useCallback(
     (e: ClipboardEvent) => {
@@ -48,18 +38,18 @@ export const useDataGridClipboardEvents = <
       const values = getSelectionValues(fields);
 
       const text = values
-        .map((value) => {
-          if (typeof value === "object" && value !== null) {
+        .map(value => {
+          if (typeof value === 'object' && value !== null) {
             return JSON.stringify(value);
           }
 
-          return `${value}` ?? "";
+          return `${value}` ?? '';
         })
-        .join("\t");
+        .join('\t');
 
-      e.clipboardData?.setData("text/plain", text);
+      e.clipboardData?.setData('text/plain', text);
     },
-    [isEditing, anchor, rangeEnd, matrix, getSelectionValues],
+    [isEditing, anchor, rangeEnd, matrix, getSelectionValues]
   );
 
   const handlePasteEvent = useCallback(
@@ -70,13 +60,13 @@ export const useDataGridClipboardEvents = <
 
       e.preventDefault();
 
-      const text = e.clipboardData?.getData("text/plain");
+      const text = e.clipboardData?.getData('text/plain');
 
       if (!text) {
         return;
       }
 
-      const next = text.split("\t");
+      const next = text.split('\t');
 
       const fields = matrix.getFieldsInSelection(anchor, rangeEnd);
       const prev = getSelectionValues(fields);
@@ -85,24 +75,16 @@ export const useDataGridClipboardEvents = <
         fields,
         next,
         prev,
-        setter: setSelectionValues,
+        setter: setSelectionValues
       });
 
       execute(command);
     },
-    [
-      isEditing,
-      anchor,
-      rangeEnd,
-      matrix,
-      getSelectionValues,
-      setSelectionValues,
-      execute,
-    ],
+    [isEditing, anchor, rangeEnd, matrix, getSelectionValues, setSelectionValues, execute]
   );
 
   return {
     handleCopyEvent,
-    handlePasteEvent,
+    handlePasteEvent
   };
 };

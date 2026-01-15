@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 type RegionCellProps = {
   name: string;
@@ -15,7 +15,7 @@ export const RegionHeader = () => {
 
   return (
     <div className="flex h-full w-full items-center">
-      <span className="truncate">{t("fields.name")}</span>
+      <span className="truncate">{t('fields.name')}</span>
     </div>
   );
 };

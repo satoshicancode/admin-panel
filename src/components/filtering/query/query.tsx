@@ -1,11 +1,9 @@
-import type { ChangeEvent } from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ChangeEvent } from 'react';
 
-import { Input } from "@medusajs/ui";
-
-import { debounce } from "lodash";
-import { useTranslation } from "react-i18next";
-import { useSearchParams } from "react-router-dom";
+import { Input } from '@medusajs/ui';
+import { debounce } from 'lodash';
+import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 
 type QueryProps = {
   placeholder?: string;
@@ -13,15 +11,15 @@ type QueryProps = {
 
 export const Query = ({ placeholder }: QueryProps) => {
   const { t } = useTranslation();
-  const placeholderText = placeholder || t("general.search");
+  const placeholderText = placeholder || t('general.search');
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const [inputValue, setInputValue] = useState(searchParams.get("q") || "");
+  const [inputValue, setInputValue] = useState(searchParams.get('q') || '');
 
   const updateSearchParams = (newValue: string) => {
     if (!newValue) {
-      setSearchParams((prev) => {
-        prev.delete("q");
+      setSearchParams(prev => {
+        prev.delete('q');
 
         return prev;
       });
@@ -29,12 +27,13 @@ export const Query = ({ placeholder }: QueryProps) => {
       return;
     }
 
-    setSearchParams((prev) => ({ ...prev, q: newValue || "" }));
+    setSearchParams(prev => ({ ...prev, q: newValue || '' }));
   };
-
+  //@todo fix this
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedUpdate = useCallback(
     debounce((newValue: string) => updateSearchParams(newValue), 500),
-    [],
+    []
   );
 
   useEffect(() => {

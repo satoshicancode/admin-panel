@@ -1,6 +1,5 @@
-import type { HttpTypes } from "@medusajs/types";
-
-import { useQueryParams } from "@hooks/use-query-params.tsx";
+import { useQueryParams } from '@hooks/use-query-params.tsx';
+import type { HttpTypes } from '@medusajs/types';
 
 type UseSalesChannelTableQueryProps = {
   prefix?: string;
@@ -9,11 +8,11 @@ type UseSalesChannelTableQueryProps = {
 
 export const useSalesChannelTableQuery = ({
   prefix,
-  pageSize = 20,
+  pageSize = 20
 }: UseSalesChannelTableQueryProps) => {
   const queryObject = useQueryParams(
-    ["offset", "q", "order", "created_at", "updated_at", "is_disabled"],
-    prefix,
+    ['offset', 'q', 'order', 'created_at', 'updated_at', 'is_disabled'],
+    prefix
   );
 
   const { offset, created_at, updated_at, is_disabled, ...rest } = queryObject;
@@ -24,7 +23,7 @@ export const useSalesChannelTableQuery = ({
     created_at: created_at ? JSON.parse(created_at) : undefined,
     updated_at: updated_at ? JSON.parse(updated_at) : undefined,
     is_disabled: is_disabled ? JSON.parse(is_disabled) : undefined,
-    ...rest,
+    ...rest
   };
 
   return searchParams;

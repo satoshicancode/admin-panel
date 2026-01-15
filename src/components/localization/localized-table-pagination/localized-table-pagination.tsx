@@ -1,13 +1,11 @@
-import type { ComponentPropsWithoutRef, ElementRef } from "react";
-import { forwardRef } from "react";
+import { forwardRef, type ComponentPropsWithoutRef, type ElementRef } from 'react';
 
-import { Table } from "@medusajs/ui";
-
-import { useTranslation } from "react-i18next";
+import { Table } from '@medusajs/ui';
+import { useTranslation } from 'react-i18next';
 
 type LocalizedTablePaginationProps = Omit<
   ComponentPropsWithoutRef<typeof Table.Pagination>,
-  "translations"
+  'translations'
 >;
 
 export const LocalizedTablePagination = forwardRef<
@@ -17,13 +15,19 @@ export const LocalizedTablePagination = forwardRef<
   const { t } = useTranslation();
 
   const translations = {
-    of: t("general.of"),
-    results: t("general.results"),
-    pages: t("general.pages"),
-    prev: t("general.prev"),
-    next: t("general.next"),
+    of: t('general.of'),
+    results: t('general.results'),
+    pages: t('general.pages'),
+    prev: t('general.prev'),
+    next: t('general.next')
   };
 
-  return <Table.Pagination {...props} translations={translations} ref={ref} />;
+  return (
+    <Table.Pagination
+      {...props}
+      translations={translations}
+      ref={ref}
+    />
+  );
 });
-LocalizedTablePagination.displayName = "LocalizedTablePagination";
+LocalizedTablePagination.displayName = 'LocalizedTablePagination';

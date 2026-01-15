@@ -1,16 +1,12 @@
-import type { PropsWithChildren } from "react";
-import { useState } from "react";
+import { useState, type PropsWithChildren } from 'react';
 
-import { StackedModalContext } from "./stacked-modal-context";
+import { StackedModalContext } from './stacked-modal-context';
 
 type StackedModalProviderProps = PropsWithChildren<{
   onOpenChange: (open: boolean) => void;
 }>;
 
-export const StackedModalProvider = ({
-  children,
-  onOpenChange,
-}: StackedModalProviderProps) => {
+export const StackedModalProvider = ({ children, onOpenChange }: StackedModalProviderProps) => {
   const [state, setState] = useState<Record<string, boolean>>({});
 
   const getIsOpen = (id: string) => {
@@ -18,23 +14,23 @@ export const StackedModalProvider = ({
   };
 
   const setIsOpen = (id: string, open: boolean) => {
-    setState((prevState) => ({
+    setState(prevState => ({
       ...prevState,
-      [id]: open,
+      [id]: open
     }));
 
     onOpenChange(open);
   };
 
   const register = (id: string) => {
-    setState((prevState) => ({
+    setState(prevState => ({
       ...prevState,
-      [id]: false,
+      [id]: false
     }));
   };
 
   const unregister = (id: string) => {
-    setState((prevState) => {
+    setState(prevState => {
       const newState = { ...prevState };
       delete newState[id];
 
@@ -48,7 +44,7 @@ export const StackedModalProvider = ({
         getIsOpen,
         setIsOpen,
         register,
-        unregister,
+        unregister
       }}
     >
       {children}

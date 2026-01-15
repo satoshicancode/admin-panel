@@ -1,15 +1,11 @@
-import type {
-  CellContext,
-  ColumnDefTemplate,
-  HeaderContext,
-} from "@tanstack/react-table";
-import { createColumnHelper } from "@tanstack/react-table";
-import type { FieldValues } from "react-hook-form";
-
-import type {
-  DataGridColumnType,
-  FieldFunction,
-} from "@components/data-grid/types";
+import type { DataGridColumnType, FieldFunction } from '@components/data-grid/types';
+import {
+  createColumnHelper,
+  type CellContext,
+  type ColumnDefTemplate,
+  type HeaderContext
+} from '@tanstack/react-table';
+import type { FieldValues } from 'react-hook-form';
 
 type DataGridHelperColumnsProps<TData, TFieldValues extends FieldValues> = {
   /**
@@ -47,10 +43,7 @@ type DataGridHelperColumnsProps<TData, TFieldValues extends FieldValues> = {
   | { field?: null | undefined; type?: never }
 );
 
-export function createDataGridHelper<
-  TData,
-  TFieldValues extends FieldValues,
->() {
+export function createDataGridHelper<TData, TFieldValues extends FieldValues>() {
   const columnHelper = createColumnHelper<TData>();
 
   return {
@@ -61,7 +54,7 @@ export function createDataGridHelper<
       cell,
       disableHiding = false,
       field,
-      type,
+      type
     }: DataGridHelperColumnsProps<TData, TFieldValues>) =>
       columnHelper.display({
         id,
@@ -71,8 +64,8 @@ export function createDataGridHelper<
         meta: {
           name,
           field,
-          type,
-        },
-      }),
+          type
+        }
+      })
   };
 }

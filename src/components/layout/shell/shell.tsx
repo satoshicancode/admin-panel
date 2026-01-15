@@ -1,27 +1,22 @@
-import type { PropsWithChildren, ReactNode } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type PropsWithChildren, type ReactNode } from 'react';
 
-import { SidebarLeft, TriangleRightMini, XMark } from "@medusajs/icons";
-import { IconButton, clx } from "@medusajs/ui";
-
-import { AnimatePresence } from "motion/react";
-import { Dialog as RadixDialog } from "radix-ui";
-import { useTranslation } from "react-i18next";
-import type { UIMatch } from "react-router-dom";
-import { Link, Outlet, useMatches, useNavigation } from "react-router-dom";
-
-import { ProgressBar } from "@components/common/progress-bar";
-import { Notifications } from "@components/layout/notifications";
-
-import { KeybindProvider } from "@providers/keybind-provider";
-import { useGlobalShortcuts } from "@providers/keybind-provider/hooks";
-import { useSidebar } from "@providers/sidebar-provider";
+import { ProgressBar } from '@components/common/progress-bar';
+import { Notifications } from '@components/layout/notifications';
+import { SidebarLeft, TriangleRightMini, XMark } from '@medusajs/icons';
+import { clx, IconButton } from '@medusajs/ui';
+import { KeybindProvider } from '@providers/keybind-provider';
+import { useGlobalShortcuts } from '@providers/keybind-provider/hooks';
+import { useSidebar } from '@providers/sidebar-provider';
+import { AnimatePresence } from 'motion/react';
+import { Dialog as RadixDialog } from 'radix-ui';
+import { useTranslation } from 'react-i18next';
+import { Link, Outlet, useMatches, useNavigation, type UIMatch } from 'react-router-dom';
 
 export const Shell = ({ children }: PropsWithChildren) => {
   const globalShortcuts = useGlobalShortcuts();
   const navigation = useNavigation();
 
-  const loading = navigation.state === "loading";
+  const loading = navigation.state === 'loading';
 
   return (
     <KeybindProvider shortcuts={globalShortcuts}>
@@ -35,10 +30,10 @@ export const Shell = ({ children }: PropsWithChildren) => {
           <Topbar />
           <main
             className={clx(
-              "flex h-full w-full flex-col items-center overflow-y-auto transition-opacity delay-200 duration-200",
+              'flex h-full w-full flex-col items-center overflow-y-auto transition-opacity delay-200 duration-200',
               {
-                "opacity-25": loading,
-              },
+                'opacity-25': loading
+              }
             )}
           >
             <Gutter>
@@ -82,9 +77,7 @@ const NavigationBar = ({ loading }: { loading: boolean }) => {
 };
 
 const Gutter = ({ children }: PropsWithChildren) => (
-  <div className="flex w-full max-w-[1600px] flex-col gap-y-2 p-3">
-    {children}
-  </div>
+  <div className="flex w-full max-w-[1600px] flex-col gap-y-2 p-3">{children}</div>
 );
 
 const Breadcrumbs = () => {
@@ -96,8 +89,8 @@ const Breadcrumbs = () => {
   >[];
 
   const crumbs = matches
-    .filter((match) => match.handle?.breadcrumb)
-    .map((match) => {
+    .filter(match => match.handle?.breadcrumb)
+    .map(match => {
       const handle = match.handle;
 
       let label: string | ReactNode | undefined = undefined;
@@ -114,23 +107,22 @@ const Breadcrumbs = () => {
 
       return {
         label: label,
-        path: match.pathname,
+        path: match.pathname
       };
     })
     .filter(Boolean) as { label: string | ReactNode; path: string }[];
 
   return (
-    <ol
-      className={clx(
-        "txt-compact-small-plus flex select-none items-center text-ui-fg-muted",
-      )}
-    >
+    <ol className={clx('txt-compact-small-plus flex select-none items-center text-ui-fg-muted')}>
       {crumbs.map((crumb, index) => {
         const isLast = index === crumbs.length - 1;
         const isSingle = crumbs.length === 1;
 
         return (
-          <li key={index} className={clx("flex items-center")}>
+          <li
+            key={index}
+            className={clx('flex items-center')}
+          >
             {!isLast ? (
               <Link
                 className="transition-fg hover:text-ui-fg-subtle"
@@ -144,7 +136,7 @@ const Breadcrumbs = () => {
                 <span
                   key={index}
                   className={clx({
-                    "hidden lg:block": !isSingle,
+                    'hidden lg:block': !isSingle
                   })}
                 >
                   {crumb.label}
@@ -171,7 +163,7 @@ const ToggleSidebar = () => {
       <IconButton
         className="hidden lg:flex"
         variant="transparent"
-        onClick={() => toggle("desktop")}
+        onClick={() => toggle('desktop')}
         size="small"
       >
         <SidebarLeft className="text-ui-fg-muted rtl:rotate-180" />
@@ -179,7 +171,7 @@ const ToggleSidebar = () => {
       <IconButton
         className="hidden max-lg:flex"
         variant="transparent"
-        onClick={() => toggle("mobile")}
+        onClick={() => toggle('mobile')}
         size="small"
       >
         <SidebarLeft className="text-ui-fg-muted rtl:rotate-180" />
@@ -207,8 +199,8 @@ const DesktopSidebarContainer = ({ children }: PropsWithChildren) => {
 
   return (
     <div
-      className={clx("hidden h-screen w-[220px] border-e", {
-        "lg:flex": desktop,
+      className={clx('hidden h-screen w-[220px] border-e', {
+        'lg:flex': desktop
       })}
     >
       {children}
@@ -221,18 +213,21 @@ const MobileSidebarContainer = ({ children }: PropsWithChildren) => {
   const { mobile, toggle } = useSidebar();
 
   return (
-    <RadixDialog.Root open={mobile} onOpenChange={() => toggle("mobile")}>
+    <RadixDialog.Root
+      open={mobile}
+      onOpenChange={() => toggle('mobile')}
+    >
       <RadixDialog.Portal>
         <RadixDialog.Overlay
           className={clx(
-            "fixed inset-0 bg-ui-bg-overlay",
-            "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+            'fixed inset-0 bg-ui-bg-overlay',
+            'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'
           )}
         />
         <RadixDialog.Content
           className={clx(
-            "fixed inset-y-2 start-2 flex w-full max-w-[304px] flex-col overflow-hidden rounded-lg border-r bg-ui-bg-subtle shadow-elevation-modal",
-            "data-[state=closed]:slide-out-to-start-1/2 data-[state=open]:slide-in-from-start-1/2 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+            'fixed inset-y-2 start-2 flex w-full max-w-[304px] flex-col overflow-hidden rounded-lg border-r bg-ui-bg-subtle shadow-elevation-modal',
+            'data-[state=closed]:slide-out-to-start-1/2 data-[state=open]:slide-in-from-start-1/2 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'
           )}
         >
           <div className="p-3">
@@ -246,10 +241,10 @@ const MobileSidebarContainer = ({ children }: PropsWithChildren) => {
               </IconButton>
             </RadixDialog.Close>
             <RadixDialog.Title className="sr-only">
-              {t("app.nav.accessibility.title")}
+              {t('app.nav.accessibility.title')}
             </RadixDialog.Title>
             <RadixDialog.Description className="sr-only">
-              {t("app.nav.accessibility.description")}
+              {t('app.nav.accessibility.description')}
             </RadixDialog.Description>
           </div>
           {children}

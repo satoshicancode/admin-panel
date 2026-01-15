@@ -1,15 +1,14 @@
-import type { FieldValues } from "react-hook-form";
-
 import {
   DataGridBooleanCell,
   DataGridCurrencyCell,
   DataGridNumberCell,
   DataGridReadOnlyCell,
   DataGridRoot,
-  type DataGridRootProps,
   DataGridSkeleton,
   DataGridTextCell,
-} from "@components/data-grid/components";
+  type DataGridRootProps
+} from '@components/data-grid/components';
+import type { FieldValues } from 'react-hook-form';
 
 interface DataGridProps<TData, TFieldValues extends FieldValues = FieldValues>
   extends DataGridRootProps<TData, TFieldValues> {
@@ -23,9 +22,7 @@ const _DataGrid = <TData, TFieldValues extends FieldValues = FieldValues>({
   isLoading ? (
     <DataGridSkeleton
       columns={props.columns}
-      rows={
-        props.data?.length && props.data.length > 0 ? props.data.length : 10
-      }
+      rows={props.data?.length && props.data.length > 0 ? props.data.length : 10}
     />
   ) : (
     <DataGridRoot {...props} />
@@ -36,5 +33,5 @@ export const DataGrid = Object.assign(_DataGrid, {
   TextCell: DataGridTextCell,
   NumberCell: DataGridNumberCell,
   CurrencyCell: DataGridCurrencyCell,
-  ReadonlyCell: DataGridReadOnlyCell,
+  ReadonlyCell: DataGridReadOnlyCell
 });

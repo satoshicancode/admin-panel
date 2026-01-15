@@ -1,25 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
-import { Switch } from "@medusajs/ui";
+import { ConditionalTooltip } from '@components/common/conditional-tooltip';
+import { useDataGridCell, useDataGridCellError } from '@components/data-grid/hooks';
+import type { DataGridCellProps, InputProps } from '@components/data-grid/types';
+import { useCombinedRefs } from '@hooks/use-combined-refs.tsx';
+import { Switch } from '@medusajs/ui';
+import CurrencyInput, { type CurrencyInputProps } from 'react-currency-input-field';
+import { Controller, type ControllerRenderProps } from 'react-hook-form';
 
-import type { CurrencyInputProps } from "react-currency-input-field";
-import CurrencyInput from "react-currency-input-field";
-import type { ControllerRenderProps } from "react-hook-form";
-import { Controller } from "react-hook-form";
-
-import { ConditionalTooltip } from "@components/common/conditional-tooltip";
-import {
-  useDataGridCell,
-  useDataGridCellError,
-} from "@components/data-grid/hooks";
-import type {
-  DataGridCellProps,
-  InputProps,
-} from "@components/data-grid/types";
-
-import { useCombinedRefs } from "@hooks/use-combined-refs.tsx";
-
-import { DataGridCellContainer } from "./data-grid-cell-container";
+import { DataGridCellContainer } from './data-grid-cell-container';
 
 //@todo fix type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -34,7 +23,7 @@ export const DataGridTogglableNumberCell = <TData, TValue = any>({
   disabledToggleTooltip?: string;
 }) => {
   const { field, control, renderProps } = useDataGridCell({
-    context,
+    context
   });
   const errorProps = useDataGridCellError({ context });
 
@@ -57,7 +46,11 @@ export const DataGridTogglableNumberCell = <TData, TValue = any>({
             />
           }
         >
-          <Inner field={field} inputProps={input} {...rest} />
+          <Inner
+            field={field}
+            inputProps={input}
+            {...rest}
+          />
         </DataGridCellContainer>
       )}
     />
@@ -68,7 +61,7 @@ const OuterComponent = ({
   field,
   inputProps,
   isAnchor,
-  tooltip,
+  tooltip
 }: {
   //@todo fix type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -91,10 +84,10 @@ const OuterComponent = ({
     const newValue = { ...localValue, checked: update };
 
     if (!update && !newValue.disabledToggle) {
-      newValue.quantity = "";
+      newValue.quantity = '';
     }
 
-    if (update && newValue.quantity === "") {
+    if (update && newValue.quantity === '') {
       newValue.quantity = 0;
     }
 
@@ -104,15 +97,15 @@ const OuterComponent = ({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (isAnchor && e.key.toLowerCase() === "x") {
+      if (isAnchor && e.key.toLowerCase() === 'x') {
         e.preventDefault();
         buttonRef.current?.click();
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
 
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isAnchor]);
 
   return (
@@ -151,13 +144,7 @@ const Inner = ({
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { ref, value, onChange: _, onBlur, ...fieldProps } = field;
-  const {
-    ref: inputRef,
-    onChange,
-    onBlur: onInputBlur,
-    onFocus,
-    ...attributes
-  } = inputProps;
+  const { ref: inputRef, onChange, onBlur: onInputBlur, onFocus, ...attributes } = inputProps;
 
   const [localValue, setLocalValue] = useState(value);
 
@@ -167,10 +154,8 @@ const Inner = ({
 
   const combinedRefs = useCombinedRefs(inputRef, ref);
 
-  const handleInputChange: CurrencyInputProps["onValueChange"] = (
-    updatedValue,
-  ) => {
-    const ensuredValue = updatedValue !== undefined ? updatedValue : "";
+  const handleInputChange: CurrencyInputProps['onValueChange'] = updatedValue => {
+    const ensuredValue = updatedValue !== undefined ? updatedValue : '';
     const newValue = { ...localValue, quantity: ensuredValue };
 
     /**
@@ -179,7 +164,7 @@ const Inner = ({
      * Else, if the value is empty and the location is enabled, then the
      * location should be disabled, unless toggling the location is disabled.
      */
-    if (ensuredValue !== "") {
+    if (ensuredValue !== '') {
       newValue.checked = true;
     } else if (newValue.checked && newValue.disabledToggle === false) {
       newValue.checked = false;
@@ -189,7 +174,9 @@ const Inner = ({
   };
 
   const handleOnChange = () => {
-    if (localValue.disabledToggle && localValue.quantity === "") {
+    if (localValue.disabledToggle && localValue.quantity === '') {
+      //@todo fix type
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any,react-hooks/immutability
       localValue.quantity = 0;
     }
 

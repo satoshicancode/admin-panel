@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion } from 'motion/react';
 
 interface ProgressBarProps {
   /**
@@ -13,19 +13,19 @@ export const ProgressBar = ({ duration = 2 }: ProgressBarProps) => (
   <motion.div
     className="size-full bg-ui-fg-subtle"
     initial={{
-      width: "0%",
+      width: '0%'
     }}
     transition={{
       delay: 0.2,
       duration,
-      ease: "linear",
+      ease: 'linear'
     }}
     animate={{
-      width: "90%",
+      width: '90%'
     }}
     exit={{
-      width: "100%",
-      transition: { duration: 0.2, ease: "linear" },
+      width: '100%',
+      transition: { duration: 0.2, ease: 'linear' }
     }}
   />
 );

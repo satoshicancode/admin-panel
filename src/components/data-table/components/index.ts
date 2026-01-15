@@ -1,1 +1,1 @@
-export { DataTableStatusCell } from "./data-table-status-cell";
+export { DataTableStatusCell } from './data-table-status-cell';

@@ -1,27 +1,17 @@
-import { Checkbox } from "@medusajs/ui";
+import { useDataGridCell, useDataGridCellError } from '@components/data-grid/hooks';
+import type { DataGridCellProps, InputProps } from '@components/data-grid/types';
+import { useCombinedRefs } from '@hooks/use-combined-refs.tsx';
+import { Checkbox } from '@medusajs/ui';
+import { Controller, type ControllerRenderProps } from 'react-hook-form';
 
-import type { ControllerRenderProps } from "react-hook-form";
-import { Controller } from "react-hook-form";
-
-import {
-  useDataGridCell,
-  useDataGridCellError,
-} from "@components/data-grid/hooks";
-import type {
-  DataGridCellProps,
-  InputProps,
-} from "@components/data-grid/types";
-
-import { useCombinedRefs } from "@hooks/use-combined-refs.tsx";
-
-import { DataGridCellContainer } from "./data-grid-cell-container";
+import { DataGridCellContainer } from './data-grid-cell-container';
 
 export const DataGridBooleanCell = <TData, TValue = unknown>({
   context,
-  disabled,
+  disabled
 }: DataGridCellProps<TData, TValue> & { disabled?: boolean }) => {
   const { field, control, renderProps } = useDataGridCell({
-    context,
+    context
   });
   const errorProps = useDataGridCellError({ context });
 
@@ -32,8 +22,15 @@ export const DataGridBooleanCell = <TData, TValue = unknown>({
       control={control}
       name={field}
       render={({ field }) => (
-        <DataGridCellContainer {...container} {...errorProps}>
-          <Inner field={field} inputProps={input} disabled={disabled} />
+        <DataGridCellContainer
+          {...container}
+          {...errorProps}
+        >
+          <Inner
+            field={field}
+            inputProps={input}
+            disabled={disabled}
+          />
         </DataGridCellContainer>
       )}
     />
@@ -43,7 +40,7 @@ export const DataGridBooleanCell = <TData, TValue = unknown>({
 const Inner = ({
   field,
   inputProps,
-  disabled,
+  disabled
 }: {
   //@todo fix type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,13 +49,7 @@ const Inner = ({
   disabled?: boolean;
 }) => {
   const { ref, value, onBlur, name, disabled: fieldDisabled } = field;
-  const {
-    ref: inputRef,
-    onBlur: onInputBlur,
-    onChange,
-    onFocus,
-    ...attributes
-  } = inputProps;
+  const { ref: inputRef, onBlur: onInputBlur, onChange, onFocus, ...attributes } = inputProps;
 
   const combinedRefs = useCombinedRefs(ref, inputRef);
 
@@ -67,7 +58,7 @@ const Inner = ({
       disabled={disabled || fieldDisabled}
       name={name}
       checked={value}
-      onCheckedChange={(newValue) => onChange(newValue === true, value)}
+      onCheckedChange={newValue => onChange(newValue === true, value)}
       onFocus={onFocus}
       onBlur={() => {
         onBlur();

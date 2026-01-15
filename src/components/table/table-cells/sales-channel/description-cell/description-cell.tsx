@@ -1,6 +1,5 @@
-import { useTranslation } from "react-i18next";
-
-import { PlaceholderCell } from "@components/table/table-cells/common/placeholder-cell";
+import { PlaceholderCell } from '@components/table/table-cells/common/placeholder-cell';
+import { useTranslation } from 'react-i18next';
 
 type DescriptionCellProps = {
   description?: string | null;
@@ -23,7 +22,7 @@ export const DescriptionHeader = () => {
 
   return (
     <div className="flex h-full w-full items-center">
-      <span className="truncate">{t("fields.description")}</span>
+      <span className="truncate">{t('fields.description')}</span>
     </div>
   );
 };

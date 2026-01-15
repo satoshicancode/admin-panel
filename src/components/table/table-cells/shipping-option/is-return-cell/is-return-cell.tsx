@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 type IsReturnCellProps = {
   isReturn?: boolean;
@@ -9,9 +9,7 @@ export const IsReturnCell = ({ isReturn }: IsReturnCellProps) => {
 
   return (
     <div className="flex items-center overflow-hidden">
-      <span className="truncate">
-        {isReturn ? t("regions.return") : t("regions.outbound")}
-      </span>
+      <span className="truncate">{isReturn ? t('regions.return') : t('regions.outbound')}</span>
     </div>
   );
 };
@@ -21,7 +19,7 @@ export const IsReturnHeader = () => {
 
   return (
     <div className="flex items-center overflow-hidden">
-      <span className="truncate">{t("fields.type")}</span>
+      <span className="truncate">{t('fields.type')}</span>
     </div>
   );
 };

@@ -1,10 +1,8 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import type { FieldValues, Path, PathValue } from "react-hook-form";
-
-import type { DataGridMatrix } from "@components/data-grid/models";
-import { DataGridBulkUpdateCommand } from "@components/data-grid/models";
-import type { DataGridCoordinates } from "@components/data-grid/types";
+import { DataGridBulkUpdateCommand, type DataGridMatrix } from '@components/data-grid/models';
+import type { DataGridCoordinates } from '@components/data-grid/types';
+import type { FieldValues, Path, PathValue } from 'react-hook-form';
 
 type UseDataGridMouseUpEventOptions<TData, TFieldValues extends FieldValues> = {
   matrix: DataGridMatrix<TData, TFieldValues>;
@@ -14,21 +12,16 @@ type UseDataGridMouseUpEventOptions<TData, TFieldValues extends FieldValues> = {
   setRangeEnd: (coords: DataGridCoordinates | null) => void;
   setIsSelecting: (isSelecting: boolean) => void;
   setIsDragging: (isDragging: boolean) => void;
-  getSelectionValues: (
-    fields: string[],
-  ) => PathValue<TFieldValues, Path<TFieldValues>>[];
+  getSelectionValues: (fields: string[]) => PathValue<TFieldValues, Path<TFieldValues>>[];
   setSelectionValues: (
     fields: string[],
-    values: PathValue<TFieldValues, Path<TFieldValues>>[],
+    values: PathValue<TFieldValues, Path<TFieldValues>>[]
   ) => void;
   execute: (command: DataGridBulkUpdateCommand) => void;
   isDragging: boolean;
 };
 
-export const useDataGridMouseUpEvent = <
-  TData,
-  TFieldValues extends FieldValues,
->({
+export const useDataGridMouseUpEvent = <TData, TFieldValues extends FieldValues>({
   matrix,
   anchor,
   dragEnd,
@@ -39,7 +32,7 @@ export const useDataGridMouseUpEvent = <
   setIsSelecting,
   getSelectionValues,
   setSelectionValues,
-  execute,
+  execute
 }: UseDataGridMouseUpEventOptions<TData, TFieldValues>) => {
   const handleDragEnd = useCallback(() => {
     if (!isDragging) {
@@ -57,7 +50,7 @@ export const useDataGridMouseUpEvent = <
     }
 
     const anchorValue = getSelectionValues([anchorField]);
-    const fields = dragSelection.filter((field) => field !== anchorField);
+    const fields = dragSelection.filter(field => field !== anchorField);
 
     const prev = getSelectionValues(fields);
     const next = Array.from({ length: prev.length }, () => anchorValue[0]);
@@ -66,7 +59,7 @@ export const useDataGridMouseUpEvent = <
       fields,
       prev,
       next,
-      setter: setSelectionValues,
+      setter: setSelectionValues
     });
 
     execute(command);
@@ -85,7 +78,7 @@ export const useDataGridMouseUpEvent = <
     execute,
     setIsDragging,
     setDragEnd,
-    setRangeEnd,
+    setRangeEnd
   ]);
 
   const handleMouseUpEvent = useCallback(() => {
@@ -94,6 +87,6 @@ export const useDataGridMouseUpEvent = <
   }, [handleDragEnd, setIsSelecting]);
 
   return {
-    handleMouseUpEvent,
+    handleMouseUpEvent
   };
 };

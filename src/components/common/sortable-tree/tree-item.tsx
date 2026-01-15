@@ -1,20 +1,18 @@
-import type { HTMLAttributes, ReactNode } from "react";
-import type React from "react";
-import { forwardRef } from "react";
+import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
+import type React from 'react';
 
 import {
   DotsSix,
   FolderIllustration,
   FolderOpenIllustration,
   TagIllustration,
-  TriangleRightMini,
-} from "@medusajs/icons";
-import { Badge, IconButton, clx } from "@medusajs/ui";
+  TriangleRightMini
+} from '@medusajs/icons';
+import { Badge, clx, IconButton } from '@medusajs/ui';
 
-import type { HandleProps } from "./types";
+import type { HandleProps } from './types';
 
-export interface TreeItemProps
-  extends Omit<HTMLAttributes<HTMLLIElement>, "id"> {
+export interface TreeItemProps extends Omit<HTMLAttributes<HTMLLIElement>, 'id'> {
   childCount?: number;
   clone?: boolean;
   collapsed?: boolean;
@@ -49,19 +47,19 @@ export const TreeItem = forwardRef<HTMLDivElement, TreeItemProps>(
       wrapperRef,
       ...props
     },
-    ref,
+    ref
   ) => (
     <li
       ref={wrapperRef}
       style={
         {
-          paddingLeft: `${indentationWidth * depth}px`,
+          paddingLeft: `${indentationWidth * depth}px`
         } as React.CSSProperties
       }
-      className={clx("-mb-px list-none", {
-        "pointer-events-none": disableInteraction,
-        "select-none": disableSelection,
-        "[&:first-of-type>div]:border-t-0": !clone,
+      className={clx('-mb-px list-none', {
+        'pointer-events-none': disableInteraction,
+        'select-none': disableSelection,
+        '[&:first-of-type>div]:border-t-0': !clone
       })}
       {...props}
     >
@@ -69,37 +67,47 @@ export const TreeItem = forwardRef<HTMLDivElement, TreeItemProps>(
         ref={ref}
         style={style}
         className={clx(
-          "relative flex items-center gap-x-3 border-y bg-ui-bg-base px-6 py-2.5 transition-fg",
+          'relative flex items-center gap-x-3 border-y bg-ui-bg-base px-6 py-2.5 transition-fg',
           {
-            "border-l": depth > 0,
-            "w-fit rounded-lg border-none bg-ui-bg-base pr-6 opacity-80 shadow-elevation-flyout":
+            'border-l': depth > 0,
+            'w-fit rounded-lg border-none bg-ui-bg-base pr-6 opacity-80 shadow-elevation-flyout':
               clone,
-            "z-[1] bg-ui-bg-base-hover opacity-50": ghost,
-            "bg-ui-bg-disabled": disabled,
-          },
+            'z-[1] bg-ui-bg-base-hover opacity-50': ghost,
+            'bg-ui-bg-disabled': disabled
+          }
         )}
       >
-        <Handle {...handleProps} disabled={disabled} />
-        <Collapse collapsed={collapsed} onCollapse={onCollapse} clone={clone} />
-        <Icon childrenCount={childCount} collapsed={collapsed} clone={clone} />
+        <Handle
+          {...handleProps}
+          disabled={disabled}
+        />
+        <Collapse
+          collapsed={collapsed}
+          onCollapse={onCollapse}
+          clone={clone}
+        />
+        <Icon
+          childrenCount={childCount}
+          collapsed={collapsed}
+          clone={clone}
+        />
         <Value value={value} />
-        <ChildrenCount clone={clone} childrenCount={childCount} />
+        <ChildrenCount
+          clone={clone}
+          childrenCount={childCount}
+        />
       </div>
     </li>
-  ),
+  )
 );
-TreeItem.displayName = "TreeItem";
+TreeItem.displayName = 'TreeItem';
 
-const Handle = ({
-  listeners,
-  attributes,
-  disabled,
-}: HandleProps & { disabled?: boolean }) => (
+const Handle = ({ listeners, attributes, disabled }: HandleProps & { disabled?: boolean }) => (
   <IconButton
     size="small"
     variant="transparent"
     type="button"
-    className={clx("cursor-grab", { "cursor-not-allowed": disabled })}
+    className={clx('cursor-grab', { 'cursor-not-allowed': disabled })}
     disabled={disabled}
     {...attributes}
     {...listeners}
@@ -145,7 +153,12 @@ const Collapse = ({ collapsed, onCollapse, clone }: CollapseProps) => {
   }
 
   if (!onCollapse) {
-    return <div className="size-7" role="presentation" />;
+    return (
+      <div
+        className="size-7"
+        role="presentation"
+      />
+    );
   }
 
   return (
@@ -156,8 +169,8 @@ const Collapse = ({ collapsed, onCollapse, clone }: CollapseProps) => {
       type="button"
     >
       <TriangleRightMini
-        className={clx("text-ui-fg-subtle transition-transform", {
-          "rotate-90": !collapsed,
+        className={clx('text-ui-fg-subtle transition-transform', {
+          'rotate-90': !collapsed
         })}
       />
     </IconButton>
@@ -169,9 +182,7 @@ type ValueProps = {
 };
 
 const Value = ({ value }: ValueProps) => (
-  <div className="txt-compact-small flex-grow truncate text-ui-fg-subtle">
-    {value}
-  </div>
+  <div className="txt-compact-small flex-grow truncate text-ui-fg-subtle">{value}</div>
 );
 
 type ChildrenCountProps = {
@@ -189,7 +200,11 @@ const ChildrenCount = ({ clone, childrenCount }: ChildrenCountProps) => {
   }
 
   return (
-    <Badge size="2xsmall" color="blue" className="absolute -right-2 -top-2">
+    <Badge
+      size="2xsmall"
+      color="blue"
+      className="absolute -right-2 -top-2"
+    >
       {childrenCount}
     </Badge>
   );

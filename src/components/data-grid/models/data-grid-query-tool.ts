@@ -1,5 +1,5 @@
-import type { DataGridCoordinates } from "@components/data-grid/types";
-import { generateCellId } from "@components/data-grid/utils";
+import type { DataGridCoordinates } from '@components/data-grid/types';
+import { generateCellId } from '@components/data-grid/utils';
 
 export class DataGridQueryTool {
   private container: HTMLElement | null;
@@ -31,21 +31,19 @@ export class DataGridQueryTool {
   }
 
   getCoordinatesByField(field: string): DataGridCoordinates | null {
-    const cell = this.container?.querySelector(
-      `[data-field="${field}"][data-cell-id]`,
-    );
+    const cell = this.container?.querySelector(`[data-field="${field}"][data-cell-id]`);
 
     if (!cell) {
       return null;
     }
 
-    const cellId = cell.getAttribute("data-cell-id");
+    const cellId = cell.getAttribute('data-cell-id');
 
     if (!cellId) {
       return null;
     }
 
-    const [row, col] = cellId.split(":").map((n) => parseInt(n, 10));
+    const [row, col] = cellId.split(':').map(n => parseInt(n, 10));
 
     if (isNaN(row) || isNaN(col)) {
       return null;
@@ -57,9 +55,7 @@ export class DataGridQueryTool {
   getContainer(cell: DataGridCoordinates) {
     const id = this._getCellId(cell);
 
-    const container = this.container?.querySelector(
-      `[data-container-id="${id}"]`,
-    );
+    const container = this.container?.querySelector(`[data-container-id="${id}"]`);
 
     if (!container) {
       return null;

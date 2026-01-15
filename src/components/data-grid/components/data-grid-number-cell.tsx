@@ -1,22 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { clx } from "@medusajs/ui";
+import { useDataGridCell, useDataGridCellError } from '@components/data-grid/hooks';
+import type { DataGridCellProps, InputProps } from '@components/data-grid/types';
+import { useCombinedRefs } from '@hooks/use-combined-refs.tsx';
+import { clx } from '@medusajs/ui';
+import { Controller, type ControllerRenderProps } from 'react-hook-form';
 
-import type { ControllerRenderProps } from "react-hook-form";
-import { Controller } from "react-hook-form";
-
-import {
-  useDataGridCell,
-  useDataGridCellError,
-} from "@components/data-grid/hooks";
-import type {
-  DataGridCellProps,
-  InputProps,
-} from "@components/data-grid/types";
-
-import { useCombinedRefs } from "@hooks/use-combined-refs.tsx";
-
-import { DataGridCellContainer } from "./data-grid-cell-container";
+import { DataGridCellContainer } from './data-grid-cell-container';
 
 //@todo fix type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -29,7 +19,7 @@ export const DataGridNumberCell = <TData, TValue = any>({
   placeholder?: string;
 }) => {
   const { field, control, renderProps } = useDataGridCell({
-    context,
+    context
   });
   const errorProps = useDataGridCellError({ context });
 
@@ -40,8 +30,15 @@ export const DataGridNumberCell = <TData, TValue = any>({
       control={control}
       name={field}
       render={({ field }) => (
-        <DataGridCellContainer {...container} {...errorProps}>
-          <Inner field={field} inputProps={input} {...rest} />
+        <DataGridCellContainer
+          {...container}
+          {...errorProps}
+        >
+          <Inner
+            field={field}
+            inputProps={input}
+            {...rest}
+          />
         </DataGridCellContainer>
       )}
     />
@@ -63,13 +60,7 @@ const Inner = ({
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { ref, value, onChange: _, onBlur, ...fieldProps } = field;
-  const {
-    ref: inputRef,
-    onChange,
-    onBlur: onInputBlur,
-    onFocus,
-    ...attributes
-  } = inputProps;
+  const { ref: inputRef, onChange, onBlur: onInputBlur, onFocus, ...attributes } = inputProps;
 
   const [localValue, setLocalValue] = useState(value);
 
@@ -84,7 +75,7 @@ const Inner = ({
       <input
         ref={combinedRefs}
         value={localValue}
-        onChange={(e) => setLocalValue(e.target.value)}
+        onChange={e => setLocalValue(e.target.value)}
         onBlur={() => {
           onBlur();
           onInputBlur();
@@ -96,8 +87,8 @@ const Inner = ({
         type="number"
         inputMode="decimal"
         className={clx(
-          "txt-compact-small size-full bg-transparent outline-none",
-          "placeholder:text-ui-fg-muted",
+          'txt-compact-small size-full bg-transparent outline-none',
+          'placeholder:text-ui-fg-muted'
         )}
         tabIndex={-1}
         {...props}

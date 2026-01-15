@@ -76,6 +76,7 @@ export const useUpsertPricePreference = (
           attribute: payload.attribute ?? undefined,
         }, query)
       }
+
       return sdk.admin.pricePreference.create(payload, query)
     },
     onSuccess: (data, variables, context) => {
