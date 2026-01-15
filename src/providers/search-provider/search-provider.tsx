@@ -1,11 +1,9 @@
-import type { PropsWithChildren } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type PropsWithChildren } from 'react';
 
-import { Search } from "@components/search";
+import { Search } from '@components/search';
+import { useSidebar } from '@providers/sidebar-provider';
 
-import { useSidebar } from "@providers/sidebar-provider";
-
-import { SearchContext } from "./search-context";
+import { SearchContext } from './search-context';
 
 export const SearchProvider = ({ children }: PropsWithChildren) => {
   const [open, setOpen] = useState(false);
@@ -19,7 +17,7 @@ export const SearchProvider = ({ children }: PropsWithChildren) => {
      * to close it when opening the search
      */
     if (update && mobile) {
-      toggle("mobile");
+      toggle('mobile');
     }
 
     setOpen(update);
@@ -27,15 +25,15 @@ export const SearchProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        setOpen((prev) => !prev);
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        setOpen(prev => !prev);
       }
     };
 
-    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener('keydown', onKeyDown);
 
     return () => {
-      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener('keydown', onKeyDown);
     };
   }, []);
 
@@ -44,7 +42,7 @@ export const SearchProvider = ({ children }: PropsWithChildren) => {
       value={{
         open,
         onOpenChange: setOpen,
-        toggleSearch,
+        toggleSearch
       }}
     >
       {children}

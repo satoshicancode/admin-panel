@@ -1,10 +1,5 @@
-import type {
-  DataTableColumnDef,
-  DataTableEmptyStateProps,
-  DataTableFilter,
-} from "@medusajs/ui";
-
-import type { ColumnAdapter } from "@hooks/table/columns/use-configurable-table-columns.tsx";
+import type { ColumnAdapter } from '@hooks/table/columns/use-configurable-table-columns.tsx';
+import type { DataTableColumnDef, DataTableEmptyStateProps, DataTableFilter } from '@medusajs/ui';
 
 /**
  * Adapter interface for configurable tables.
@@ -24,7 +19,7 @@ export interface TableAdapter<TData> {
     fields: string,
     // @todo fix any type
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    params: any,
+    params: any
   ) => {
     data: TData[] | undefined;
     count: number | undefined;
@@ -88,16 +83,14 @@ export interface TableAdapter<TData> {
 /**
  * Helper to create a type-safe table adapter
  */
-export function createTableAdapter<TData>(
-  adapter: TableAdapter<TData>,
-): TableAdapter<TData> {
+export function createTableAdapter<TData>(adapter: TableAdapter<TData>): TableAdapter<TData> {
   return {
     // Provide smart defaults
     // @todo fix any type
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getRowId: (row: any) => row.id,
     pageSize: 20,
-    queryPrefix: "",
-    ...adapter,
+    queryPrefix: '',
+    ...adapter
   };
 }

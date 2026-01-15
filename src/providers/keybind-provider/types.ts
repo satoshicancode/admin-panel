@@ -1,15 +1,12 @@
 export type KeybindContextState = object;
 
-export type Platform = "Mac" | "Windows" | "Linux";
+export type Platform = 'Mac' | 'Windows' | 'Linux';
 
 export type Keys = {
   [key in Platform]?: string[];
 };
 
-export type ShortcutType =
-  | "pageShortcut"
-  | "settingShortcut"
-  | "commandShortcut";
+export type ShortcutType = 'pageShortcut' | 'settingShortcut' | 'commandShortcut';
 
 export type Shortcut = {
   keys: Keys;

@@ -1,8 +1,4 @@
-import type {
-  AdminOrder,
-  AdminOrderLineItem,
-  HttpTypes,
-} from "@medusajs/types";
+import type { AdminOrder, AdminOrderLineItem, HttpTypes } from '@medusajs/types';
 
 export const getPaymentsFromOrder = (order: HttpTypes.AdminOrder) => {
   return order.payment_collections
@@ -20,8 +16,7 @@ export function getReservationsLimitCount(order: AdminOrder) {
   }
 
   return order.items.reduce(
-    (acc: number, item: AdminOrderLineItem) =>
-      acc + (item.variant?.inventory_items?.length || 1),
-    0,
+    (acc: number, item: AdminOrderLineItem) => acc + (item.variant?.inventory_items?.length || 1),
+    0
   );
 }

@@ -1,7 +1,7 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
-export type ThemeOption = "light" | "dark" | "system";
-export type ThemeValue = "light" | "dark";
+export type ThemeOption = 'light' | 'dark' | 'system';
+export type ThemeValue = 'light' | 'dark';
 
 type ThemeContextValue = {
   theme: ThemeOption;

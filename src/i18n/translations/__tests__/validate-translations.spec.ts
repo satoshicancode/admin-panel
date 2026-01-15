@@ -1,22 +1,23 @@
-import fs from "fs";
-import path from "path";
-import { describe, expect, test } from "vitest";
+import fs from 'fs';
+import path from 'path';
 
-import schema from "@/i18n/translations/$schema.json";
+import { describe, expect, test } from 'vitest';
 
-const translationsDir = path.join(__dirname, "..");
+import schema from '@/i18n/translations/$schema.json';
+
+const translationsDir = path.join(__dirname, '..');
 
 // @todo fix any type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getRequiredKeysFromSchema(schema: any, prefix = ""): string[] {
+function getRequiredKeysFromSchema(schema: any, prefix = ''): string[] {
   const keys: string[] = [];
 
-  if (schema.type === "object" && schema.properties) {
+  if (schema.type === 'object' && schema.properties) {
     // @todo fix any type
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Object.entries(schema.properties).forEach(([key, value]: [string, any]) => {
       const newPrefix = prefix ? `${prefix}.${key}` : key;
-      if (value.type === "object") {
+      if (value.type === 'object') {
         keys.push(...getRequiredKeysFromSchema(value, newPrefix));
       } else {
         keys.push(newPrefix);
@@ -28,12 +29,12 @@ function getRequiredKeysFromSchema(schema: any, prefix = ""): string[] {
 }
 // @todo fix any type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getTranslationKeys(obj: any, prefix = ""): string[] {
+function getTranslationKeys(obj: any, prefix = ''): string[] {
   const keys: string[] = [];
 
   Object.entries(obj).forEach(([key, value]) => {
     const newPrefix = prefix ? `${prefix}.${key}` : key;
-    if (value && typeof value === "object") {
+    if (value && typeof value === 'object') {
       keys.push(...getTranslationKeys(value, newPrefix));
     } else {
       keys.push(newPrefix);
@@ -43,27 +44,23 @@ function getTranslationKeys(obj: any, prefix = ""): string[] {
   return keys.sort();
 }
 
-describe("translation schema validation", () => {
-  test("en.json should have all keys defined in schema", () => {
-    const enPath = path.join(translationsDir, "en.json");
-    const enTranslations = JSON.parse(fs.readFileSync(enPath, "utf-8"));
+describe('translation schema validation', () => {
+  test('en.json should have all keys defined in schema', () => {
+    const enPath = path.join(translationsDir, 'en.json');
+    const enTranslations = JSON.parse(fs.readFileSync(enPath, 'utf-8'));
 
     const schemaKeys = getRequiredKeysFromSchema(schema);
     const translationKeys = getTranslationKeys(enTranslations);
 
-    const missingInTranslations = schemaKeys.filter(
-      (key) => !translationKeys.includes(key),
-    );
-    const extraInTranslations = translationKeys.filter(
-      (key) => !schemaKeys.includes(key),
-    );
+    const missingInTranslations = schemaKeys.filter(key => !translationKeys.includes(key));
+    const extraInTranslations = translationKeys.filter(key => !schemaKeys.includes(key));
 
     if (missingInTranslations.length > 0) {
-      console.error("\nMissing keys in en.json:", missingInTranslations);
+      console.error('\nMissing keys in en.json:', missingInTranslations);
     }
 
     if (extraInTranslations.length > 0) {
-      console.error("\nExtra keys in en.json:", extraInTranslations);
+      console.error('\nExtra keys in en.json:', extraInTranslations);
     }
 
     expect(missingInTranslations).toEqual([]);

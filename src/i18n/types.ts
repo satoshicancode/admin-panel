@@ -1,10 +1,10 @@
-import type { Locale } from "date-fns";
+import type { Locale } from 'date-fns';
 
-import enUS from "./translations/en.json";
+import enUS from './translations/en.json';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const resources = {
-  translation: enUS,
+  translation: enUS
 } as const;
 
 export type Resources = typeof resources;

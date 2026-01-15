@@ -1,11 +1,8 @@
-import { format } from "date-fns/format";
+import { format } from 'date-fns/format';
 
-export function formatDate(
-  date: string | Date | undefined,
-  date_format: string = "yyyy-MM-dd",
-) {
+export function formatDate(date: string | Date | undefined, date_format: string = 'yyyy-MM-dd') {
   if (!date) {
-    return "unknown";
+    return 'unknown';
   }
   const value = new Date(date);
   value.setMinutes(value.getMinutes() - value.getTimezoneOffset());

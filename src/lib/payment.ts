@@ -1,8 +1,6 @@
-import type { AdminPaymentCollection } from "@medusajs/types";
+import type { AdminPaymentCollection } from '@medusajs/types';
 
-export const getTotalCaptured = (
-  paymentCollections: AdminPaymentCollection[],
-) =>
+export const getTotalCaptured = (paymentCollections: AdminPaymentCollection[]) =>
   paymentCollections.reduce((acc, paymentCollection) => {
     acc =
       acc +
@@ -14,11 +12,9 @@ export const getTotalCaptured = (
 
 export const getTotalPending = (paymentCollections: AdminPaymentCollection[]) =>
   paymentCollections
-    .filter((pc) => pc.status !== "canceled")
+    .filter(pc => pc.status !== 'canceled')
     .reduce((acc, paymentCollection) => {
-      acc +=
-        (paymentCollection.amount as number) -
-        (paymentCollection.captured_amount as number);
+      acc += (paymentCollection.amount as number) - (paymentCollection.captured_amount as number);
 
       return acc;
     }, 0);

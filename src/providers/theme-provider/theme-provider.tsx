@@ -1,10 +1,8 @@
-import type { PropsWithChildren } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type PropsWithChildren } from 'react';
 
-import type { ThemeOption, ThemeValue } from "./theme-context";
-import { ThemeContext } from "./theme-context";
+import { ThemeContext, type ThemeOption, type ThemeValue } from './theme-context';
 
-const THEME_KEY = "medusa_admin_theme";
+const THEME_KEY = 'medusa_admin_theme';
 
 function getDefaultValue(): ThemeOption {
   const persisted = localStorage?.getItem(THEME_KEY) as ThemeOption;
@@ -13,19 +11,17 @@ function getDefaultValue(): ThemeOption {
     return persisted;
   }
 
-  return "system";
+  return 'system';
 }
 
 function getThemeValue(selected: ThemeOption): ThemeValue {
-  if (selected === "system") {
+  if (selected === 'system') {
     if (window !== undefined) {
-      return window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
 
     // Default to light theme if we can't detect the system preference
-    return "light";
+    return 'light';
   }
 
   return selected;
@@ -45,13 +41,13 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
   };
 
   useEffect(() => {
-    const html = document.querySelector("html");
+    const html = document.querySelector('html');
     if (html) {
       /**
        * Temporarily disable transitions to prevent
        * the theme change from flashing.
        */
-      const css = document.createElement("style");
+      const css = document.createElement('style');
       css.appendChild(
         document.createTextNode(
           `* {
@@ -60,12 +56,12 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
             -o-transition: none !important;
             -ms-transition: none !important;
             transition: none !important;
-          }`,
-        ),
+          }`
+        )
       );
       document.head.appendChild(css);
 
-      html.classList.remove(value === "light" ? "dark" : "light");
+      html.classList.remove(value === 'light' ? 'dark' : 'light');
       html.classList.add(value);
       // Ensures that native elements respect the theme, e.g. the scrollbar.
       html.style.colorScheme = value;
@@ -81,8 +77,6 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
   }, [value]);
 
   return (
-    <ThemeContext.Provider value={{ theme: state, setTheme }}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={{ theme: state, setTheme }}>{children}</ThemeContext.Provider>
   );
 };

@@ -1,32 +1,27 @@
-import type { PropsWithChildren } from "react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, type PropsWithChildren } from 'react';
 
-import { useShortcuts } from "./hooks";
-import { KeybindContext } from "./keybind-context";
-import type { KeybindContextState, Shortcut } from "./types";
+import { useShortcuts } from './hooks';
+import { KeybindContext } from './keybind-context';
+import type { KeybindContextState, Shortcut } from './types';
 import {
   findFirstPlatformMatch,
   findShortcutIndex,
   getShortcutKeys,
-  getShortcutWithDefaultValues,
-} from "./utils";
+  getShortcutWithDefaultValues
+} from './utils';
 
 type KeybindProviderProps = PropsWithChildren<{
   shortcuts: Shortcut[];
   debounce?: number;
 }>;
 
-export const KeybindProvider = ({
-  shortcuts,
-  debounce = 500,
-  children,
-}: KeybindProviderProps) => {
+export const KeybindProvider = ({ shortcuts, debounce = 500, children }: KeybindProviderProps) => {
   const [storeShortcuts, setStoreCommands] = useState(
-    shortcuts.map((shr) => getShortcutWithDefaultValues(shr)),
+    shortcuts.map(shr => getShortcutWithDefaultValues(shr))
   );
   const registerShortcut = useCallback(
     (shortcut: Shortcut) => {
-      setStoreCommands((prevShortcuts) => {
+      setStoreCommands(prevShortcuts => {
         const idx = findShortcutIndex(shortcuts, getShortcutKeys(shortcut));
 
         const newShortcuts = [...prevShortcuts];
@@ -40,7 +35,7 @@ export const KeybindProvider = ({
         return [...prevShortcuts, getShortcutWithDefaultValues(shortcut)];
       });
     },
-    [shortcuts],
+    [shortcuts]
   );
 
   const getKeysByPlatform = useCallback((command: Shortcut) => {
@@ -53,14 +48,10 @@ export const KeybindProvider = ({
     () => ({
       shortcuts: storeShortcuts,
       registerShortcut,
-      getKeysByPlatform,
+      getKeysByPlatform
     }),
-    [storeShortcuts, registerShortcut, getKeysByPlatform],
+    [storeShortcuts, registerShortcut, getKeysByPlatform]
   );
 
-  return (
-    <KeybindContext.Provider value={commandsContext}>
-      {children}
-    </KeybindContext.Provider>
-  );
+  return <KeybindContext.Provider value={commandsContext}>{children}</KeybindContext.Provider>;
 };

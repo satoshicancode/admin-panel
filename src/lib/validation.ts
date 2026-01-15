@@ -1,8 +1,8 @@
-import i18next from "i18next";
-import type { FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
-import { z } from "zod";
+import i18next from 'i18next';
+import type { FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
+import { z } from 'zod';
 
-import { castNumber } from "./cast-number";
+import { castNumber } from './cast-number';
 
 /**
  * Validates that an optional value is an integer.
@@ -11,28 +11,28 @@ export const optionalInt = z
   .union([z.string(), z.number()])
   .optional()
   .refine(
-    (value) => {
-      if (value === "" || value === undefined) {
+    value => {
+      if (value === '' || value === undefined) {
         return true;
       }
 
       return Number.isInteger(castNumber(value));
     },
     {
-      message: i18next.t("validation.mustBeInt"),
-    },
+      message: i18next.t('validation.mustBeInt')
+    }
   )
   .refine(
-    (value) => {
-      if (value === "" || value === undefined) {
+    value => {
+      if (value === '' || value === undefined) {
         return true;
       }
 
       return castNumber(value) >= 0;
     },
     {
-      message: i18next.t("validation.mustBePositive"),
-    },
+      message: i18next.t('validation.mustBePositive')
+    }
   );
 
 /**
@@ -42,16 +42,16 @@ export const optionalFloat = z
   .union([z.string(), z.number()])
   .optional()
   .refine(
-    (value) => {
-      if (value === "" || value === undefined) {
+    value => {
+      if (value === '' || value === undefined) {
         return true;
       }
 
       return castNumber(value) >= 0;
     },
     {
-      message: i18next.t("validation.mustBePositive"),
-    },
+      message: i18next.t('validation.mustBePositive')
+    }
   );
 
 /**
@@ -63,8 +63,8 @@ export const metadataFormSchema = z.array(
     value: z.unknown(),
     isInitial: z.boolean().optional(),
     isDeleted: z.boolean().optional(),
-    isIgnored: z.boolean().optional(),
-  }),
+    isIgnored: z.boolean().optional()
+  })
 );
 
 /**
@@ -80,7 +80,7 @@ export function partialFormValidation<TForm extends FieldValues>(
   fields: FieldPath<any>[],
   // @todo fix any type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  schema: z.ZodSchema<any>,
+  schema: z.ZodSchema<any>
 ) {
   // @todo fix any type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -94,7 +94,7 @@ export function partialFormValidation<TForm extends FieldValues>(
 
       return acc;
     },
-    {} as Record<string, unknown>,
+    {} as Record<string, unknown>
   );
 
   const validationResult = schema.safeParse(values);
@@ -103,9 +103,9 @@ export function partialFormValidation<TForm extends FieldValues>(
     validationResult.error.errors.forEach(({ path, message, code }) => {
       // @todo fix any type
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      form.setError(path.join(".") as any, {
+      form.setError(path.join('.') as any, {
         type: code,
-        message,
+        message
       });
     });
 

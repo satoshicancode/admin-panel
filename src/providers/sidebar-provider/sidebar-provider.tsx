@@ -1,9 +1,8 @@
-import type { PropsWithChildren } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type PropsWithChildren } from 'react';
 
-import { useLocation } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 
-import { SidebarContext } from "./sidebar-context";
+import { SidebarContext } from './sidebar-context';
 
 export const SidebarProvider = ({ children }: PropsWithChildren) => {
   const [desktop, setDesktop] = useState(true);
@@ -11,8 +10,8 @@ export const SidebarProvider = ({ children }: PropsWithChildren) => {
 
   const { pathname } = useLocation();
 
-  const toggle = (view: "desktop" | "mobile") => {
-    if (view === "desktop") {
+  const toggle = (view: 'desktop' | 'mobile') => {
+    if (view === 'desktop') {
       setDesktop(!desktop);
     } else {
       setMobile(!mobile);

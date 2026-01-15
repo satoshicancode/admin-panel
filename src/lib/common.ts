@@ -10,7 +10,7 @@ export function pick(obj: Record<string, any>, keys: string[]) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ret: Record<string, any> = {};
 
-  keys.forEach((k) => {
+  keys.forEach(k => {
     if (k in obj) {
       ret[k] = obj[k];
     }
@@ -31,7 +31,7 @@ export function cleanNonValues(obj: Record<string, any>) {
   const ret: Record<string, any> = {};
 
   for (const key in obj) {
-    if (obj[key] !== null && typeof obj[key] !== "undefined") {
+    if (obj[key] !== null && typeof obj[key] !== 'undefined') {
       ret[key] = obj[key];
     }
   }
