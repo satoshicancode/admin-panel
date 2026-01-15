@@ -8,13 +8,6 @@ export const canItemBeFulfilledByAdmin = (
   item: AdminOrderLineItem,
   adminLocationIds: Set<string>
 ): boolean => {
-  if (!item.variant?.manage_inventory) {
-    const product = item.variant?.product;
-    const hasSeller = product?.seller !== null && product?.seller !== undefined;
-
-    return !hasSeller;
-  }
-
   const inventory = item.variant?.inventory?.[0];
   if (!inventory?.location_levels?.length) {
     return false;

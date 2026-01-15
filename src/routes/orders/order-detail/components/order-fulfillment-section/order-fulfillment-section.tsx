@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 
 import { Buildings, InformationCircle, XCircle } from '@medusajs/icons';
 import {
@@ -47,12 +47,6 @@ export const OrderFulfillmentSection = ({
 }: OrderFulfillmentSectionProps) => {
   const fulfillments = order.fulfillments || [];
 
-  const adminLocationIds = useMemo(() => {
-    return new Set(stockLocations.map(location => location.id));
-  }, [stockLocations]);
-
-  const canAdminFulfill = filterItemsFulfillableByAdmin(order.items, adminLocationIds).length > 0;
-
   return (
     <div
       className="flex flex-col gap-y-3"
@@ -60,7 +54,7 @@ export const OrderFulfillmentSection = ({
     >
       <UnfulfilledItemBreakdown
         order={order}
-        canAdminFulfill={canAdminFulfill}
+        stockLocations={stockLocations}
       />
       {fulfillments.map((f, index) => (
         <Fulfillment
@@ -129,10 +123,10 @@ const UnfulfilledItem = ({
 
 const UnfulfilledItemBreakdown = ({
   order,
-  canAdminFulfill
+  stockLocations
 }: {
   order: AdminOrder;
-  canAdminFulfill: boolean;
+  stockLocations: HttpTypes.AdminStockLocation[];
 }) => {
   // Create an array of order items that haven't been fulfilled or at least not fully fulfilled
   const unfulfilledItemsWithShipping = order.items!.filter(
@@ -150,7 +144,7 @@ const UnfulfilledItemBreakdown = ({
           order={order}
           unfulfilledItems={unfulfilledItemsWithShipping}
           requiresShipping={true}
-          canAdminFulfill={canAdminFulfill}
+          stockLocations={stockLocations}
         />
       )}
 
@@ -159,7 +153,7 @@ const UnfulfilledItemBreakdown = ({
           order={order}
           unfulfilledItems={unfulfilledItemsWithoutShipping}
           requiresShipping={false}
-          canAdminFulfill={canAdminFulfill}
+          stockLocations={stockLocations}
         />
       )}
     </>
@@ -170,12 +164,12 @@ const UnfulfilledItemDisplay = ({
   order,
   unfulfilledItems,
   requiresShipping = false,
-  canAdminFulfill
+  stockLocations
 }: {
   order: AdminOrder;
   unfulfilledItems: AdminOrderLineItem[];
   requiresShipping: boolean;
-  canAdminFulfill: boolean;
+  stockLocations: HttpTypes.AdminStockLocation[];
 }) => {
   const { t } = useTranslation();
 
@@ -183,9 +177,16 @@ const UnfulfilledItemDisplay = ({
     return;
   }
 
+  const adminLocationIds = useMemo(() => {
+    return new Set(stockLocations.map(location => location.id));
+  }, [stockLocations]);
+
+  const itemsThatCanBeFulfilled = filterItemsFulfillableByAdmin(order.items, adminLocationIds);
+  const canAdminFulfill = itemsThatCanBeFulfilled.length > 0;
+
   return (
     <Container
-      className="divide-y p-0"
+      className="divide-y overflow-hidden p-0"
       data-testid="order-fulfillment-unfulfilled"
     >
       <div
@@ -238,20 +239,25 @@ const UnfulfilledItemDisplay = ({
           />
         </div>
       </div>
-      {!canAdminFulfill && (
-        <div className="flex items-center gap-x-3 bg-ui-bg-subtle px-6 py-4 text-ui-fg-subtle">
-          <InformationCircle className="text-ui-fg-subtle" />
-          <Text size="small">{t('orders.fulfillment.noAdminLocationsMessage')}</Text>
-        </div>
-      )}
       <div data-testid="order-fulfillment-unfulfilled-items">
-        {unfulfilledItems.map((item: AdminOrderLineItem) => (
-          <UnfulfilledItem
-            key={item.id}
-            item={item}
-            currencyCode={order.currency_code}
-          />
-        ))}
+        {unfulfilledItems.map((item: AdminOrderLineItem) => {
+          const cantBeFulfilledByAdmin =
+            itemsThatCanBeFulfilled.findIndex(i => i.id === item.id) === -1;
+          return (
+            <Fragment key={item.id}>
+              <UnfulfilledItem
+                item={item}
+                currencyCode={order.currency_code}
+              />
+              {cantBeFulfilledByAdmin && (
+                <div className="flex items-center gap-x-3 border-t border-dashed bg-ui-bg-subtle px-6 py-4 text-ui-fg-subtle">
+                  <InformationCircle className="text-ui-fg-subtle" />
+                  <Text size="small">{t('orders.fulfillment.cantBeFulfilledByAdmin')}</Text>
+                </div>
+              )}
+            </Fragment>
+          );
+        })}
       </div>
     </Container>
   );

@@ -5110,7 +5110,7 @@
             "methodDescription": {
               "type": "string"
             },
-            "noAdminLocationsMessage": {
+            "cantBeFulfilledByAdmin": {
               "type": "string"
             },
             "error": {
@@ -5258,7 +5258,7 @@
             "locationDescription",
             "sendNotificationHint",
             "methodDescription",
-            "noAdminLocationsMessage",
+            "cantBeFulfilledByAdmin",
             "error",
             "status",
             "toast",
