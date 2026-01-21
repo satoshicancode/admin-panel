@@ -1,17 +1,13 @@
-import { useParams } from "react-router-dom";
-
-import { RouteFocusModal } from "@components/modals";
-
-import { useStockLocation } from "@hooks/api";
-
-import { LocationEditFulfillmentProvidersForm } from "@routes/locations/location-fulfillment-providers/components/edit-fulfillment-providers-form";
+import { RouteFocusModal } from '@components/modals';
+import { useStockLocation } from '@hooks/api';
+import { LocationEditFulfillmentProvidersForm } from '@routes/locations/location-fulfillment-providers/components/edit-fulfillment-providers-form';
+import { useParams } from 'react-router-dom';
 
 export const LocationFulfillmentProviders = () => {
   const { location_id } = useParams();
-  const { stock_location, isPending, isError, error } = useStockLocation(
-    location_id!,
-    { fields: "id,*fulfillment_providers" },
-  );
+  const { stock_location, isPending, isError, error } = useStockLocation(location_id!, {
+    fields: 'id,*fulfillment_providers'
+  });
 
   const ready = !isPending && !!stock_location;
 
@@ -21,9 +17,7 @@ export const LocationFulfillmentProviders = () => {
 
   return (
     <RouteFocusModal data-testid="location-fulfillment-providers-modal">
-      {ready && (
-        <LocationEditFulfillmentProvidersForm location={stock_location} />
-      )}
+      {ready && <LocationEditFulfillmentProvidersForm location={stock_location} />}
     </RouteFocusModal>
   );
 };

@@ -1,77 +1,75 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
-import type { HttpTypes } from "@medusajs/types";
+import { createDataGridHelper } from '@components/data-grid';
+import { DataGridReadOnlyCell } from '@components/data-grid/components';
+import { DataGridTogglableNumberCell } from '@components/data-grid/components/data-grid-toggleable-number-cell.tsx';
+import type { HttpTypes } from '@medusajs/types';
+import type { InventoryStockSchema } from '@routes/inventory/inventory-stock/schema';
+import { useTranslation } from 'react-i18next';
 
-import { useTranslation } from "react-i18next";
+const helper = createDataGridHelper<HttpTypes.AdminInventoryItem, InventoryStockSchema>();
 
-import { createDataGridHelper } from "@components/data-grid";
-import { DataGridReadOnlyCell } from "@components/data-grid/components";
-import { DataGridTogglableNumberCell } from "@components/data-grid/components/data-grid-toggleable-number-cell.tsx";
-
-import type { InventoryStockSchema } from "@routes/inventory/inventory-stock/schema";
-
-const helper = createDataGridHelper<
-  HttpTypes.AdminInventoryItem,
-  InventoryStockSchema
->();
-
-export const useInventoryStockColumns = (
-  locations: HttpTypes.AdminStockLocation[] = [],
-) => {
+export const useInventoryStockColumns = (locations: HttpTypes.AdminStockLocation[] = []) => {
   const { t } = useTranslation();
 
   return useMemo(
     () => [
       helper.column({
-        id: "title",
-        name: "Title",
-        header: "Title",
-        cell: (context) => {
+        id: 'title',
+        name: 'Title',
+        header: 'Title',
+        cell: context => {
           const item = context.row.original;
 
           return (
-            <DataGridReadOnlyCell context={context} color="normal">
-              <span title={item.title || undefined}>{item.title || "-"}</span>
+            <DataGridReadOnlyCell
+              context={context}
+              color="normal"
+            >
+              <span title={item.title || undefined}>{item.title || '-'}</span>
             </DataGridReadOnlyCell>
           );
         },
-        disableHiding: true,
+        disableHiding: true
       }),
       helper.column({
-        id: "sku",
-        name: "SKU",
-        header: "SKU",
-        cell: (context) => {
+        id: 'sku',
+        name: 'SKU',
+        header: 'SKU',
+        cell: context => {
           const item = context.row.original;
 
           return (
-            <DataGridReadOnlyCell context={context} color="normal">
-              <span title={item.sku || undefined}>{item.sku || "-"}</span>
+            <DataGridReadOnlyCell
+              context={context}
+              color="normal"
+            >
+              <span title={item.sku || undefined}>{item.sku || '-'}</span>
             </DataGridReadOnlyCell>
           );
         },
-        disableHiding: true,
+        disableHiding: true
       }),
-      ...locations.map((location) =>
+      ...locations.map(location =>
         helper.column({
           id: `location_${location.id}`,
           name: location.name,
           header: location.name,
-          field: (context) => {
+          field: context => {
             const item = context.row.original;
 
             return `inventory_items.${item.id}.locations.${location.id}` as const;
           },
-          type: "togglable-number",
-          cell: (context) => (
+          type: 'togglable-number',
+          cell: context => (
             <DataGridTogglableNumberCell
               context={context}
-              disabledToggleTooltip={t("inventory.stock.disabledToggleTooltip")}
+              disabledToggleTooltip={t('inventory.stock.disabledToggleTooltip')}
             />
-          ),
-        }),
-      ),
+          )
+        })
+      )
     ],
-    [locations, t],
+    [locations, t]
   );
 };

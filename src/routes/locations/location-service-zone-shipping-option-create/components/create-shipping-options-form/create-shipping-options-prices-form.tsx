@@ -1,42 +1,30 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
 
-import type { UseFormReturn } from "react-hook-form";
-import { useWatch } from "react-hook-form";
-
-import { DataGrid } from "@components/data-grid";
-import {
-  StackedFocusModal,
-  useRouteModal,
-  useStackedModal,
-} from "@components/modals";
-
-import { useRegions, useStore } from "@hooks/api";
-import { usePricePreferences } from "@hooks/api/price-preferences";
-
-import { ConditionalPriceForm } from "@routes/locations/common/components/conditional-price-form";
-import { ShippingOptionPriceProvider } from "@routes/locations/common/components/shipping-option-price-provider";
+import { DataGrid } from '@components/data-grid';
+import { StackedFocusModal, useRouteModal, useStackedModal } from '@components/modals';
+import { useRegions, useStore } from '@hooks/api';
+import { usePricePreferences } from '@hooks/api/price-preferences';
+import { ConditionalPriceForm } from '@routes/locations/common/components/conditional-price-form';
+import { ShippingOptionPriceProvider } from '@routes/locations/common/components/shipping-option-price-provider';
 import {
   CONDITIONAL_PRICES_STACKED_MODAL_ID,
-  FulfillmentSetType,
-} from "@routes/locations/common/constants";
-import { useShippingOptionPriceColumns } from "@routes/locations/common/hooks/use-shipping-option-price-columns";
-import type { ConditionalPriceInfo } from "@routes/locations/common/types";
+  FulfillmentSetType
+} from '@routes/locations/common/constants';
+import { useShippingOptionPriceColumns } from '@routes/locations/common/hooks/use-shipping-option-price-columns';
+import type { ConditionalPriceInfo } from '@routes/locations/common/types';
+import { useWatch, type UseFormReturn } from 'react-hook-form';
 
-import type { CreateShippingOptionSchema } from "./schema";
+import type { CreateShippingOptionSchema } from './schema';
 
 type PricingPricesFormProps = {
   form: UseFormReturn<CreateShippingOptionSchema>;
   type: FulfillmentSetType;
 };
 
-export const CreateShippingOptionsPricesForm = ({
-  form,
-  type,
-}: PricingPricesFormProps) => {
+export const CreateShippingOptionsPricesForm = ({ form, type }: PricingPricesFormProps) => {
   const isPickup = type === FulfillmentSetType.Pickup;
   const { getIsOpen, setIsOpen } = useStackedModal();
-  const [selectedPrice, setSelectedPrice] =
-    useState<ConditionalPriceInfo | null>(null);
+  const [selectedPrice, setSelectedPrice] = useState<ConditionalPriceInfo | null>(null);
 
   const onOpenConditionalPricesModal = (info: ConditionalPriceInfo) => {
     setIsOpen(CONDITIONAL_PRICES_STACKED_MODAL_ID, true);
@@ -48,47 +36,39 @@ export const CreateShippingOptionsPricesForm = ({
     setSelectedPrice(null);
   };
 
-  const {
-    store,
-    isLoading: isStoreLoading,
-    isError: isStoreError,
-    error: storeError,
-  } = useStore();
+  const { store, isLoading: isStoreLoading, isError: isStoreError, error: storeError } = useStore();
 
   const currencies = useMemo(
-    () => store?.supported_currencies?.map((c) => c.currency_code) || [],
-    [store],
+    () => store?.supported_currencies?.map(c => c.currency_code) || [],
+    [store]
   );
 
   const {
     regions,
     isLoading: isRegionsLoading,
     isError: isRegionsError,
-    error: regionsError,
+    error: regionsError
   } = useRegions({
-    fields: "id,name,currency_code",
-    limit: 999,
+    fields: 'id,name,currency_code',
+    limit: 999
   });
 
   const { price_preferences: pricePreferences } = usePricePreferences({});
 
   const { setCloseOnEscape } = useRouteModal();
 
-  const name = useWatch({ control: form.control, name: "name" });
+  const name = useWatch({ control: form.control, name: 'name' });
 
   const columns = useShippingOptionPriceColumns({
     name,
     currencies,
     regions,
-    pricePreferences,
+    pricePreferences
   });
 
   const isLoading = isStoreLoading || !store || isRegionsLoading || !regions;
 
-  const data = useMemo(
-    () => [[...(currencies || []), ...(regions || [])]],
-    [currencies, regions],
-  );
+  const data = useMemo(() => [[...(currencies || []), ...(regions || [])]], [currencies, regions]);
 
   /**
    * Prefill prices with 0 if createing a pickup (shipping) option
@@ -96,14 +76,14 @@ export const CreateShippingOptionsPricesForm = ({
   useEffect(() => {
     if (!isLoading && isPickup) {
       if (currencies.length > 0) {
-        currencies.forEach((currency) => {
-          form.setValue(`currency_prices.${currency}`, "0");
+        currencies.forEach(currency => {
+          form.setValue(`currency_prices.${currency}`, '0');
         });
       }
 
       if (regions.length > 0) {
-        regions.forEach((region) => {
-          form.setValue(`region_prices.${region.id}`, "0");
+        regions.forEach(region => {
+          form.setValue(`region_prices.${region.id}`, '0');
         });
       }
     }
@@ -120,7 +100,7 @@ export const CreateShippingOptionsPricesForm = ({
   return (
     <StackedFocusModal
       id={CONDITIONAL_PRICES_STACKED_MODAL_ID}
-      onOpenChangeCallback={(open) => {
+      onOpenChangeCallback={open => {
         if (!open) {
           setSelectedPrice(null);
         }
@@ -131,18 +111,24 @@ export const CreateShippingOptionsPricesForm = ({
         onOpenConditionalPricesModal={onOpenConditionalPricesModal}
         onCloseConditionalPricesModal={onCloseConditionalPricesModal}
       >
-        <div className="flex size-full flex-col divide-y overflow-hidden" data-testid="location-shipping-option-create-prices-form-container">
+        <div
+          className="flex size-full flex-col divide-y overflow-hidden"
+          data-testid="location-shipping-option-create-prices-form-container"
+        >
           <DataGrid
             isLoading={isLoading}
             data={data}
             columns={columns}
             state={form}
-            onEditingChange={(editing) => setCloseOnEscape(!editing)}
+            onEditingChange={editing => setCloseOnEscape(!editing)}
             disableInteractions={getIsOpen(CONDITIONAL_PRICES_STACKED_MODAL_ID)}
             data-testid="location-shipping-option-create-prices-form-data-grid"
           />
           {selectedPrice && (
-            <ConditionalPriceForm info={selectedPrice} variant="create" />
+            <ConditionalPriceForm
+              info={selectedPrice}
+              variant="create"
+            />
           )}
         </div>
       </ShippingOptionPriceProvider>

@@ -1,13 +1,11 @@
-import { RouteFocusModal } from "@components/modals";
-
-import { useStockLocations } from "@hooks/api";
-
-import { InventoryCreateForm } from "@routes/inventory/inventory-create/components/inventory-create-form";
+import { RouteFocusModal } from '@components/modals';
+import { useStockLocations } from '@hooks/api';
+import { InventoryCreateForm } from '@routes/inventory/inventory-create/components/inventory-create-form';
 
 export function InventoryCreate() {
   const { isPending, stock_locations, isError, error } = useStockLocations({
     limit: 9999,
-    fields: "id,name",
+    fields: 'id,name'
   });
   const ready = !isPending && !!stock_locations;
 

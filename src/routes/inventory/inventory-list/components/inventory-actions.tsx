@@ -1,12 +1,9 @@
-import { PencilSquare, Trash } from "@medusajs/icons";
-import type { InventoryItemDTO } from "@medusajs/types";
-import { usePrompt } from "@medusajs/ui";
-
-import { useTranslation } from "react-i18next";
-
-import { ActionMenu } from "@components/common/action-menu";
-
-import { useDeleteInventoryItem } from "@hooks/api";
+import { ActionMenu } from '@components/common/action-menu';
+import { useDeleteInventoryItem } from '@hooks/api';
+import { PencilSquare, Trash } from '@medusajs/icons';
+import type { InventoryItemDTO } from '@medusajs/types';
+import { usePrompt } from '@medusajs/ui';
+import { useTranslation } from 'react-i18next';
 
 export const InventoryActions = ({ item }: { item: InventoryItemDTO }) => {
   const { t } = useTranslation();
@@ -15,10 +12,10 @@ export const InventoryActions = ({ item }: { item: InventoryItemDTO }) => {
 
   const handleDelete = async () => {
     const res = await prompt({
-      title: t("general.areYouSure"),
-      description: t("inventory.deleteWarning"),
-      confirmText: t("actions.delete"),
-      cancelText: t("actions.cancel"),
+      title: t('general.areYouSure'),
+      description: t('inventory.deleteWarning'),
+      confirmText: t('actions.delete'),
+      cancelText: t('actions.cancel')
     });
 
     if (!res) {
@@ -35,20 +32,20 @@ export const InventoryActions = ({ item }: { item: InventoryItemDTO }) => {
           actions: [
             {
               icon: <PencilSquare />,
-              label: t("actions.edit"),
-              to: `${item.id}/edit`,
-            },
-          ],
+              label: t('actions.edit'),
+              to: `${item.id}/edit`
+            }
+          ]
         },
         {
           actions: [
             {
               icon: <Trash />,
-              label: t("actions.delete"),
-              onClick: handleDelete,
-            },
-          ],
-        },
+              label: t('actions.delete'),
+              onClick: handleDelete
+            }
+          ]
+        }
       ]}
       data-testid={`inventory-item-actions-${item.id}`}
     />

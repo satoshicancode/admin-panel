@@ -1,60 +1,45 @@
-import { Heading } from "@medusajs/ui";
-
-import { useTranslation } from "react-i18next";
-import { json, useParams } from "react-router-dom";
-
-import { RouteDrawer } from "@components/modals";
-
-import { useShippingOptions } from "@hooks/api";
-
-import { FulfillmentSetType } from "@routes/locations/common/constants";
-import { EditShippingOptionForm } from "@routes/locations/location-service-zone-shipping-option-edit/components/edit-region-form";
+import { RouteDrawer } from '@components/modals';
+import { useShippingOptions } from '@hooks/api';
+import { Heading } from '@medusajs/ui';
+import { FulfillmentSetType } from '@routes/locations/common/constants';
+import { EditShippingOptionForm } from '@routes/locations/location-service-zone-shipping-option-edit/components/edit-region-form';
+import { useTranslation } from 'react-i18next';
+import { json, useParams } from 'react-router-dom';
 
 export const LocationServiceZoneShippingOptionEdit = () => {
   const { t } = useTranslation();
 
   const { location_id, so_id } = useParams();
 
-  const { shipping_options, isPending, isFetching, isError, error } =
-    useShippingOptions({
-      id: so_id,
-      fields: "+service_zone.fulfillment_set.type",
-    });
+  const { shipping_options, isPending, isFetching, isError, error } = useShippingOptions({
+    id: so_id,
+    fields: '+service_zone.fulfillment_set.type'
+  });
 
-  const shippingOption = shipping_options?.find((so) => so.id === so_id);
+  const shippingOption = shipping_options?.find(so => so.id === so_id);
 
   if (!isPending && !isFetching && !shippingOption) {
-    throw json(
-      { message: `Shipping option with ID ${so_id} was not found` },
-      404,
-    );
+    throw json({ message: `Shipping option with ID ${so_id} was not found` }, 404);
   }
 
   if (isError) {
     throw error;
   }
 
-  const isPickup =
-    shippingOption?.service_zone.fulfillment_set.type ===
-    FulfillmentSetType.Pickup;
+  const isPickup = shippingOption?.service_zone.fulfillment_set.type === FulfillmentSetType.Pickup;
 
   return (
     <RouteDrawer data-testid="location-shipping-option-edit-drawer">
       <RouteDrawer.Header data-testid="location-shipping-option-edit-drawer-header">
         <Heading data-testid="location-shipping-option-edit-drawer-heading">
-          {t(
-            `stockLocations.${isPickup ? "pickupOptions" : "shippingOptions"}.edit.header`,
-          )}
+          {t(`stockLocations.${isPickup ? 'pickupOptions' : 'shippingOptions'}.edit.header`)}
         </Heading>
       </RouteDrawer.Header>
       {shippingOption && (
         <EditShippingOptionForm
           shippingOption={shippingOption}
           locationId={location_id!}
-          type={
-            shippingOption.service_zone.fulfillment_set
-              .type as FulfillmentSetType
-          }
+          type={shippingOption.service_zone.fulfillment_set.type as FulfillmentSetType}
         />
       )}
     </RouteDrawer>
