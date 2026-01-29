@@ -1,19 +1,16 @@
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { AdminProductCategory } from '@medusajs/types';
+import { AdminProductCategory } from '@medusajs/types';
 import { InlineTip, Input, Label, Select, Switch, Text, Textarea, toast } from '@medusajs/ui';
-import MultiSelectCategory from '@routes/attributes/attribute-create/components/multi-select-category.tsx';
-import PossibleValuesList from '@routes/attributes/attribute-create/components/possible-values-list.tsx';
-import {
-  AdminUpdateAttribute,
-  CreateAttributeFormSchema
-} from '@routes/attributes/attribute-edit/schema.ts';
-import { findDuplicatePossibleValues } from '@routes/attributes/attribute-edit/utils.ts';
-import { FormProvider, useForm } from 'react-hook-form';
-import type { z } from 'zod';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { z } from 'zod';
 
-import type { AttributeDTO } from '@/types';
+import { AttributeDTO } from '../../../../types';
+import MultiSelectCategory from '../../attribute-create/components/MultiSelectCategory';
+import PossibleValuesList from '../../attribute-create/components/PossibleValuesList';
+import { AdminUpdateAttribute, CreateAttributeFormSchema } from '../schema';
+import { findDuplicatePossibleValues } from '../utils';
 
 enum AttributeUIComponent {
   SELECT = 'select',
@@ -25,9 +22,9 @@ enum AttributeUIComponent {
 
 type CreateFormValues = z.infer<typeof CreateAttributeFormSchema>;
 
-export const UpdateAttributeFormSchema = AdminUpdateAttribute;
+export const UdpateAttributeFormSchema = AdminUpdateAttribute;
 
-type UpdateFormValues = z.infer<typeof UpdateAttributeFormSchema>;
+type UpdateFormValues = z.infer<typeof UdpateAttributeFormSchema>;
 interface AttributeFormProps {
   initialData?: AttributeDTO;
   onSubmit: (data: CreateFormValues | UpdateFormValues) => Promise<void>;
@@ -62,7 +59,7 @@ export const AttributeForm = forwardRef<AttributeFormRef, AttributeFormProps>(
 
     const form = useForm<CreateFormValues | UpdateFormValues>({
       resolver: zodResolver(
-        mode === 'create' ? CreateAttributeFormSchema : UpdateAttributeFormSchema
+        mode === 'create' ? CreateAttributeFormSchema : UdpateAttributeFormSchema
       ),
       defaultValues: {
         name: initialData?.name || '',
@@ -104,38 +101,55 @@ export const AttributeForm = forwardRef<AttributeFormRef, AttributeFormProps>(
 
     useImperativeHandle(ref, () => ({
       validateFields: async (fields: string[]) => {
-        return await form.trigger(fields as (keyof (CreateFormValues | UpdateFormValues))[]);
+        const result = await form.trigger(
+          fields as (keyof (CreateFormValues | UpdateFormValues))[]
+        );
+
+        return result;
       }
     }));
 
-    // Determine tab statuses based on form data
-    const getTabStatus = () => {
-      const formData = form.getValues();
+    const [name, description, handle, productCategoryIds, uiComponent, possibleValues] = useWatch({
+      control: form.control,
+      name: [
+        'name',
+        'description',
+        'handle',
+        'product_category_ids',
+        'ui_component',
+        'possible_values'
+      ]
+    });
+
+    const formStateKey = useMemo(() => {
+      return JSON.stringify({
+        name,
+        description,
+        handle,
+        categoryCount: productCategoryIds?.length || 0,
+        uiComponent,
+        valuesCount: possibleValues?.length || 0
+      });
+    }, [name, description, handle, productCategoryIds, uiComponent, possibleValues]);
+
+    useEffect(() => {
+      if (!onFormStateChange) return;
 
       // Details tab status
-      const hasName = formData.name?.trim();
+      const hasName = name?.trim();
       const hasDetailsData =
-        formData.description?.trim() ||
-        formData.handle?.trim() ||
-        formData.product_category_ids?.length;
+        description?.trim() || handle?.trim() || (productCategoryIds?.length || 0) > 0;
       const detailsStatus = hasName ? 'completed' : hasDetailsData ? 'in-progress' : 'not-started';
 
       // Type tab status
-      const hasTypeData = formData.ui_component && (formData.possible_values?.length || 0) > 0;
+      const hasTypeData = uiComponent && (possibleValues?.length || 0) > 0;
       const typeStatus = hasTypeData ? 'completed' : 'not-started';
 
-      return {
+      onFormStateChange({
         detailsStatus: detailsStatus as 'not-started' | 'in-progress' | 'completed',
         typeStatus: typeStatus as 'not-started' | 'in-progress' | 'completed'
-      };
-    };
-
-    useEffect(() => {
-      if (onFormStateChange) {
-        const statuses = getTabStatus();
-        onFormStateChange(statuses);
-      }
-    }, [form.watch(), onFormStateChange]);
+      });
+    }, [formStateKey, onFormStateChange]);
 
     const renderDetailsTab = () => (
       <div
