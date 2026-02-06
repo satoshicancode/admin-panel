@@ -1080,7 +1080,11 @@
       },
       "shippingAddress": {
         "title": "Хүргэлтийн хаягийг засах",
-        "requestSuccess": "Захиалгын хүргэлтийн хаяг шинэчлэгдсэн."
+        "requestSuccess": "Захиалгын хүргэлтийн хаяг шинэчлэгдсэн.",
+        "validation": {
+          "addressRequired": "Хаяг оруулна уу",
+          "countryRequired": "Улс сонгоно уу"
+        }
       },
       "billingAddress": {
         "title": "Төлбөрийн хаягийг засах",
@@ -2579,7 +2583,10 @@
         "placeholder": "wrong_size",
         "tooltip": "Утга нь буцаалтын шалтгааны хувьд өвөрмөц танигч байх ёстой."
       },
-      "label": { "label": "Шошго", "placeholder": "Буруу хэмжээ" },
+      "label": {
+        "label": "Шошго",
+        "placeholder": "Буруу хэмжээ"
+      },
       "description": {
         "label": "Тайлбар",
         "placeholder": "Үйлчлүүлэгч буруу хэмжээтэй бүтээгдэхүүн хүлээн авсан"

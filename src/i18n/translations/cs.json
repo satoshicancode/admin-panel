@@ -1145,11 +1145,15 @@
     "edit": {
       "email": {
         "title": "Upravit e-mail",
-        "requestSuccess": "E-mail byl úspěšně aktualizován."
+        "requestSuccess": "E-mail objednávky byl aktualizován na {{email}}."
       },
       "shippingAddress": {
         "title": "Upravit doručovací adresu",
-        "requestSuccess": "Doručovací adresa objednávky byla aktualizována."
+        "requestSuccess": "Doručovací adresa objednávky byla aktualizována.",
+        "validation": {
+          "addressRequired": "Prosím zadejte adresu",
+          "countryRequired": "Prosím vyberte zemi"
+        }
       },
       "billingAddress": {
         "title": "Upravit fakturační adresu",
@@ -2702,7 +2706,10 @@
         "placeholder": "špatná_velikost",
         "tooltip": "Hodnota by měla být jedinečný identifikátor pro důvod vrácení."
       },
-      "label": { "label": "Štítek", "placeholder": "Špatná velikost" },
+      "label": {
+        "label": "Štítek",
+        "placeholder": "Špatná velikost"
+      },
       "description": {
         "label": "Popis",
         "placeholder": "Zákazník obdržel špatnou velikost"
