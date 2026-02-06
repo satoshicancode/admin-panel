@@ -1088,7 +1088,11 @@
       },
       "billingAddress": {
         "title": "Изменить платежный адрес",
-        "requestSuccess": "Платежный адрес заказа обновлен."
+        "requestSuccess": "Платежный адрес заказа обновлен.",
+        "validation": {
+          "addressRequired": "Пожалуйста, введите адрес",
+          "countryRequired": "Пожалуйста, выберите страну"
+        }
       }
     },
     "returns": {

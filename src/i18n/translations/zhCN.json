@@ -1131,7 +1131,11 @@
       },
       "billingAddress": {
         "title": "编辑账单地址",
-        "requestSuccess": "订单账单地址已更新。"
+        "requestSuccess": "订单账单地址已更新。",
+        "validation": {
+          "addressRequired": "请输入地址",
+          "countryRequired": "请选择国家"
+        }
       }
     },
     "returns": {

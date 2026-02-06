@@ -1129,7 +1129,11 @@
       },
       "billingAddress": {
         "title": "Keisti adresą sąskaitai",
-        "requestSuccess": "Užsakymo adresas sąskaitai pakeistas."
+        "requestSuccess": "Užsakymo adresas sąskaitai pakeistas.",
+        "validation": {
+          "addressRequired": "Prašome įvesti adresą",
+          "countryRequired": "Prašome pasirinkti šalį"
+        }
       }
     },
     "returns": {

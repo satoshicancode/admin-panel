@@ -1131,7 +1131,11 @@
       },
       "billingAddress": {
         "title": "Uredi adresu za naplatu",
-        "requestSuccess": "Adresa za naplatu narudžbe je ažurirana."
+        "requestSuccess": "Adresa za naplatu narudžbe je ažurirana.",
+        "validation": {
+          "addressRequired": "Molimo unesite adresu",
+          "countryRequired": "Molimo odaberite zemlju"
+        }
       }
     },
     "returns": {

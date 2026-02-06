@@ -1038,7 +1038,11 @@
       },
       "billingAddress": {
         "title": "請求先住所を編集",
-        "requestSuccess": "注文の請求先住所が更新されました。"
+        "requestSuccess": "注文の請求先住所が更新されました。",
+        "validation": {
+          "addressRequired": "住所を入力してください",
+          "countryRequired": "国を選択してください"
+        }
       }
     },
     "returns": {

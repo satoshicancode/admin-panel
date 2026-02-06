@@ -1038,7 +1038,11 @@
       },
       "billingAddress": {
         "title": "Редагувати адресу для рахунку",
-        "requestSuccess": "Адреса для рахунку замовлення оновлена."
+        "requestSuccess": "Адреса для рахунку замовлення оновлена.",
+        "validation": {
+          "addressRequired": "Будь ласка, введіть адресу",
+          "countryRequired": "Будь ласка, виберіть країну"
+        }
       }
     },
     "returns": {

@@ -1131,7 +1131,11 @@
       },
       "billingAddress": {
         "title": "ערוך כתובת חיוב",
-        "requestSuccess": "כתובת החיוב של ההזמנה עודכנה."
+        "requestSuccess": "כתובת החיוב של ההזמנה עודכנה.",
+        "validation": {
+          "addressRequired": "נא להזין כתובת",
+          "countryRequired": "נא לבחור מדינה"
+        }
       }
     },
     "returns": {
