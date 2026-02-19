@@ -84,7 +84,7 @@ export const usePostCollectionDetails = () => {
         method: 'POST',
         body: payload
       }),
-    onSuccess: (data, variables, text) => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: collectionsQueryKeys.detail(variables.id) });
     }
   });
