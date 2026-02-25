@@ -4098,6 +4098,16 @@
             },
             "newOwnerDescription": {
               "type": "string"
+            },
+            "errors": {
+              "type": "object",
+              "properties": {
+                "orderChangeAlreadyExists": {
+                  "type": "string"
+                }
+              },
+              "required": ["orderChangeAlreadyExists"],
+              "additionalProperties": false
             }
           },
           "required": [
@@ -4106,7 +4116,8 @@
             "currentOwner",
             "newOwner",
             "currentOwnerDescription",
-            "newOwnerDescription"
+            "newOwnerDescription",
+            "errors"
           ],
           "additionalProperties": false
         },
@@ -5044,7 +5055,13 @@
             "trackingNumber": {
               "type": "string"
             },
+            "trackingUrl": {
+              "type": "string"
+            },
             "addTracking": {
+              "type": "string"
+            },
+            "hideTracking": {
               "type": "string"
             },
             "sendNotification": {
@@ -5060,7 +5077,9 @@
           "required": [
             "title",
             "trackingNumber",
+            "trackingUrl",
             "addTracking",
+            "hideTracking",
             "sendNotification",
             "sendNotificationHint",
             "toastCreated"

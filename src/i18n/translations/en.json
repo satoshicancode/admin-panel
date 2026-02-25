@@ -1088,11 +1088,14 @@
     },
     "transfer": {
       "title": "Transfer ownership",
-      "requestSuccess": "Order transfer request sent to: {{email}}.",
+      "requestSuccess": "Transfer request was sent to {{customerDetails}}.",
       "currentOwner": "Current owner",
       "newOwner": "New owner",
       "currentOwnerDescription": "The customer currently related to this order.",
-      "newOwnerDescription": "The customer to transfer this order to."
+      "newOwnerDescription": "The customer to transfer this order to.",
+      "errors": {
+        "orderChangeAlreadyExists": "Order can not be transferred because there is an active transfer request."
+      }
     },
     "payment": {
       "title": "Payments",
@@ -1122,7 +1125,7 @@
       "markAsPaidPayment": "Payment of {{amount}} will be marked as paid.",
       "markAsPaidPaymentSuccess": "Payment of {{amount}} successfully marked as paid",
       "createRefund": "Create Refund",
-      "refundPaymentSuccess": "Refund of amount {{amount}} successful",
+      "refundPaymentSuccess": "Payment {{amount}} was successfully refunded.",
       "createRefundWrongQuantity": "Quantity should be a number between 1 and {{number}}",
       "refundAmount": "Refund {{ amount }}",
       "paymentLink": "Copy payment link for {{ amount }}",
@@ -1344,12 +1347,14 @@
       }
     },
     "shipment": {
-      "title": "Mark fulfillment shipped",
+      "title": "Mark Fulfillment as Shipped",
       "trackingNumber": "Tracking number",
+      "trackingUrl": "Tracking URL",
       "addTracking": "Add tracking number",
+      "hideTracking": "Hide tracking number",
       "sendNotification": "Send notification",
-      "sendNotificationHint": "Notify the customer about this shipment.",
-      "toastCreated": "Shipment created successfully."
+      "sendNotificationHint": "Notify the customer about shipment",
+      "toastCreated": "Shipment was successfully created."
     },
     "fulfillment": {
       "cancelWarning": "You are about to cancel a fulfillment. This action cannot be undone.",
