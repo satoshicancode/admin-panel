@@ -398,6 +398,7 @@
   },
   "products": {
     "domain": "Products",
+    "additionalAttributes": "Additional Attributes",
     "list": {
       "noRecordsMessage": "Create your first product to start selling."
     },
@@ -863,7 +864,8 @@
       "deleteSuccessToast": "Reservation was successfully deleted.",
       "errors": {
         "noAvaliableQuantity": "Stock location doesn't have available quantity.",
-        "quantityOutOfRange": "Minimum quantity is 1 and maximum quantity is {{max}}"
+        "quantityOutOfRange": "Minimum quantity is 1 and maximum quantity is {{max}}",
+        "idRequired": "Inventory item ID is required"
       }
     },
     "adjustInventory": {
@@ -1120,7 +1122,7 @@
       "markAsPaidPayment": "Payment of {{amount}} will be marked as paid.",
       "markAsPaidPaymentSuccess": "Payment of {{amount}} successfully marked as paid",
       "createRefund": "Create Refund",
-      "refundPaymentSuccess": "Refund of amount {{amount}} successful",
+      "refundPaymentSuccess": "Payment {{amount}} was successfully refunded.",
       "createRefundWrongQuantity": "Quantity should be a number between 1 and {{number}}",
       "refundAmount": "Refund {{ amount }}",
       "paymentLink": "Copy payment link for {{ amount }}",
@@ -1143,6 +1145,7 @@
       "noteHint": "Add an internal note for the edit",
       "cancelSuccessToast": "Order edit canceled",
       "createSuccessToast": "Order edit request created",
+      "duplicateItemErrorToast": "Cannot duplicate item: variant ID is missing",
       "activeChangeError": "There is already active order change on the order (return, claim, exchange etc.). Please finish or cancel the change before editing the order.",
       "panel": {
         "title": "Order edit requested",
@@ -1159,15 +1162,23 @@
     "edit": {
       "email": {
         "title": "Edit email",
-        "requestSuccess": "Order email updated to {{email}}."
+        "requestSuccess": "Email was successfully updated."
       },
       "shippingAddress": {
         "title": "Edit shipping address",
-        "requestSuccess": "Order shipping address updated."
+        "requestSuccess": "Shipping address was successfully updated.",
+        "validation": {
+          "addressRequired": "Please enter an address",
+          "countryRequired": "Please select a country"
+        }
       },
       "billingAddress": {
         "title": "Edit billing address",
-        "requestSuccess": "Order billing address updated."
+        "requestSuccess": "Billing address was successfully updated.",
+        "validation": {
+          "addressRequired": "Please enter an address",
+          "countryRequired": "Please select a country"
+        }
       }
     },
     "returns": {
@@ -1397,7 +1408,8 @@
       "error": {
         "amountToLarge": "Cannot refund more than the original order amount.",
         "amountNegative": "Refund amount must be a positive number.",
-        "reasonRequired": "Please select a refund reason."
+        "reasonRequired": "Please select a refund reason.",
+        "refundAmountError": "Please enter an amount"
       }
     },
     "customer": {
@@ -2162,6 +2174,10 @@
         "across": {
           "title": "Across",
           "description": "Applies value across items"
+        },
+        "once": {
+          "title": "Once",
+          "description": "Limit discount to max quantity"
         }
       },
       "code": {
@@ -2333,7 +2349,8 @@
       "header": "Products",
       "actions": {
         "addProducts": "Add products",
-        "editPrices": "Edit prices"
+        "editPrices": "Edit prices",
+        "editPricesDisabled": "Add products before editing prices"
       },
       "delete": {
         "confirmation_one": "You are about to delete the prices for {{count}} product in the price list. This action cannot be undone.",
@@ -2791,11 +2808,11 @@
   },
   "login": {
     "forgotPassword": "Forgot password? - <0>Reset</0>",
-    "title": "Welcome to Medusa",
+    "title": "Welcome to Mercur Admin Panel",
     "hint": "Sign in to access the account area"
   },
   "invite": {
-    "title": "Welcome to Medusa",
+    "title": "Welcome to Mercur Admin Panel",
     "hint": "Create your account below",
     "backToLogin": "Back to login",
     "createAccount": "Create account",
@@ -3182,7 +3199,11 @@
     }
   },
   "attributes": {
-    "domain": "Product Attributes"
+    "domain": "Product Attributes",
+    "create": {
+      "fillNameWarning": "Please fill in at least the name field before proceeding to Type configuration.",
+      "possibleValuesRequired": "At least one possible value is required for this type"
+    }
   },
   "requests": {
     "domain": "Requests",

@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom"
+import { HttpTypes } from "@medusajs/types"
 
 import { RouteFocusModal } from "../../../components/modals"
 import { useOrder } from "../../../hooks/api/orders"
@@ -18,11 +19,11 @@ export function OrderCreateShipment() {
   const ready = !isLoading && order
 
   return (
-    <RouteFocusModal>
+    <RouteFocusModal data-testid="order-create-shipment-modal">
       {ready && (
         <OrderCreateShipmentForm
           order={order}
-          fulfillment={order.fulfillments?.find((f) => f.id === f_id)}
+          fulfillment={order.fulfillments?.find((f: HttpTypes.AdminOrderFulfillment) => f.id === f_id)}
         />
       )}
     </RouteFocusModal>

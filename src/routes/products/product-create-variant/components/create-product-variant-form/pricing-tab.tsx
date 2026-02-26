@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import { useMemo } from "react"
 import { UseFormReturn, useWatch } from "react-hook-form"
 import { HttpTypes } from "@medusajs/types"
 import { useTranslation } from "react-i18next"
@@ -36,12 +36,14 @@ function PricingTab({ form }: PricingTabProps) {
   }) as any
 
   return (
-    <DataGrid
-      columns={columns}
-      data={[variant]}
-      state={form}
-      onEditingChange={(editing) => setCloseOnEscape(!editing)}
-    />
+    <div data-testid="product-variant-create-form-pricing-tab">
+      <DataGrid
+        columns={columns}
+        data={[variant]}
+        state={form}
+        onEditingChange={(editing) => setCloseOnEscape(!editing)}
+      />
+    </div>
   )
 }
 

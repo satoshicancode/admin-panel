@@ -1862,6 +1862,11 @@ export function getRouteMap({
                               "../../routes/tax-regions/tax-region-tax-rate-edit"
                             ),
                         },
+                        {
+                          path: "metadata/edit",
+                          lazy: () =>
+                            import("../../routes/tax-regions/tax-region-metadata"),
+                        },
                       ],
                     },
                     {

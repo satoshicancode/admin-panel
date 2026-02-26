@@ -20,7 +20,7 @@ export const shippingOptionsQueryKeys = queryKeysFactory(
 
 export const useShippingOption = (
   id: string,
-  query?: Record<string, any>,
+  query?: Record<string, unknown>,
   options?: UseQueryOptions<
     HttpTypes.AdminShippingOptionResponse,
     Error,

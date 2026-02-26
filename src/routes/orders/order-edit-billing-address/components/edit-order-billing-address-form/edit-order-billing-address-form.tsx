@@ -1,86 +1,115 @@
-import * as zod from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { HttpTypes } from "@medusajs/types"
-import { Button, Input, toast } from "@medusajs/ui"
-import { useForm } from "react-hook-form"
-import { useTranslation } from "react-i18next"
+import { i18n } from '@components/utilities/i18n';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { HttpTypes } from '@medusajs/types';
+import { Button, Input, toast } from '@medusajs/ui';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import * as zod from 'zod';
 
-import { Form } from "../../../../../components/common/form"
-import { RouteDrawer, useRouteModal } from "../../../../../components/modals"
-import { KeyboundForm } from "../../../../../components/utilities/keybound-form"
-import { useUpdateOrder } from "../../../../../hooks/api/orders"
-import { CountrySelect } from "../../../../../components/inputs/country-select"
+import { Form } from '../../../../../components/common/form';
+import { CountrySelect } from '../../../../../components/inputs/country-select';
+import { RouteDrawer, useRouteModal } from '../../../../../components/modals';
+import { KeyboundForm } from '../../../../../components/utilities/keybound-form';
+import { useUpdateOrder } from '../../../../../hooks/api/orders';
 
 type EditOrderBillingAddressFormProps = {
-  order: HttpTypes.AdminOrder
-}
+  order: HttpTypes.AdminOrder;
+};
 
-const EditOrderBillingAddressSchema = zod.object({
-  address_1: zod.string().min(1),
-  address_2: zod.string().optional(),
-  country_code: zod.string().min(2).max(2),
-  city: zod.string().optional(),
-  postal_code: zod.string().optional(),
-  province: zod.string().optional(),
-  company: zod.string().optional(),
-  phone: zod.string().optional(),
-})
+const EditOrderBillingAddressSchema = zod
+  .object({
+    address_1: zod.string(),
+    address_2: zod.string().optional(),
+    country_code: zod.string(),
+    city: zod.string().optional(),
+    postal_code: zod.string().optional(),
+    province: zod.string().optional(),
+    company: zod.string().optional(),
+    phone: zod.string().optional()
+  })
+  .superRefine(({ address_1, country_code }, ctx) => {
+    if (!address_1 || address_1.trim().length === 0) {
+      ctx.addIssue({
+        code: zod.ZodIssueCode.custom,
+        message: i18n.t('orders.edit.billingAddress.validation.addressRequired'),
+        path: ['address_1']
+      });
+    }
 
-export function EditOrderBillingAddressForm({
-  order,
-}: EditOrderBillingAddressFormProps) {
-  const { t } = useTranslation()
-  const { handleSuccess } = useRouteModal()
+    if (!country_code || country_code.length !== 2) {
+      ctx.addIssue({
+        code: zod.ZodIssueCode.custom,
+        message: i18n.t('orders.edit.billingAddress.validation.countryRequired'),
+        path: ['country_code']
+      });
+    }
+  });
+
+export function EditOrderBillingAddressForm({ order }: EditOrderBillingAddressFormProps) {
+  const { t } = useTranslation();
+  const { handleSuccess } = useRouteModal();
 
   const form = useForm<zod.infer<typeof EditOrderBillingAddressSchema>>({
     defaultValues: {
-      address_1: order.billing_address?.address_1 || "",
-      address_2: order.billing_address?.address_2 || "",
-      city: order.billing_address?.city || "",
-      company: order.billing_address?.company || "",
-      country_code: order.billing_address?.country_code || "",
-      phone: order.billing_address?.phone || "",
-      postal_code: order.billing_address?.postal_code || "",
-      province: order.billing_address?.province || "",
+      address_1: order.billing_address?.address_1 || '',
+      address_2: order.billing_address?.address_2 || '',
+      city: order.billing_address?.city || '',
+      company: order.billing_address?.company || '',
+      country_code: order.billing_address?.country_code || '',
+      phone: order.billing_address?.phone || '',
+      postal_code: order.billing_address?.postal_code || '',
+      province: order.billing_address?.province || ''
     },
-    resolver: zodResolver(EditOrderBillingAddressSchema),
-  })
+    resolver: zodResolver(EditOrderBillingAddressSchema)
+  });
 
-  const { mutateAsync, isPending } = useUpdateOrder(order.id)
+  const { mutateAsync, isPending } = useUpdateOrder(order.id);
 
-  const handleSubmit = form.handleSubmit(async (data) => {
+  const handleSubmit = form.handleSubmit(async data => {
     try {
       await mutateAsync({
-        billing_address: data,
-      })
-      toast.success(t("orders.edit.billingAddress.requestSuccess"))
-      handleSuccess()
+        billing_address: data
+      });
+      toast.success(t('orders.edit.billingAddress.requestSuccess'));
+      handleSuccess();
     } catch (error) {
-      toast.error((error as Error).message)
+      toast.error((error as Error).message);
     }
-  })
+  });
 
   return (
-    <RouteDrawer.Form form={form}>
+    <RouteDrawer.Form
+      form={form}
+      data-testid="order-edit-billing-address-form"
+    >
       <KeyboundForm
         onSubmit={handleSubmit}
         className="flex size-full flex-col overflow-hidden"
       >
-        <RouteDrawer.Body className="flex-1 overflow-auto">
+        <RouteDrawer.Body
+          className="flex-1 overflow-auto"
+          data-testid="order-edit-billing-address-body"
+        >
           <div className="flex flex-col gap-4">
             <Form.Field
               control={form.control}
               name="address_1"
               render={({ field }) => {
                 return (
-                  <Form.Item>
-                    <Form.Label>{t("fields.address")}</Form.Label>
-                    <Form.Control>
-                      <Input size="small" {...field} />
+                  <Form.Item data-testid="order-edit-billing-address-address1-item">
+                    <Form.Label data-testid="order-edit-billing-address-address1-label">
+                      {t('fields.address')}
+                    </Form.Label>
+                    <Form.Control data-testid="order-edit-billing-address-address1-control">
+                      <Input
+                        size="small"
+                        {...field}
+                        data-testid="order-edit-billing-address-address1-input"
+                      />
                     </Form.Control>
-                    <Form.ErrorMessage />
+                    <Form.ErrorMessage data-testid="order-edit-billing-address-address1-error" />
                   </Form.Item>
-                )
+                );
               }}
             />
             <Form.Field
@@ -88,14 +117,23 @@ export function EditOrderBillingAddressForm({
               name="address_2"
               render={({ field }) => {
                 return (
-                  <Form.Item>
-                    <Form.Label optional>{t("fields.address2")}</Form.Label>
-                    <Form.Control>
-                      <Input size="small" {...field} />
+                  <Form.Item data-testid="order-edit-billing-address-address2-item">
+                    <Form.Label
+                      optional
+                      data-testid="order-edit-billing-address-address2-label"
+                    >
+                      {t('fields.address2')}
+                    </Form.Label>
+                    <Form.Control data-testid="order-edit-billing-address-address2-control">
+                      <Input
+                        size="small"
+                        {...field}
+                        data-testid="order-edit-billing-address-address2-input"
+                      />
                     </Form.Control>
-                    <Form.ErrorMessage />
+                    <Form.ErrorMessage data-testid="order-edit-billing-address-address2-error" />
                   </Form.Item>
-                )
+                );
               }}
             />
             <Form.Field
@@ -103,14 +141,23 @@ export function EditOrderBillingAddressForm({
               name="postal_code"
               render={({ field }) => {
                 return (
-                  <Form.Item>
-                    <Form.Label optional>{t("fields.postalCode")}</Form.Label>
-                    <Form.Control>
-                      <Input size="small" {...field} />
+                  <Form.Item data-testid="order-edit-billing-address-postal-code-item">
+                    <Form.Label
+                      optional
+                      data-testid="order-edit-billing-address-postal-code-label"
+                    >
+                      {t('fields.postalCode')}
+                    </Form.Label>
+                    <Form.Control data-testid="order-edit-billing-address-postal-code-control">
+                      <Input
+                        size="small"
+                        {...field}
+                        data-testid="order-edit-billing-address-postal-code-input"
+                      />
                     </Form.Control>
-                    <Form.ErrorMessage />
+                    <Form.ErrorMessage data-testid="order-edit-billing-address-postal-code-error" />
                   </Form.Item>
-                )
+                );
               }}
             />
             <Form.Field
@@ -118,14 +165,23 @@ export function EditOrderBillingAddressForm({
               name="city"
               render={({ field }) => {
                 return (
-                  <Form.Item>
-                    <Form.Label optional>{t("fields.city")}</Form.Label>
-                    <Form.Control>
-                      <Input size="small" {...field} />
+                  <Form.Item data-testid="order-edit-billing-address-city-item">
+                    <Form.Label
+                      optional
+                      data-testid="order-edit-billing-address-city-label"
+                    >
+                      {t('fields.city')}
+                    </Form.Label>
+                    <Form.Control data-testid="order-edit-billing-address-city-control">
+                      <Input
+                        size="small"
+                        {...field}
+                        data-testid="order-edit-billing-address-city-input"
+                      />
                     </Form.Control>
-                    <Form.ErrorMessage />
+                    <Form.ErrorMessage data-testid="order-edit-billing-address-city-error" />
                   </Form.Item>
-                )
+                );
               }}
             />
             <Form.Field
@@ -133,14 +189,20 @@ export function EditOrderBillingAddressForm({
               name="country_code"
               render={({ field }) => {
                 return (
-                  <Form.Item>
-                    <Form.Label>{t("fields.country")}</Form.Label>
-                    <Form.Control>
-                      <CountrySelect {...field} disabled />
+                  <Form.Item data-testid="order-edit-billing-address-country-item">
+                    <Form.Label data-testid="order-edit-billing-address-country-label">
+                      {t('fields.country')}
+                    </Form.Label>
+                    <Form.Control data-testid="order-edit-billing-address-country-control">
+                      <CountrySelect
+                        {...field}
+                        disabled
+                        data-testid="order-edit-billing-address-country-select"
+                      />
                     </Form.Control>
-                    <Form.ErrorMessage />
+                    <Form.ErrorMessage data-testid="order-edit-billing-address-country-error" />
                   </Form.Item>
-                )
+                );
               }}
             />
             <Form.Field
@@ -148,14 +210,23 @@ export function EditOrderBillingAddressForm({
               name="province"
               render={({ field }) => {
                 return (
-                  <Form.Item>
-                    <Form.Label optional>{t("fields.state")}</Form.Label>
-                    <Form.Control>
-                      <Input size="small" {...field} />
+                  <Form.Item data-testid="order-edit-billing-address-province-item">
+                    <Form.Label
+                      optional
+                      data-testid="order-edit-billing-address-province-label"
+                    >
+                      {t('fields.state')}
+                    </Form.Label>
+                    <Form.Control data-testid="order-edit-billing-address-province-control">
+                      <Input
+                        size="small"
+                        {...field}
+                        data-testid="order-edit-billing-address-province-input"
+                      />
                     </Form.Control>
-                    <Form.ErrorMessage />
+                    <Form.ErrorMessage data-testid="order-edit-billing-address-province-error" />
                   </Form.Item>
-                )
+                );
               }}
             />
             <Form.Field
@@ -163,14 +234,23 @@ export function EditOrderBillingAddressForm({
               name="company"
               render={({ field }) => {
                 return (
-                  <Form.Item>
-                    <Form.Label optional>{t("fields.company")}</Form.Label>
-                    <Form.Control>
-                      <Input size="small" {...field} />
+                  <Form.Item data-testid="order-edit-billing-address-company-item">
+                    <Form.Label
+                      optional
+                      data-testid="order-edit-billing-address-company-label"
+                    >
+                      {t('fields.company')}
+                    </Form.Label>
+                    <Form.Control data-testid="order-edit-billing-address-company-control">
+                      <Input
+                        size="small"
+                        {...field}
+                        data-testid="order-edit-billing-address-company-input"
+                      />
                     </Form.Control>
-                    <Form.ErrorMessage />
+                    <Form.ErrorMessage data-testid="order-edit-billing-address-company-error" />
                   </Form.Item>
-                )
+                );
               }}
             />
             <Form.Field
@@ -178,24 +258,37 @@ export function EditOrderBillingAddressForm({
               name="phone"
               render={({ field }) => {
                 return (
-                  <Form.Item>
-                    <Form.Label optional>{t("fields.phone")}</Form.Label>
-                    <Form.Control>
-                      <Input size="small" {...field} />
+                  <Form.Item data-testid="order-edit-billing-address-phone-item">
+                    <Form.Label
+                      optional
+                      data-testid="order-edit-billing-address-phone-label"
+                    >
+                      {t('fields.phone')}
+                    </Form.Label>
+                    <Form.Control data-testid="order-edit-billing-address-phone-control">
+                      <Input
+                        size="small"
+                        {...field}
+                        data-testid="order-edit-billing-address-phone-input"
+                      />
                     </Form.Control>
-                    <Form.ErrorMessage />
+                    <Form.ErrorMessage data-testid="order-edit-billing-address-phone-error" />
                   </Form.Item>
-                )
+                );
               }}
             />
           </div>
         </RouteDrawer.Body>
 
-        <RouteDrawer.Footer>
+        <RouteDrawer.Footer data-testid="order-edit-billing-address-footer">
           <div className="flex items-center justify-end gap-x-2">
             <RouteDrawer.Close asChild>
-              <Button variant="secondary" size="small">
-                {t("actions.cancel")}
+              <Button
+                variant="secondary"
+                size="small"
+                data-testid="order-edit-billing-address-cancel-button"
+              >
+                {t('actions.cancel')}
               </Button>
             </RouteDrawer.Close>
 
@@ -205,12 +298,13 @@ export function EditOrderBillingAddressForm({
               variant="primary"
               size="small"
               disabled={!!Object.keys(form.formState.errors || {}).length}
+              data-testid="order-edit-billing-address-save-button"
             >
-              {t("actions.save")}
+              {t('actions.save')}
             </Button>
           </div>
         </RouteDrawer.Footer>
       </KeyboundForm>
     </RouteDrawer.Form>
-  )
+  );
 }

@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+import type React from 'react'
+import { useState } from "react"
 import {
   Button,
   Input,
@@ -10,7 +11,6 @@ import {
 import { useForm } from "react-hook-form"
 import { useViewConfigurations, useViewConfiguration } from "../../../hooks/use-view-configurations"
 import type { ViewConfiguration } from "../../../hooks/use-view-configurations"
-
 
 type SaveViewFormData = {
   name: string
