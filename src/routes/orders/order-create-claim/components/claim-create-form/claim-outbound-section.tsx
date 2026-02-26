@@ -283,6 +283,7 @@ export const ClaimOutboundSection = ({
             <AddClaimOutboundItemsTable
               selectedItems={outboundItems.map(i => i.variant_id)}
               currencyCode={order.currency_code}
+              sellerId={order.seller?.id}
               onSelectionChange={finalSelection => {
                 const alreadySelected = outboundItems.map(i => i.variant_id);
 
