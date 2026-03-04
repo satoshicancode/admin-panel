@@ -1243,8 +1243,8 @@
         "itemsLabel": "Items received",
         "title": "Receive items for #{{returnId}}",
         "sendNotificationHint": "Notify customer about received return.",
-        "inventoryWarning": "Please note that we will automatically adjust the inventory levels based on your input above.",
-        "quantityInputLabel": "How many items were received in {{location}}?",
+        "inventoryWarning": "We will automatically adjust the inventory levels based on your input.",
+        "quantityInputLabel": "How many items aren't damaged and can be returned to {{location}}?",
         "writeOffInputLabel": "How many of the items are damaged?",
         "toast": {
           "success": "Return received successfully.",

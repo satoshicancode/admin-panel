@@ -1207,14 +1207,14 @@ const ReturnBreakdownWithDamages = ({
 
           {item?.note && (
             <Tooltip content={item.note}>
-              <DocumentText className="ml-1 inline text-ui-tag-neutral-icon" />
+              <DocumentText className="ml-1 inline text-ui-fg-muted" />
             </Tooltip>
           )}
 
           {item?.reason && (
             <Badge
               size="2xsmall"
-              className="cursor-default select-none capitalize"
+              className="cursor-default select-none capitalize border border-tag-neutral-border"
               rounded="full"
             >
               {item?.reason?.label}
@@ -1276,14 +1276,14 @@ const ReturnBreakdown = ({ orderReturn, itemId }: { orderReturn: AdminReturn; it
 
             {item?.note && (
               <Tooltip content={item.note}>
-                <DocumentText className="ml-1 inline shrink-0 text-ui-tag-neutral-icon" />
+                <DocumentText className="ml-1 inline shrink-0 text-ui-fg-muted" />
               </Tooltip>
             )}
 
             {item?.reason && (
               <Badge
                 size="2xsmall"
-                className="shrink-0 cursor-default select-none capitalize"
+                className="shrink-0 cursor-default select-none capitalize border border-tag-neutral-border"
                 rounded="full"
               >
                 {item?.reason?.label}

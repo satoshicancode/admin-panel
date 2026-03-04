@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { NoRecords } from '@components/common/empty-table-content';
 import { Form } from '@components/common/form';
@@ -16,7 +16,8 @@ import {
 } from '@hooks/api/returns.tsx';
 import { getStylizedAmount } from '@lib/money-amount-helpers';
 import type { AdminOrder, AdminReturn } from '@medusajs/types';
-import { Alert, Button, Input, Switch, Text, toast } from '@medusajs/ui';
+import { InformationCircleSolid, XMark } from '@medusajs/icons';
+import { Button, IconButton, Input, Switch, Text, toast } from '@medusajs/ui';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type * as zod from 'zod';
@@ -39,6 +40,7 @@ export function OrderReceiveReturnForm({
 }: OrderAllocateItemsFormProps) {
   const { t } = useTranslation();
   const { handleSuccess } = useRouteModal();
+  const [inventoryWarningDismissed, setInventoryWarningDismissed] = useState(false);
 
   const canAdminReceiveReturn =
     !orderReturn.location_id || !adminLocationIds || adminLocationIds.has(orderReturn.location_id);
@@ -323,12 +325,27 @@ export function OrderReceiveReturnForm({
                 </div>
               </div>
 
-              <Alert
-                className="rounded-xl"
-                variant="warning"
+              {!inventoryWarningDismissed && (
+              <div
+                className="flex gap-2 items-start rounded-[8px] bg-ui-bg-component p-3 shadow-elevation-card-rest"
+                data-testid="order-receive-return-inventory-warning"
               >
-                {t('orders.returns.receive.inventoryWarning')}
-              </Alert>
+                <span className="flex shrink-0 size-5 items-center justify-center text-ui-tag-orange-icon">
+                  <InformationCircleSolid className="size-[15px]" />
+                </span>
+                <Text size="small" weight="plus" className="text-ui-fg-base leading-5 flex-1 min-w-0">
+                  {t('orders.returns.receive.inventoryWarning')}
+                </Text>
+                <IconButton
+                  size="2xsmall"
+                  variant="transparent"
+                  onClick={() => setInventoryWarningDismissed(true)}
+                  data-testid="order-receive-return-inventory-warning-dismiss"
+                >
+                  <XMark className="text-ui-fg-base" />
+                </IconButton>
+              </div>
+              )}
 
               <div
                 className="my-2 rounded-xl bg-ui-bg-subtle p-3 shadow-elevation-card-rest"
